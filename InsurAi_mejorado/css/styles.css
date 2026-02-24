@@ -1,0 +1,1019 @@
+/* Variables Globales */
+:root {
+    --sidebar-bg: rgb(82, 36, 125);
+    --item-bg-light: rgba(255, 255, 255, 0.1);
+    --item-bg-dark: rgba(0, 0, 0, 0.2);
+    --accent-white: #ffffff;
+    --transition: all 0.3s ease;
+    --sidebar-bg: rgba(60, 20, 100, 0.85); 
+    --sidebar-bg-light: rgba(40, 10, 70, 0.9);
+    /* ... resto de tus variables ... */
+
+    /* ... otras variables ... */
+}
+
+/* Reset y Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif !important;
+}
+button, input, optgroup, select, textarea {
+    font-family: 'Inter', sans-serif !important;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    /* Degradado similar a la imagen original */
+    background:#E8E0DF;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.container .sidebar {
+    flex-shrink: 0;
+    margin-left: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(to bottom, var(--sidebar-bg), var(--sidebar-bg-light));
+    padding: 50px 0;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: visible; /* Asegurar visibilidad */
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 50px 0;
+    position: relative;
+    min-height: 100vh; /* Asegura que el sidebar llegue hasta abajo de la pantalla */
+    display: flex;
+    flex-direction: column;
+    
+}
+/* linea roja */
+
+.sidebar-red-line {
+    width: 100%;
+    height: 4px;                   /* Grosor de la línea */
+    background-color: #ff0000;     /* Rojo intenso */
+    margin: 160px 0 30px 0;  
+    position: absolute;           /* Espacio debajo de la línea (opcional) */
+}
+/* Submenú Soporte: despliegue a la derecha del sidebar (estilo referencia) */
+.soporte-menu-trigger {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.soporte-chevron {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 6px solid rgba(255,255,255,0.7);
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.soporte-li.submenu-open .soporte-chevron {
+    opacity: 1;
+}
+.acc-list li.soporte-li.submenu-open {
+    background: rgba(255,255,255,0.08);
+    border-left: 4px solid var(--accent-white);
+    
+}
+
+.soporte-menu-panel, .doc-menu-panel {
+    position: fixed;
+    left: 280px; /* Debe ser igual al ancho de tu sidebar */
+    width: 200px;
+    background: var(--sidebar-bg);
+    z-index: 9999; /* Por encima de todo */
+    border-left: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    display: none; /* Se controla por JS */
+    background: rgba(102, 56, 145, 0.95); /* El mismo violeta pero con ligera transparencia */
+}
+
+body .soporte-menu-panel.show,
+body .doc-menu-panel.show {
+    display: block !important;
+}
+.soporte-submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0;
+}
+.soporte-submenu-list li {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.soporte-submenu-list li:last-child {
+    border-bottom: none;
+}
+.soporte-submenu-list a {
+    display: block;
+    padding: 10px 18px;
+    color: var(--accent-white);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+.soporte-submenu-list a:hover {
+    background: rgba(255,255,255,0.08);
+}
+/* Submenú Documentación: mismo comportamiento que Soporte, a la derecha del sidebar */
+.doc-menu-trigger {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.doc-chevron {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 6px solid rgba(255,255,255,0.7);
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.doc-li.submenu-open .doc-chevron {
+    opacity: 1;
+}
+.acc-list li.doc-li.submenu-open {
+    background: rgba(255,255,255,0.08);
+    border-left: 4px solid var(--accent-white);
+}
+.doc-menu-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-width: 200px;
+    z-index: 1050;
+    display: none;
+    background: var(--sidebar-bg);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+}
+.doc-menu-panel.show {
+    display: block;
+}
+.doc-submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0;
+}
+.doc-submenu-list li {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.doc-submenu-list li:last-child {
+    border-bottom: none;
+}
+.doc-submenu-list a {
+    display: block;
+    padding: 10px 18px;
+    color: var(--accent-white);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+.doc-submenu-list a:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.logo-section {
+    padding: 0px 20px 30px 20px;  /* Ajusta el margen interno según prefieras */
+    display: flex;
+    justify-content: flex-start; /* Alinea a la izquierda */
+    align-items: center;
+    text-align: center;
+}
+.logo-img {
+    max-width: 200px; /* Define aquí el tamaño máximo que deseas */
+    width: 100%;      /* Permite que se adapte si el sidebar es más pequeño */
+    height: auto;     /* Mantiene la relación de aspecto original */
+    display: inline-block;
+}
+.logo-section h1 {
+    font-weight: 300;
+    font-size: 2.8rem;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.logo-section p {
+    font-size: 1.1rem;
+    opacity: 0.6;
+    margin-top: -5px;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Accordion (menús laterales) */
+.accordion {
+    padding: 0 30px 30px 20px;
+    margin-top: 90px !important;
+    position: relative;
+    overflow: visible;
+}
+.acc-item {
+    margin-bottom: 10px;
+    
+}
+.acc-header {
+    /* 1. La fórmula mágica: 100% del espacio + los 50px de relleno del sidebar */
+    width: calc(100% + 50px) !important; 
+    /* 2. Lo rodamos exactamente 20px a la izquierda para tocar el borde */
+    margin-left: -20px !important; 
+    margin-right: 0 !important; /* Eliminamos el margen derecho para que no se salga */
+    /* 3. Mantenemos el espacio interno para que el texto "Cartera" no se pegue al borde */
+    padding: 12px 30px 12px 20px !important;
+    box-sizing: border-box !important; /* Asegura que el padding no engorde la caja */
+    background: rgba(0, 0, 0, 0.2);
+    text-align: left;
+    color: rgb(255, 255, 255);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    border-bottom: none !important;
+}
+.acc-header:hover { opacity: 0.9; }
+.acc-header::after {
+    content: '';
+    flex: 1;
+    height: 3px;
+    margin-left: 5px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 2px;
+}
+.acc-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+    background: transparent; /* Esto hace que tome el mismo fondo del sidebar */
+}
+/* la flechita */ 
+.acc-item.open .acc-body {
+    max-height: 1000px; /* Aumentado para seguridad */
+    border-left-color: rgba(255,255,255,0.12);
+    overflow: visible !important; /* CRÍTICO: Permite que el submenú salga del sidebar */
+}
+.acc-list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 18px;
+}
+/* 1. Quitamos el borde tradicional del elemento */
+.acc-list li {
+    position: relative; 
+    padding: 12px 25px 12px 10px; 
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: none; /* <--- Cambio clave: eliminamos el borde original */
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    gap: 30px; 
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 2. Dibujamos la nueva línea de punta a punta */
+.acc-list li::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -38px; /* Compensa matemáticamente los paddings izquierdos (20px + 18px) */
+    width: 280px; /* El ancho exacto de tu sidebar de extremo a extremo */
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2); /* Mantenemos el color blanco semi-transparente */
+}
+
+/* 3. Nos aseguramos de que el último ítem no tenga línea abajo (como lo tenías configurado) */
+.acc-list li:last-child::before {
+    display: none;
+}
+/* BLOQUE 1: Estira el fondo del ítem activo de borde a borde */
+.acc-list li.active {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border-left: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    margin-left: -38px;
+    margin-right: -48px;
+    width: auto; 
+    padding-left: 48px;
+    padding-right: 20px; 
+    position: relative; 
+    z-index: 50; 
+}
+/* BLOQUE 2: Crea la flecha gigante que sale del sidebar */
+.acc-list li.active::after {
+    content: "";
+    position: absolute;     
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+    border-left: 30px solid #2b2b2b;
+    filter: drop-shadow(4px 0 3px rgba(0,0,0,0.2));
+    z-index: 51;
+}
+.soporte-menu-panel,
+.doc-menu-panel {
+    overflow: visible !important;
+}
+.acc-list li:last-child {
+    border-bottom: none;
+}
+
+/*fondo de perfil */
+
+.acc-list li.active {
+    background-color: #2b2b2b; 
+    color: #ffffff; 
+    border-left: none; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+.acc-list li.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -20px; 
+    width: 0;
+    height: 0;
+    border-top: 24px solid transparent; 
+    border-bottom: 24px solid transparent; 
+    border-left: 20px solid #2b2b2b; 
+    z-index: 10;
+}
+.acc-list li .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4); 
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+.acc-list li.active .icon {
+    border-color: #ffffff;
+}
+.acc-list.two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+}
+
+/* Avatar box under sidebar with red decorative line */
+.avatar-box {
+    position: absolute;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 0; 
+    bottom: 0;         /* La pega al fondo del sidebar */
+    left: 0;
+    width: 100%;       /* Ocupa todo el ancho del sidebar */
+    background-color: #000000;
+    padding: 20px 0 23px 0;
+    z-index: 100
+}
+.avatar-box .red-line {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #ff0000; 
+    display: block;
+     
+}
+.avatar-wrap {
+    margin-top: -12px; 
+    position: relative;
+    z-index: 2; 
+    width: 70px;
+    height: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.avatar-trigger-wrap {
+    position: relative;
+}
+.avatar-btn {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: block;
+    line-height: 0;
+}
+.avatar-dropdown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 8px);
+    min-width: 180px;
+    background: var(--sidebar-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    z-index: 1060;
+    display: none;
+    overflow: hidden;
+    bottom: calc(100% + 8px);
+    top: auto; 
+}
+.avatar-dropdown.show {
+    display: block;
+}
+.avatar-dropdown-item {
+    display: block;
+    padding: 10px 16px;
+    color: var(--accent-white);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.2s ease;
+}
+.avatar-dropdown-item:last-child {
+    border-bottom: none;
+}
+.avatar-dropdown-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+.avatar-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    background: #6b4b9a; /* fallback color */
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 1 / 1;
+    top: auto;
+    margin-top: -40px;
+    
+}
+.avatar-card {
+    background: white;
+    color: #000;
+    margin: 15px 30px 0 25px; /* Le damos el margen lateral solo a la tarjeta */
+    padding: 20px 10px;
+    border-radius: 0; /* Bordes rectos como en la imagen de referencia */
+    font-size: 0.85rem;
+    margin-top: -35px;
+}
+.avatar-card .username { 
+    font-weight: bold; 
+    margin-bottom: 12px; 
+    font-size: 0.95rem; 
+}
+.avatar-card .user-date { 
+    font-size: 0.8rem; 
+    color: #000; 
+    font-weight: bold;
+    margin-bottom: 12px; 
+}
+.avatar-card .user-role { 
+    font-size: 0.8rem; 
+    color: #000; 
+    font-weight: bold;
+}
+.main-nav li {
+    padding: 18px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; 
+}
+.main-nav li:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.main-nav li.active {
+    background: #252525; 
+    border-left: none; 
+}
+.main-nav li.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -20px; 
+    transform: translateY(-50%); 
+    border-top: 28px solid transparent; 
+    border-bottom: 28px solid transparent;
+    border-left: 20px solid #252525; 
+    z-index: 10;
+}
+.main-nav li .icon {
+    position: relative;
+    z-index: 11; 
+}
+.soporte-submenu-list li.active::after,
+.doc-submenu-list li.active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent; 
+    border-left: 20px solid #2b2b2b; 
+    z-index: 10;
+}
+
+/* bloques cuadrados */
+
+.top-grid {
+    display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        min-height: 150px;
+        gap: 0;
+}
+.grid-item {
+    padding: 30px;
+    text-align: center;
+    background: #ED704E;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.grid-item.dark {
+    background: #827F7D;
+}
+
+.item-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.grid-item h3 {
+    font-size: 1rem;
+    text-transform: capitalize;
+    margin: 5px 0;
+}
+
+.grid-item p {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    line-height: 1.4;
+}
+
+/* Login Box */
+
+.login-box input {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+        border-right: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+}
+
+.login-btn {
+    background: var(--accent-white);
+    color: #333;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+/* Dashboards: tarjetas blancas con esquinas curvas */
+.dashboards {
+    padding: 30px 40px;
+    background: transparent;
+}
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+.card {
+    background: #ffffff;
+    color: #222;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    min-height: 120px;
+}
+.card.wide { grid-column: span 3; }
+.card-title {
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+.chart {
+    width: 100%;
+    height: 110px;
+    display: block;
+}
+.chart.mini-rows { height: auto; }
+.mini-rows .row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+.mini-rows .row:last-child { border-bottom: none; }
+
+@media (max-width: 900px) {
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .card.wide { grid-column: span 2; }
+}
+@media (max-width: 600px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .card.wide { grid-column: span 1; }
+}
+
+.main-title {
+    font-size: 6rem;
+    font-weight: 300;
+    margin: 0;
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: 2.2rem;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+.steps-list {
+    width: 100%;
+    max-width: 550px;
+}
+
+.step-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.step-num { font-weight: bold; font-size: 1.1rem; }
+.step-text { font-size: 1.2rem; }
+
+/* Footer */
+.footer-updates {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    padding: 3px 26px;
+    background: linear-gradient(90deg, #f3d7b0 0%, #d7b89a 40%, #b78f7e 100%);
+    align-items: start;
+    
+}
+.update-card {
+    background: transparent;
+    color: #222;
+    padding: 8px 6px;
+    /* Nuevas propiedades para centrar todo */
+    display: flex;
+    flex-direction: column; /* Coloca el ícono arriba y el texto abajo */
+    align-items: center;    /* Centra el ícono (.icon-wrap) horizontalmente */
+    text-align: center;     /* Centra el texto del h4 y el párrafo */
+}
+.update-card h4 {
+    font-size: 0.95rem;
+    margin: 0 0 8px 0;
+    color: #000000;
+}
+.update-card p {
+    font-size: 0.85rem;
+    color: #222;
+    opacity: 0.85;
+    margin: 0;
+}
+
+/* Iconos del pie de pagina */
+
+.icon-wrap {
+    width: 60px !important;
+    height: 60px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Evita que imágenes grandes se salgan del recuadro */
+}
+.icon-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Mantiene la proporción de la imagen sin deformarla ni estirarla */
+}
+
+/* otra cosa */ 
+
+.grid-item {
+    padding: 30px;
+    text-align: center;
+    background: #ED704E;
+        border-right: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Transición suave para el color de fondo y la sombra */
+    position: relative; 
+    /* Esta transición le da un pequeño efecto de "rebote" elástico muy natural */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.4s ease;
+    cursor: pointer;
+}
+.grid-item:hover {
+    transform: scale(1.05); 
+    
+    /* Sombra 3D profunda que se proyecta alrededor y debajo */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    
+    /* Asegura que este cuadro y su sombra queden por encima de los cuadros vecinos */
+    z-index: 10;
+}
+.grid-item:hover .item-icon {
+    transform: scale(1.5);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* --- barra de busqueda --- */
+
+.search-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.search-bar-dark {
+    background-color: #1a2b45; 
+    width: 100%;
+    padding: 8px 40px; 
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.search-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%; 
+}
+.search-content input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    outline: none;
+    text-transform: uppercase;
+}
+.search-content input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.search-content i {
+    color: white;
+    font-size: 1.2rem;
+    margin-left: 20px;
+}
+
+/* la linea */
+
+.brick-line-separator {
+    width: 100%;
+    height: 10px;
+    background-color: #ff0000; 
+    border: none;
+    margin: 0;
+    height: 10px;            
+    
+}
+
+/* esto es pa acomodar el contenedor principal, el anaranjado */
+
+.main-content {
+    padding-right: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+.top-grid {
+    margin-bottom: 0 !important;
+}
+.main-content {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    padding: 0; 
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Eli esto es la edicion de la barra de busqueda */
+
+.search-divider-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.search-bar-blue {
+    background-color: #1a2b45; 
+    padding: 15px 40px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-bar-blue input {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    outline: none;
+    text-transform: uppercase;
+}
+.search-bar-blue i {
+    color: white;
+    font-size: 1.2rem;
+}
+/* esto es la linea */
+.brick-line {
+    width: 100%;
+    height: 10px;
+    background-color: #A52A2A; 
+}
+.top-grid {
+    width: 100%;
+    margin: 0 !important;
+}
+.soporte-menu-panel, .doc-menu-panel {
+    display: none;
+}
+/* EL CONTENEDOR DE LA FRANJA NARANJA */
+.orange-footer-bar {
+    background-color: #FF8C00; /* Color naranja */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Cambia a 'flex-start' si prefieres que esté a la izquierda */
+    padding: 6px 25px; /* Mantiene la franja delgada */
+    gap: 15px; /* Espacio entre el logo y el texto */
+    box-sizing: border-box;
+}
+
+/* EL LOGO DENTRO DE LA FRANJA */
+.orange-footer-bar .footer-logo {
+    height: 30px; /* Altura pequeña para no engrosar la línea naranja */
+    width: auto;
+    object-fit: contain;
+}
+
+/* EL TEXTO DE DERECHOS RESERVADOS */
+.orange-footer-bar span {
+    color: #ffffff; /* Texto blanco para que resalte en el naranja */
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+/* =========================================
+   Botón Flotante Chatbot Zybanna
+   ========================================= */
+.zybanna-bot-trigger {
+    position: fixed; /* Se queda fijo en la pantalla al hacer scroll */
+    bottom: 30px;    /* Distancia desde abajo */
+    right:  30px;      /* Distancia desde la izquierda */
+    width: 70px;     /* Tamaño del botón */
+    height: 70px;
+    border-radius: 50%; /* Lo hace perfectamente redondo */
+    overflow: hidden;   /* Recorta la imagen cuadrada dentro del círculo */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
+    cursor: pointer;    /* Manito al pasar el mouse */
+    z-index: 9999;      /* Asegura que esté siempre por encima de todo */
+    transition: all 0.3s ease; /* Suaviza las animaciones */
+    background-color: #fff; /* Fondo blanco por si la imagen tiene transparencias */
+    border: 3px solid #6b4b9a; /* Opcional: un borde del color de tu marca (usé el morado del avatar) */
+}
+
+/* Estilo para que la imagen llene bien el círculo */
+.zybanna-bot-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra todo el círculo sin deformarse */
+}
+
+/* Animación al pasar el mouse (Hover) */
+.zybanna-bot-trigger:hover {
+    transform: scale(1.1) translateY(-5px); /* Crece un poco y sube */
+    box-shadow: 0 8px 25px rgba(107, 75, 154, 0.5); /* Sombra más intensa y con color */
+}
+
+/* 1. Fondo oscuro para el ítem activo en los submenús de Soporte y Documentación */
+.soporte-submenu-list li.active,
+.doc-submenu-list li.active {
+    background-color: #2b2b2b;
+    position: relative;
+    z-index: 50;
+    width: 100%;
+}
+/* 2. La flecha gigante que sobresale del panel hacia la derecha */
+.soporte-submenu-list li.active::after,
+.doc-submenu-list li.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%; 
+    width: 0;
+    height: 0;
+    border-bottom: 19px solid transparent; 
+    border-left: 25px solid #2b2b2b; 
+    filter: drop-shadow(4px 0 3px rgba(0,0,0,0.2));
+    z-index: 51;
+    transform: none; 
+}
+/* Alineación del contenedor LI para que el icono y texto convivan bien */
+.acc-list li,
+.soporte-submenu-list li,
+.doc-submenu-list li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alinea a la izquierda */
+    gap: 0px; /* Espacio entre imagen y texto */
+    padding: 10px 20px;
+    padding-left: 10px !important; 
+    padding-right: 20px;
+    height: 45px;
+    
+}
+
+/* Estilo para las imágenes de los iconos */
+.sub-icon {
+    width: 45px;  /* Ajusta el tamaño a tu gusto */
+    height: 25px; /* Manténlo cuadrado */
+    filter: brightness(0) invert(1); /* OPCIONAL: Si tus iconos son negros, esto los vuelve blancos */
+    opacity: 0.7;
+    object-fit: contain; /* Para que no se estiren */
+    transition: transform 0.3s ease;
+    display: block;
+    margin-right: 10px;
+}
+
+/* Efecto cuando pasas el mouse o está activo */
+li:hover .sub-icon,
+li.active .sub-icon {
+    opacity: 1;
+    transform: scale(1.2); /* Un pequeño salto para que se vea vivo */
+}
+
+
+
+
+

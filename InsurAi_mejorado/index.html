@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Template Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="container-fluid p-0 d-flex">
+    <aside class="sidebar">
+        <div class="logo-section">
+            <img src="Imagenes/Inzur (1).png" alt="Zynapxe" class="logo-img">
+        </div>
+        <div class="sidebar-red-line"></div>
+        <!-- Accordion menus: Cartera (open) y Soporte y Documentacion -->
+        <div class="accordion">
+            <div class="acc-item open">
+                <div id="marker">
+                </div>
+                <button class="acc-header">Cartera</button>
+                <div class="acc-body">
+                    <ul class="acc-list">
+                        <li>Home <img src="Imagenes/1.1.png" class="sub-icon" alt="icono">
+                        <li class="active">Services <img src="Imagenes/1.3.png" class="sub-icon" alt="icono">
+                        <li>Gallery <img src="Imagenes/2.2.png" class="sub-icon" alt="icono">
+                        <li>Login <img src="Imagenes/1.4.png" class="sub-icon" alt="icono">
+                        <li>Contact <img src="Imagenes/1.5.png" class="sub-icon" alt="icono">
+                    </ul>
+                </div>
+            </div>
+
+            <div class="acc-item">
+                <button class="acc-header">Soporte y Documentacion</button>
+                <div class="acc-body">
+                    <ul class="acc-list">
+                        <li class="soporte-li"><span class="soporte-menu-trigger" role="button" tabindex="0">Soporte <span class="soporte-chevron"></span></span></li>
+                        <li class="doc-li"><span class="doc-menu-trigger" role="button" tabindex="0">Documentación <span class="doc-chevron"></span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Avatar box below accordion -->
+        <div class="avatar-box">
+            <div class="red-line"></div>
+            <div class="avatar-wrap avatar-trigger-wrap">
+                <button type="button" class="avatar-btn" aria-label="Menú de usuario" id="avatarMenuBtn">
+                    <img src="Imagenes/IA.PNG" alt="Avatar" class="avatar-img">
+                </button>
+                <div class="avatar-dropdown" id="avatarDropdown">
+                    <a href="#" class="avatar-dropdown-item">Cerrar Sesión</a>
+                    <a href="#" class="avatar-dropdown-item">Cambiar Clave</a>
+                    <a href="#" class="avatar-dropdown-item">Editar Perfil</a>
+                </div>
+            </div>
+            <div class="avatar-card">
+                <div class="username">Sney y Eli</div>
+                <div class="user-date">24/02/2026</div>
+                <div class="user-role">Administrador</div>
+            </div>
+        </div>
+    </aside>
+    <main class="content">
+    <!-- Top Grid - Solo los 5 cuadros -->
+    <div class="top-grid">
+        <div class="grid-item">
+            <div class="item-icon">💳</div>
+            <h3>Suscripción</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+            <div class="grid-item dark">
+            <div class="item-icon">✉️</div>
+            <h3>Siniestros</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+            <div class="grid-item">
+            <div class="item-icon">👤</div>
+            <h3>Cobranzas</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+            <div class="grid-item dark">
+            <div class="item-icon">✉️</div>
+            <h3>Comisiones</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="grid-item">
+            <div class="item-icon">👤</div>
+            <h3>Tickets</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+    </div>
+            <div class="search-section-container">
+<div class="search-section-wrapper">
+    <div class="search-bar-dark">
+        <div class="search-content">
+            <input type="text" placeholder="Buscar">
+            <i class="bi bi-search"></i>
+        </div>
+    </div>
+    <div class="brick-line-separator"></div>
+</div>
+        <!-- Dashboards: tarjetas blancas con esquinas curvas -->
+        <section class="dashboards">
+            <div class="dash-grid">
+                <div class="card">
+                    <h4 class="card-title">Ventas</h4>
+                    <svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+                        <rect x="10" y="60" width="30" height="50" fill="#6c5ce7"></rect>
+                        <rect x="55" y="30" width="30" height="80" fill="#a29bfe"></rect>
+                        <rect x="100" y="20" width="30" height="90" fill="#6c5ce7"></rect>
+                        <rect x="145" y="45" width="30" height="65" fill="#a29bfe"></rect>
+                        <rect x="190" y="10" width="30" height="100" fill="#6c5ce7"></rect>
+                    </svg>
+                </div>
+
+                <div class="card">
+                    <h4 class="card-title">Usuarios</h4>
+                    <svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+                        <polyline points="0,90 40,70 80,60 120,40 160,50 200,30 240,20 280,40 300,38" fill="none" stroke="#6c5ce7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                    </svg>
+                </div>
+
+                <div class="card">
+                    <h4 class="card-title">Distribución</h4>
+                    <svg class="chart" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                        <circle cx="60" cy="60" r="40" fill="#eee"></circle>
+                        <path d="M60 60 L100 60 A40 40 0 0 0 35 100 Z" fill="#6c5ce7"></path>
+                        <path d="M60 60 L35 100 A40 40 0 0 0 20 40 Z" fill="#a29bfe"></path>
+                    </svg>
+                </div>
+
+                <div class="card wide">
+                    <h4 class="card-title">Actividades recientes</h4>
+                    <div class="chart mini-rows">
+                        <div class="row"><span>Creaciones</span><strong>124</strong></div>
+                        <div class="row"><span>Tickets</span><strong>23</strong></div>
+                        <div class="row"><span>Pagos</span><strong>89</strong></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+<div class="orange-footer-bar">
+    <img src="Imagenes/Inzur (1).png" alt="InsurAI Logo" class="footer-logo">
+    <span>Zynapxe AI ENGINEERS / Derechos Reservados 2026</span>
+</div>
+        <footer class="footer-updates">
+            <div class="update-card">
+                <div class="icon-wrap" aria-hidden="true">
+                    <img src="Imagenes/1.png" alt="Icono 1">
+                </div>
+                <h4>Version</h4>
+                <p>version 1.0.</p>
+            </div>
+            <div class="update-card">
+                <div class="icon-wrap" aria-hidden="true">
+                    <img src="Imagenes/2.png" alt="Icono 1">
+                </div>
+                <h4>Sem volutpat</h4>
+                <p>Mauris commodo dolor et ligula ornare.</p>
+            </div>
+            <div class="update-card">
+                <div class="icon-wrap" aria-hidden="true">
+                    <img src="Imagenes/3.png" alt="Icono 1">
+                </div>
+                <h4>Lorem ipsum</h4>
+                <p>Adipiscing elit. Quisque eget libero.</p>
+            </div>
+            <div class="update-card">
+                <div class="icon-wrap" aria-hidden="true">
+                    <img src="Imagenes/4.png" alt="Icono 1">
+                </div>
+                <h4>Consectetur</h4>
+                <p>Donec ornare posuere augue, vel rutrum.</p>
+            </div>
+            <div class="update-card">
+                <div class="icon-wrap" aria-hidden="true">
+                    <img src="Imagenes/IA.PNG" alt="Descripción de la foto" width="50" height="50">
+                    <i class="bi bi-person-search" aria-hidden="true"></i>
+                </div>
+                <h4>Zybanna</h4>
+                <p>Inteligencia Artificial.</p>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<!-- Submenú Soporte: se despliega a la derecha del sidebar -->
+<div class="soporte-menu-panel" id="soporteMenuPanel">
+    <ul class="soporte-submenu-list">
+        <li><a href="#">Crear Tickets</a></li>
+        <li><a href="#">Solicitudes</a></li>
+        <li><a href="#">Historial</a></li>
+    </ul>
+</div>
+
+<!-- Submenú Documentación: se despliega a la derecha del sidebar -->
+<div class="doc-menu-panel" id="docMenuPanel">
+    <ul class="doc-submenu-list">
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Arquitectura</a></li>
+        <li><a href="#">Manual de Uso</a></li>
+    </ul>
+</div>
+
+
+
+<!-- Agrega aqui el script que te digo -->
+
+<script>
+// Toggle accordion items (ORIGINAL - FUNCIONA)
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.acc-header').forEach(function(header){
+        header.addEventListener('click', function(){
+            var item = this.parentElement;
+            item.classList.toggle('open');
+        });
+    });
+    // Menú Soporte: desplegar a la derecha del sidebar (clic en Soporte)
+    var soporteTrigger = document.querySelector('.soporte-menu-trigger');
+    var soportePanel = document.getElementById('soporteMenuPanel');
+    if (soporteTrigger && soportePanel) {
+        function positionSoportePanel() {
+            var rect = soporteTrigger.closest('.soporte-li').getBoundingClientRect();
+            soportePanel.style.left = '280px'; /* al lado del sidebar, no encima */
+            soportePanel.style.top = rect.top + 'px';
+        }
+        soporteTrigger.addEventListener('click', function(e){
+            e.stopPropagation();
+            soportePanel.classList.toggle('show');
+            if (soportePanel.classList.contains('show')) positionSoportePanel();
+            soporteTrigger.closest('.soporte-li').classList.toggle('submenu-open', soportePanel.classList.contains('show'));
+        });
+        soporteTrigger.addEventListener('keydown', function(e){
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                soportePanel.classList.toggle('show');
+                if (soportePanel.classList.contains('show')) positionSoportePanel();
+                soporteTrigger.closest('.soporte-li').classList.toggle('submenu-open', soportePanel.classList.contains('show'));
+            }
+        });
+        document.addEventListener('click', function(){
+            soportePanel.classList.remove('show');
+            if (soporteTrigger) soporteTrigger.closest('.soporte-li').classList.remove('submenu-open');
+        });
+        soportePanel.addEventListener('click', function(e){ e.stopPropagation(); });
+    }
+    // Menú Documentación: desplegar a la derecha del sidebar (igual que Soporte)
+    var docTrigger = document.querySelector('.doc-menu-trigger');
+    var docPanel = document.getElementById('docMenuPanel');
+    if (docTrigger && docPanel) {
+        function positionDocPanel() {
+            var rect = docTrigger.closest('.doc-li').getBoundingClientRect();
+            docPanel.style.left = '280px';
+            docPanel.style.top = rect.top + 'px';
+        }
+        docTrigger.addEventListener('click', function(e){
+            e.stopPropagation();
+            docPanel.classList.toggle('show');
+            if (docPanel.classList.contains('show')) positionDocPanel();
+            docTrigger.closest('.doc-li').classList.toggle('submenu-open', docPanel.classList.contains('show'));
+        });
+        docTrigger.addEventListener('keydown', function(e){
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                docPanel.classList.toggle('show');
+                if (docPanel.classList.contains('show')) positionDocPanel();
+                docTrigger.closest('.doc-li').classList.toggle('submenu-open', docPanel.classList.contains('show'));
+            }
+        });
+        document.addEventListener('click', function(){
+            docPanel.classList.remove('show');
+            if (docTrigger) docTrigger.closest('.doc-li').classList.remove('submenu-open');
+        });
+        docPanel.addEventListener('click', function(e){ e.stopPropagation(); });
+    }
+    // Menú avatar: al hacer clic en la cara del avatar
+    var avatarBtn = document.getElementById('avatarMenuBtn');
+    var avatarDropdown = document.getElementById('avatarDropdown');
+    if (avatarBtn && avatarDropdown) {
+        avatarBtn.addEventListener('click', function(e){
+            e.stopPropagation();
+            avatarDropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', function(){
+            avatarDropdown.classList.remove('show');
+        });
+        avatarDropdown.addEventListener('click', function(e){ e.stopPropagation(); });
+    }
+
+    // --- NUEVO: Selección de items en Cartera (con flecha) ---
+    // Excluye los li que contienen los triggers (soporte-li y doc-li)
+    const carteraItems = document.querySelectorAll('.acc-list li:not(.soporte-li):not(.doc-li)');
+    carteraItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evita que afecte al accordion
+            
+            // Quitar active de todos los items de Cartera
+            carteraItems.forEach(li => li.classList.remove('active'));
+            // Poner active al clickeado
+            this.classList.add('active');
+        });
+    });
+
+    // --- NUEVO: Selección de items en submenús (Soporte y Documentación) ---
+    // Soporte
+    const soporteLinks = document.querySelectorAll('.soporte-submenu-list a');
+    soporteLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // No cerrar el panel
+            
+            const parentUl = this.closest('ul');
+            parentUl.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+            this.closest('li').classList.add('active');
+        });
+    });
+    
+    // Documentación
+    const docLinks = document.querySelectorAll('.doc-submenu-list a');
+    docLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const parentUl = this.closest('ul');
+            parentUl.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+            this.closest('li').classList.add('active');
+        });
+    });
+
+});
+</script>
+<div class="zybanna-bot-trigger">
+    <img src="Imagenes/IA.PNG"Asistente Zybanna">
+</div>
+
+</body>
+</html>
