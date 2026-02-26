@@ -1,0 +1,1928 @@
+/* Variables Globales */
+:root {
+    --sidebar-bg: rgb(82, 36, 125);
+    --item-bg-light: rgba(255, 255, 255, 0.1);
+    --item-bg-dark: rgba(0, 0, 0, 0.2);
+    --accent-white: #ffffff;
+    --transition: all 0.3s ease;
+    --sidebar-bg: rgba(60, 20, 100, 0.85); 
+    --sidebar-bg-light: rgba(40, 10, 70, 0.9);
+    /* ... resto de tus variables ... */
+
+    /* ... otras variables ... */
+}
+
+/* Reset y Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif !important;
+}
+button, input, optgroup, select, textarea {
+    font-family: 'Inter', sans-serif !important;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    /* Degradado similar a la imagen original */
+    background:#E8E0DF;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.container .sidebar {
+    flex-shrink: 0;
+    margin-left: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(to bottom, var(--sidebar-bg), var(--sidebar-bg-light));
+    padding: 50px 0;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: visible; /* Asegurar visibilidad */
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 50px 0;
+    position: relative;
+    min-height: 100vh; /* Asegura que el sidebar llegue hasta abajo de la pantalla */
+    display: flex;
+    flex-direction: column;
+    overflow: visible !important;
+   
+}
+/* linea roja */
+
+.sidebar-red-line {
+    width: 100%;
+    height: 1.5px;
+    background-color: #ff0000;
+    margin: 74px 0 400px 0;  /* Reducido de 100px a 30px */
+    position: absolute;
+}
+/* Submenú Soporte: despliegue a la derecha del sidebar (estilo referencia) */
+.soporte-menu-trigger {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.soporte-chevron {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 10px solid rgba(255,255,255,0.7);
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.soporte-li.submenu-open .soporte-chevron {
+    opacity: 1;
+}
+.acc-list li.soporte-li.submenu-open {
+    background: rgba(255,255,255,0.08);
+    border-left: 0px solid var(--accent-white);
+    
+}
+
+/* ── Paneles flotantes Soporte / Documentación ───────────────────────── */
+.soporte-menu-panel,
+.doc-menu-panel {
+    display: none;
+    position: fixed;
+    left: 10px;          /* mismo ancho que el sidebar */
+    width: 200px;
+    background: rgba(102, 56, 145, 0.97);
+    border-left: 2px solid rgba(255,255,255,0.25);
+    border-radius: 0 6px 6px 0;
+    box-shadow: 10px 0 20px rgba(0,0,0,0.45);
+    z-index: 99999;
+    
+}
+
+.soporte-menu-panel.show,
+.doc-menu-panel.show {
+    display: block !important;
+}
+
+/* Encabezado de cada panel */
+.submenu-panel-header {
+    padding: 10px 18px 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.soporte-submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0px 0;
+}
+.soporte-submenu-list li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.soporte-submenu-list li:last-child {
+    border-bottom: none;
+}
+.soporte-submenu-list a {
+    display: block;
+    padding: 12px 18px;
+    color: var(--accent-white);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.soporte-submenu-list a:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff !important;
+}
+
+/* Submenú Documentación: mismo comportamiento que Soporte, a la derecha del sidebar */
+
+.doc-menu-trigger {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.doc-chevron {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 6px solid rgba(104, 104, 104, 0.7);
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.doc-li.submenu-open .doc-chevron {
+    opacity: 1;
+}
+.acc-list li.doc-li.submenu-open {
+    background: rgba(73, 73, 73, 0.08);
+    border-left: 4px solid var(--accent-white);
+}
+
+.doc-submenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0;
+}
+.doc-submenu-list li {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.doc-submenu-list li:last-child {
+    border-bottom: none;
+}
+.doc-submenu-list a {
+    display: block;
+    padding: 10px 18px;
+    color: var(--accent-white);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+.doc-submenu-list a:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+/* LOGO INICIAL */
+
+.logo-section {
+    padding: 15px 50px 0px px !important;  /* Ajusta el margen interno según prefieras */
+    display: flex;
+    justify-content: flex-start; /* Alinea a la izquierda */
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin-top: -20px;
+    
+}
+.logo-img {
+    max-width: 300px; /* Define aquí el tamaño máximo que deseas */
+    width: 200%;      /* Permite que se adapte si el sidebar es más pequeño */
+    height: auto;     /* Mantiene la relación de aspecto original */
+    display: block;
+    margin-left: -22px;
+    margin-top: -70px;
+    background-color: #555555;  /* Un gris claro y elegante */
+    padding: 15px 20px;         /* Espacio interno para que el logo respire dentro del cuadro gris */
+    border-radius: 10px;        /* Bordes redondeados como en tu imagen */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave para que resalte sobre el morado */
+    box-sizing: border-box;
+}
+.logo-section h1 {
+    font-weight: 300;
+    font-size: 2.8rem;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.logo-section p {
+    font-size: 1.1rem;
+    opacity: 0.6;
+    margin-top: -5px;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Accordion (menús laterales) */
+.accordion {
+    padding: 0 30px 30px 20px;
+    margin-top: 60px !important;
+    position: relative;
+    flex: 1;                /* Toma el espacio disponible */
+    overflow: visible !important;      /* Si los menús son muy largos, aparece scroll solo aquí */
+}
+.accordion::-webkit-scrollbar {
+    width: 4px;
+}
+.accordion::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+/* tamano del menu separacion */
+.acc-item {
+    margin-bottom: 0px;
+    
+}
+.acc-header {
+    /* 1. La fórmula mágica: 100% del espacio + los 50px de relleno del sidebar */
+    width: calc(100% + 50px) !important; 
+    /* 2. Lo rodamos exactamente 20px a la izquierda para tocar el borde */
+    margin-left: -20px !important; 
+    margin-right: 0 !important; /* Eliminamos el margen derecho para que no se salga */
+    /* 3. Mantenemos el espacio interno para que el texto "Cartera" no se pegue al borde */
+    padding: 12px 30px 12px 20px !important;
+    box-sizing: border-box !important; /* Asegura que el padding no engorde la caja */
+    background: rgba(0, 0, 0, 0.2);
+    text-align: left;
+    color: rgb(255, 255, 255);
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: background 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    border-bottom: none !important;
+    font-weight: 500; /* Antes quizás estaba en 600 o bold. 500 es un punto medio elegante. */
+    letter-spacing: 0.5px;
+    
+}
+.acc-header:hover { opacity: 0.9; }
+.acc-header::after {
+    content: '';
+    flex: 1;
+    height: 3px;
+    margin-left: 5px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 2px;
+}
+.acc-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+    background: transparent; /* Esto hace que tome el mismo fondo del sidebar */
+}
+/* la flechita */ 
+.acc-item.open .acc-body {
+    max-height: 1000px; /* Aumentado para seguridad */
+    border-left-color: rgba(255,255,255,0.12);
+    overflow: visible !important; /* CRÍTICO: Permite que el submenú salga del sidebar */
+}
+.acc-list {
+    list-style: none;
+    margin: 0;
+    padding: 2px 18px;
+}
+/* 1. Quitamos el borde tradicional del elemento */
+.acc-list li {
+    position: relative; 
+    padding: 12px 25px 12px 10px; 
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: none; /* <--- Cambio clave: eliminamos el borde original */
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    gap: 30px; 
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 2. Dibujamos la nueva línea de punta a punta */
+/* Línea divisoria para TODOS los items (estén activos o no) */
+.acc-list li::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0px; /* Ajusta este valor para que coincida con el inicio del texto */
+    right: -50px; /* Llega hasta el borde derecho */
+    width: auto;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: 1;
+}
+
+/* Quitar la línea del último item (como estaba antes) */
+.acc-list li:last-child::before {
+    display: none;
+}
+
+/* Estilos para item activo - mantener el fondo y la flecha */
+/* Item activo - fondo oscuro de lado a lado */
+.acc-list li.active {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    position: relative;
+    z-index: 2;
+    /* Extender el fondo de lado a lado */
+    margin-left: -38px;  /* Esto extiende hacia la izquierda */
+    margin-right: -48px; /* Esto extiende hacia la derecha */
+    width: auto;
+    /* El padding IZQUIERDO debe ser MAYOR para que el texto NO se mueva */
+    padding: 8px 20px 8px 48px !important; /* Aumentamos padding-left a 48px */
+    /* El padding-right se mantiene igual */
+}
+
+/* Flecha del item activo - debe sobresalir */
+.acc-list li.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+    border-left: 30px solid #2b2b2b;
+    filter: drop-shadow(4px 0 3px rgba(0,0,0,0.2));
+    z-index: 3;
+    right: -35px; /* La flecha sobresale */
+}
+
+/* Línea divisoria en items activos */
+.acc-list li.active::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 48px; /* Ajustado para que coincida con el padding-left del texto */
+    right: 0;
+    width: auto;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: 4;
+}
+
+/*fondo de perfil */
+
+.acc-list li.active {
+    background-color: #2b2b2b; 
+    color: #ffffff; 
+    border-left: none; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    
+}
+.acc-list li.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -20px; 
+    width: 0;
+    height: 0;
+    border-top: 24px solid transparent; 
+    border-bottom: 24px solid transparent; 
+    border-left: 20px solid #2b2b2b; 
+    z-index: 10;
+}
+.acc-list li .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4); 
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+.acc-list li.active .icon {
+    border-color: #ffffff;
+}
+.acc-list.two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+}
+/* Enlaces dentro del acordeón (ej. Administración) mismo estilo que el resto */
+.acc-list .acc-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    flex: 1;
+    font-size: 14px;
+}
+.acc-list li:hover .acc-link,
+.acc-list .acc-link:hover {
+    color: inherit;
+}
+.acc-header .bi {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Avatar sidebar abajo  */
+
+.avatar-box {
+    position: absolute;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 0; 
+    bottom: 0;         /* La pega al fondo del sidebar */
+    left: 0;
+    width: 100%;       /* Ocupa todo el ancho del sidebar */
+    background-color: #000000;
+    padding: 20px 0 23px 0;
+    z-index: 100
+}
+.avatar-box .red-line {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: #ff0000; 
+    display: block;
+     
+}
+.avatar-wrap {
+    margin-top: -20px; 
+    position: relative;
+    z-index: 2; 
+    width: 70px;
+    height: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.avatar-trigger-wrap {
+    position: relative;
+}
+.avatar-btn {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: block;
+    line-height: 0;
+}
+.avatar-dropdown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 8px);
+    min-width: 180px;
+    background: var(--sidebar-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    z-index: 1060;
+    display: none;
+    overflow: hidden;
+    bottom: calc(100% + 8px);
+    top: auto; 
+    background-color: #2b2b2b !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5) !important;
+}
+.avatar-dropdown.show {
+    display: block;
+}
+.avatar-dropdown-item {
+    display: block;
+    padding: 10px 16px;
+    color: var(--accent-white);
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.2s ease;
+}
+.avatar-dropdown-item:last-child {
+    border-bottom: none;
+}
+.avatar-dropdown-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+.avatar-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    background: #6b4b9a; /* fallback color */
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 1 / 1;
+    top: auto;
+    margin-top: -40px;
+    
+}
+.avatar-card {
+    background: white;
+    color: #000;
+    margin: 15px 30px 0 35px; /* Le damos el margen lateral solo a la tarjeta */
+    padding: 20px 10px;
+    border-radius: 0; /* Bordes rectos como en la imagen de referencia */
+    font-size: 0.85rem;
+    margin-top: -60px;
+}
+.avatar-card .username { 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+    font-size: 0.95rem;
+    
+}
+.avatar-card .user-date { 
+    font-size: 0.8rem; 
+    color: #000; 
+    font-weight: bold;
+    margin-bottom: 10px; 
+}
+.avatar-card .user-role { 
+    font-size: 0.8rem; 
+    color: #000; 
+    font-weight: bold;
+}
+.main-nav li {
+    padding: 18px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; 
+}
+.main-nav li:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.main-nav li.active {
+    background: #252525; 
+    border-left: none; 
+}
+.main-nav li.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -20px; 
+    transform: translateY(-50%); 
+    border-top: 28px solid transparent; 
+    border-bottom: 28px solid transparent;
+    border-left: 20px solid #252525; 
+    z-index: 10;
+}
+.main-nav li .icon {
+    position: relative;
+    z-index: 11; 
+}
+
+
+/* bloques cuadrados */
+
+.top-grid {
+    display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        min-height: 150px;
+        gap: 0;
+}
+.grid-item {
+    padding: 30px;
+    text-align: center;
+    background: #ED704E;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.grid-item.dark {
+    background: #827F7D;
+}
+
+.item-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.grid-item h3 {
+    font-size: 1rem;
+    text-transform: capitalize;
+    margin: 5px 0;
+}
+
+.grid-item p {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    line-height: 1.4;
+}
+
+/* Login Box */
+
+.login-box input {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+    background: rgba(89, 0, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+        border-right: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+}
+
+.login-btn {
+    background: var(--accent-white);
+    color: #333;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+/* Dashboards: tarjetas blancas con esquinas curvas */
+.dashboards {
+    padding: 30px 40px;
+    background: transparent;
+}
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+.card {
+    background: #ffffff;
+    color: #222;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 30px 60px rgba(0,0,0,0.15);
+    min-height: 120px;
+}
+.card.wide { grid-column: span 3; }
+.card-title {
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+.chart {
+    width: 100%;
+    height: 110px;
+    display: block;
+}
+.chart.mini-rows { height: auto; }
+.mini-rows .row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+.mini-rows .row:last-child { border-bottom: none; }
+
+@media (max-width: 900px) {
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .card.wide { grid-column: span 2; }
+}
+@media (max-width: 600px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .card.wide { grid-column: span 1; }
+}
+
+.main-title {
+    font-size: 6rem;
+    font-weight: 300;
+    margin: 0;
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: 2.2rem;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+.steps-list {
+    width: 100%;
+    max-width: 550px;
+}
+
+.step-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.step-num { font-weight: bold; font-size: 1.1rem; }
+.step-text { font-size: 1.2rem; }
+
+/* Footer */
+
+.footer-updates {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 15px !important;
+    padding: 2px 30px !important; /* El valor que quieras */
+    background: linear-gradient(90deg, #f3d7b0 0%, #d7b89a 40%, #b78f7e 100%) !important;
+    align-items: start !important;
+}
+.update-card {
+    background: transparent;
+    color: #222;
+    padding: 8px 6px;
+    /* Nuevas propiedades para centrar todo */
+    display: flex;
+    flex-direction: column; /* Coloca el ícono arriba y el texto abajo */
+    align-items: center;    /* Centra el ícono (.icon-wrap) horizontalmente */
+    text-align: center;     /* Centra el texto del h4 y el párrafo */
+}
+.update-card h4 {
+    font-size: 0.95rem;
+    margin: 0 0 8px 0;
+    color: #000000;
+}
+.update-card p {
+    font-size: 0.85rem;
+    color: #222;
+    opacity: 0.85;
+    margin: 0;
+}
+
+/* Iconos del pie de pagina */
+
+.icon-wrap {
+    width: 90px !important;
+    height: 90px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Evita que imágenes grandes se salgan del recuadro */
+}
+.icon-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Mantiene la proporción de la imagen sin deformarla ni estirarla */
+}
+
+/* Logo Zybanna en la tarjeta del footer: redondo */
+.update-card.zybanna-logo-card .icon-wrap {
+    border-radius: 100%;
+    width: 150px !important;  /* Aumentamos de 60px a 100px */
+    height: 150px !important; /* Aumentamos de 60px a 100px */
+    border-radius: 50%;
+    margin-bottom: 15px;
+    margin-top: -40px !important; 
+    
+    /* Aseguramos que el resto del contenido no se pegue */
+    margin-bottom: 10px; 
+    
+    position: relative;
+    z-index: 10; /* Por si quieres que sobresalga un poco del borde superior */
+}
+
+.update-card.zybanna-logo-card .icon-wrap img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+.update-card.zybanna-logo-card .icon-wrap .bi {
+    display: none; /* Oculta el ícono si hay imagen */
+}
+
+/* otra cosa */ 
+
+.grid-item {
+    padding: 30px;
+    text-align: center;
+    background: #ED704E;
+        border-right: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Transición suave para el color de fondo y la sombra */
+    position: relative; 
+    /* Esta transición le da un pequeño efecto de "rebote" elástico muy natural */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.4s ease;
+    cursor: pointer;
+}
+.grid-item:hover {
+    transform: scale(1.05); 
+    
+    /* Sombra 3D profunda que se proyecta alrededor y debajo */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    
+    /* Asegura que este cuadro y su sombra queden por encima de los cuadros vecinos */
+    z-index: 10;
+}
+.grid-item:hover .item-icon {
+    transform: scale(1.5);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* --- barra de busqueda --- */
+
+.search-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.search-bar-dark {
+    background-color: #1a2b45; 
+    width: 100%;
+    padding: 4px 40px; 
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.search-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%; 
+}
+.search-content input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    outline: none;
+    text-transform: uppercase;
+}
+.search-content input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.search-content i {
+    color: white;
+    font-size: 1.2rem;
+    margin-left: 20px;
+}
+
+/* esto es pa acomodar el contenedor principal, el anaranjado */
+
+.main-content {
+    padding-right: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+.top-grid {
+    margin-bottom: 0 !important;
+}
+.main-content {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    padding: 0; 
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Eli esto es la edicion de la barra de busqueda */
+
+.search-divider-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.search-bar-blue {
+    background-color: #1a2b45; 
+    padding: 15px 40px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-bar-blue input {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    outline: none;
+    text-transform: uppercase;
+}
+.search-bar-blue i {
+    color: white;
+    font-size: 1.2rem;
+}
+/* esto es la linea */
+.brick-line {
+    width: 80%;
+    height: 8px;
+    background-color: #060606; 
+}
+.top-grid {
+    width: 100%;
+    margin: 0 !important;
+}
+.soporte-menu-panel, .doc-menu-panel {
+    display: none;
+}
+/* EL CONTENEDOR DE LA FRANJA NARANJA */
+.orange-footer-bar {
+    background-color: #FF8C00; /* Color naranja */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Cambia a 'flex-start' si prefieres que esté a la izquierda */
+    padding: 0px 0px; /* Mantiene la franja delgada */
+    gap: 15px; /* Espacio entre el logo y el texto */
+    box-sizing: border-box;
+    height: 30px;
+}
+
+/* EL LOGO DENTRO DE LA FRANJA
+   Truco: mantenemos la altura real pequeña para que la franja
+   no crezca, pero visualmente agrandamos el logo con scale(). */
+.orange-footer-bar .footer-logo {
+    height: 40px;      /* Tamaño "real" que define la altura de la barra */
+    width: auto;
+    object-fit: contain;
+    transform: scale(1.3);      /* Lo vemos más grande sin engordar la franja */
+    transform-origin: center;
+}
+
+/* EL TEXTO DE DERECHOS RESERVADOS */
+.orange-footer-bar span {
+    color: #ffffff; /* Texto blanco para que resalte en el naranja */
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* 1. Fondo oscuro para el ítem activo en los submenús de Soporte y Documentación */
+.soporte-submenu-list li.active,
+.doc-submenu-list li.active {
+    background-color: #2b2b2b;
+    position: relative;
+    z-index: 50;
+    width: 100%;
+}
+/* 2. La flecha gigante que sobresale del panel hacia la derecha */
+.soporte-submenu-list li.active::after,
+.doc-submenu-list li.active::after {
+    content: "";
+    position: absolute;
+    top: -50;
+    bottom: 0;
+    left: 100%; 
+    width: 0;
+    height: 100;
+    border-bottom: 19px solid transparent; 
+    border-left: 25px solid #2b2b2b; 
+    filter: drop-shadow(4px 0 3px rgba(0,0,0,0.2));
+    z-index: 51;
+    transform: none; 
+}
+/* Alineación del contenedor LI para que el icono y texto convivan bien */
+.acc-list li,
+.soporte-submenu-list li,
+.doc-submenu-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Texto a la izquierda, icono anclado a la derecha */
+    gap: 0; 
+    padding: 10px 20px;
+    padding-left: 10px !important; 
+    padding-right: 20px;
+    height: 45px;
+}
+
+/* Estilo para las imágenes de los iconos */
+.sub-icon {
+    width: 45px;  /* Ajusta el tamaño a tu gusto */
+    height: 25px; /* Manténlo cuadrado */
+    filter: brightness(0) invert(1); /* OPCIONAL: Si tus iconos son negros, esto los vuelve blancos */
+    opacity: 0.7;
+    object-fit: contain; /* Para que no se estiren */
+    transition: transform 0.3s ease;
+    display: block;
+    margin-left: auto;  /* Empuja el icono hacia el borde derecho del sidebar */
+    margin-right: 0;
+}
+
+/* Efecto cuando pasas el mouse o está activo */
+li:hover .sub-icon,
+li.active .sub-icon {
+    opacity: 1;
+    transform: scale(1.2); /* Un pequeño salto para que se vea vivo */
+}
+/* Contenedor de la burbuja expandida */
+/* Apuntamos a la burbuja base, pero solo si tiene el tamaño adecuado */
+/* ===== CONTENEDOR PRINCIPAL ===== */
+/* Contenedor de la burbuja expandida */
+
+
+/* ==========================================
+   3. ESTILOS PARA TU PNG TRANSPARENTE
+=========================================== */
+/* Contenedor de la burbuja expandida */
+.woot-widget-bubble.woot-elements--expanded {
+  display: flex !important;
+  align-items: center !important;
+  padding-left: 58px !important; /* Espacio para el avatar circular */
+  position: relative !important;
+  overflow: visible !important;
+  border-radius: 35px !important;
+  min-height: 48px !important;
+}
+
+/* Inyección del Avatar (Mujer) */
+.woot-widget-bubble.woot-elements--expanded::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 6px !important; /* Posición desde el borde izquierdo de la burbuja */
+  top: 50% !important;
+  transform: translateY(-50%) !important; /* Centrado vertical */
+  width: 42px !important;
+  height: 42px !important;
+  
+  /* URL de imagen real de prueba (Asistente profesional) */
+  background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  
+  border-radius: 50% !important;
+  border: 2px solid #ffffff !important; /* Borde blanco para contraste */
+  z-index: 100 !important;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ajuste del texto para que no se pegue al avatar */
+.woot-widget-bubble.woot-elements--expanded span {
+  margin-left: 2px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+/* --- CÍRCULOS BLANCOS PARA LOS ICONOS --- */
+
+/* 1. Iconos del Sidebar (Más pequeños) */
+.acc-list .sub-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 50%;        /* Lo hace perfectamente redondo */
+    padding: 6px;              /* Da "aire" para que el logo no toque los bordes */
+    object-fit: contain;       /* Evita que tu PNG se deforme */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra suave */
+    transition: transform 0.3s ease;
+}
+
+/* Efecto hover: el círculo crece un poco al pasar el mouse */
+
+
+/* 2. Iconos de los Bloques Superiores (Más grandes) */
+
+/* Estado inicial del Sidebar */
+/* Para que toda la página use la nueva fuente */
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* O por si solo quieres aplicarla a los bloques que estabas editando antes */
+/* La franja azul debajo de los bloques */
+
+/* El cuadro de diálogo estilo buscador */
+/* La franja azul que atraviesa la pantalla */
+.search-bar-stripe {
+    background-color: #004080; 
+    padding: -5px 0; /* Aún más fina */
+    width: 100%;
+    margin-top: 0px; /* Reducido para que suba más (si la quieres pegada, pon 0px) */
+    display: flex;
+    align-items: center;
+    position: relative; /* Necesario para posicionar la línea roja fuera */
+    
+    /* Quitamos el border-bottom anterior */
+    border-bottom: none;
+}
+
+/* El "cuadro de diálogo" del buscador */
+.search-dialog-wrapper {
+    background: rgb(255, 255, 255);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    /* Ajustamos el padding para acomodar el botón a la derecha */
+    padding: 2x 10px 2px 20px;
+    
+    /* Estos dos valores lo estiran de punta a punta */
+    width: 95%;
+    max-width: 1600px;
+
+    margin: 0 auto;
+    box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* El ícono de lupa */
+.search-dialog-wrapper .bi-search {
+    color: #666;
+    font-size: 18px;
+    margin-right: 20px;
+    padding: 2px 6px 2px 10px;
+}
+
+/* El input donde se escribe */
+.main-search-input {
+    border: none;
+    outline: none;
+    /* "flex-grow: 1" hace que el input ocupe todo el espacio disponible */
+    flex-grow: 1; 
+    font-size: 15px;
+    color: #333;
+    background: transparent;
+    margin-right: 10px; /* Espacio entre el texto y el botón */
+}
+.search-btn:hover {
+    background-color: #e65c00; /* Un naranja un poco más oscuro al pasar el mouse */
+}
+.search-bar-stripe::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px; /* AQUÍ CONTROLAS LA SEPARACIÓN: más número = más lejos */
+    width: 100%;
+    height: 3px;     /* Grosor de la línea */
+    background-color: #ff4500; /* Color rojo/naranja */
+}
+.search-btn {
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    
+    /* Reducimos el padding vertical del botón */
+    padding: 4px 20px; 
+    
+    border-radius: 20px;
+    font-size: 13px; /* Texto un poco más pequeño para que no se vea apretado */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+}
+/* ESTILOS NUEVOS PARA EL BOTÓN "BUSCAR" */
+.search-btn {
+    background-color: #ff6b00; /* Naranja consistente con tu diseño */
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Tamaño del botón */
+    border-radius: 20px; /* Bordes redondeados */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Evita que el texto se rompa en dos líneas */
+    
+}
+/* Estilo para la punta de flecha que sobresale */
+#marker {
+    position: absolute; /* */
+    
+    /* Lo pegamos al borde derecho */
+    right: -15px; 
+    
+    /* Ajusta este valor para que quede centrado con 'Cartera' */
+    top: 60px; 
+    
+    /* Construcción del triángulo (punta de flecha) */
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    
+    /* El color debe ser el mismo que el fondo de tu sidebar o el de acento */
+    border-left: 15px solid #ff4500; 
+    
+    z-index: 9999; /* Para asegurar que se vea por encima de todo */
+}
+/* Hacer el marker transparente pero mantener su espacio */
+#marker {
+    border-left-color: transparent !important;
+    opacity: 0 !important;
+}
+/* Forzar footer pequeño */
+body .footer-updates {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    min-height: auto !important;
+    height: auto !important;
+}
+
+/* Asegurar que los iconos mantengan su tamaño */
+body .footer-updates .icon-wrap {
+    width: 90px !important;
+    height: 90px !important;
+    margin: 0 !important;
+}
+
+body .footer-updates .update-card {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+/* FUERZA BRUTA - ELIMINAR TODAS LAS FLECHAS DE LOS SUBMENÚS */
+.soporte-submenu-list li::after,
+.soporte-submenu-list li::before,
+.soporte-submenu-list li.active::after,
+.soporte-submenu-list li.active::before,
+.doc-submenu-list li::after,
+.doc-submenu-list li::before,
+.doc-submenu-list li.active::after,
+.doc-submenu-list li.active::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    position: static !important;
+    pointer-events: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* TODO ESTO ES DE GABRIEL */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* ===== ON BOARDING ===== */
+        .onboarding-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #e1e7ec;
+            padding: 1rem;
+        }
+
+        /* Logo fuera del cuadro */
+        .logo-arriba {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 420px; /* Ajustado al nuevo tamaño del cuadro */
+            width: 100%;
+        }
+
+        .logo-arriba img {
+            max-width: 250px;
+            height: auto;
+        }
+
+        /* CUADRO MÁS GRANDE */
+        .onboarding-card {
+            max-width: 420px;   /* Antes 380px - Ahora más ancho */
+            width: 100%;
+            background: white;
+            border-radius: 10px;  /* Un poco más redondeado */
+            padding: 2.5rem 3rem;  /* Antes 2rem 2.5rem - Ahora más espacio interior */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Ocultamos el logo texto original */
+        .logo-inzur {
+            display: none;
+        }
+
+        .logo-subtitle {
+            display: none;
+        }
+
+        .welcome-message {
+            margin-bottom: 2rem;  /* Más espacio inferior */
+            text-align: center;
+        }
+
+        .welcome-message h2 {
+            font-size: 1.3rem;    /* Un poco más grande */
+            font-weight: 600;
+            color: #96c1d8;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-message p {
+            color: #666;
+            font-size: 0.9rem;    /* Un poco más grande */
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;  /* Más espacio entre campos */
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;     /* Un poco más grande */
+            color: #666;
+            margin-bottom: 0.3rem;
+            font-weight: 400;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;   /* Campos más altos y con más padding */
+            border: 1px solid #ccc;
+            border-radius: 5px;      /* Bordes un poco más redondeados */
+            font-size: 1rem;         /* Texto más grande */
+            background: white;
+        }
+
+        .btn-ingresar {
+            width: 100%;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #999;
+            padding: 0.8rem;         /* Botón más alto */
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1.5rem 0 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ingresar:hover {
+            background-color: #e0e0e0;
+        }
+
+        .forgot-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 2rem;
+        }
+
+        .powered-by {
+            color: #666;
+            font-size: 0.75rem;
+            border-top: 1px solid #eee;
+            padding-top: 1.2rem;
+        }
+
+        .powered-by strong {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        /* ===== DASHBOARD - NAVBAR BLANCO ===== */
+        .main-dashboard {
+            display: none;
+        }
+
+        /* Navbar superior blanco */
+        .top-navbar {
+            background: white;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            height: 80px;
+            gap: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Botones + y lupa - SIN FONDO, COLOR #4e6975 */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-right: 1rem;
+        }
+
+        .btn-action {
+            width: auto;
+            height: auto;
+            background: transparent;
+            color: #4e6975;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        /* + más grande y robusto */
+        .btn-action.plus {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-top: -8px;
+        }
+
+        .btn-action.lupa {
+            font-size: 2.4rem;
+            font-weight: 300;
+        }
+
+        .btn-action:hover {
+            color: #ff6b35;
+            transform: scale(1.1);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f5f5f5;
+            color: #ff6b35;
+        }
+
+        .nav-item.active {
+            color: #ff6b35;
+            border-bottom: 3px solid #ff6b35;
+            border-radius: 0;
+            padding-bottom: 1.4rem;
+            margin-bottom: -1px;
+        }
+
+        .nav-item .icon {
+            font-size: 1.3rem;
+        }
+
+        .user-section {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #333;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+
+        /* Header - SIN BIENVENIDO */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .filter-text {
+            color: #666;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-text span {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        /* Search section */
+        .search-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-title .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: #4e6975;
+        }
+
+        .search-title .arrow.rotated {
+            transform: rotate(90deg);
+        }
+
+        .filters-container {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            max-height: 300px;
+        }
+
+        .filters-container.collapsed {
+            max-height: 0;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-item label {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .filter-item input, .filter-item select {
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background: white;
+        }
+
+        .filter-item input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .total-objects {
+            font-size: 1.1rem;
+            color: #4e6975;
+            font-weight: 700;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 5px solid #4e6975;
+        }
+
+        /* Tabla */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .crud-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .crud-table th {
+            text-align: left;
+            padding: 1rem 0.75rem;
+            color: #333;
+            font-weight: 700;
+            border-bottom: 5px solid #0caec4;
+            background: #f9f9f9;
+        }
+
+        .crud-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .crud-table tr:hover td {
+            background: #fff3e0;
+            cursor: pointer;
+        }
+
+        /* Colores naranja para textos */
+        .person-name {
+            font-weight: 600;
+            color: #ff6b35 !important;
+        }
+
+        .organization-name {
+            color: #ff6b35 !important;
+            font-weight: 500;
+        }
+
+        .email-address {
+            color: #ff6b35 !important;
+            text-decoration: none;
+        }
+
+        .email-address:hover {
+            text-decoration: underline;
+        }
+
+        /* Estados - SOLO TEXTO Y PUNTO */
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.creado {
+            background: #0d47a1;
+            box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
+        }
+
+        .status-dot.activo {
+            background: #1b5e20;
+            box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.2);
+        }
+
+        .status-dot.inactivo {
+            background: #b71c1c;
+            box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.2);
+        }
+
+        .status-select-clean {
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            padding: 0.2rem 0;
+            color: #333;
+        }
+
+        .status-select-clean.creado {
+            color: #0d47a1;
+        }
+
+        .status-select-clean.activo {
+            color: #1b5e20;
+        }
+
+        .status-select-clean.inactivo {
+            color: #b71c1c;
+        }
+
+        /* Paginación */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 5px solid #4e6975;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-pagination {
+            padding: 0.5rem 1.2rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-pagination:hover {
+            background: #f0f0f0;
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .per-page {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .items-total {
+            color: #4e6975;
+            font-weight: 700;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 5px solid #0caec4;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .btn-cerrar {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-cancelar {
+            background: white;
+            border: 1px solid #ccc;
+            color: #666;
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-guardar {
+            background: #ff6b35;
+            border: none;
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }

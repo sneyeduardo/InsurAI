@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InzurAI+ · Seguros en Movimiento</title>
+    <style>
+        /* ===== FUENTES ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* ===== ON BOARDING ===== */
+        .onboarding-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #e1e7ec;
+            padding: 1rem;
+        }
+
+        /* Logo fuera del cuadro */
+        .logo-arriba {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 420px; /* Ajustado al nuevo tamaño del cuadro */
+            width: 100%;
+        }
+
+        .logo-arriba img {
+            max-width: 250px;
+            height: auto;
+        }
+
+        /* CUADRO MÁS GRANDE */
+        .onboarding-card {
+            max-width: 420px;   /* Antes 380px - Ahora más ancho */
+            width: 100%;
+            background: white;
+            border-radius: 10px;  /* Un poco más redondeado */
+            padding: 2.5rem 3rem;  /* Antes 2rem 2.5rem - Ahora más espacio interior */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Ocultamos el logo texto original */
+        .logo-inzur {
+            display: none;
+        }
+
+        .logo-subtitle {
+            display: none;
+        }
+
+        .welcome-message {
+            margin-bottom: 2rem;  /* Más espacio inferior */
+            text-align: center;
+        }
+
+        .welcome-message h2 {
+            font-size: 1.3rem;    /* Un poco más grande */
+            font-weight: 600;
+            color: #96c1d8;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-message p {
+            color: #666;
+            font-size: 0.9rem;    /* Un poco más grande */
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;  /* Más espacio entre campos */
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;     /* Un poco más grande */
+            color: #666;
+            margin-bottom: 0.3rem;
+            font-weight: 400;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;   /* Campos más altos y con más padding */
+            border: 1px solid #ccc;
+            border-radius: 5px;      /* Bordes un poco más redondeados */
+            font-size: 1rem;         /* Texto más grande */
+            background: white;
+        }
+
+        .btn-ingresar {
+            width: 100%;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #999;
+            padding: 0.8rem;         /* Botón más alto */
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1.5rem 0 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ingresar:hover {
+            background-color: #e0e0e0;
+        }
+
+        .forgot-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 2rem;
+        }
+
+        .powered-by {
+            color: #666;
+            font-size: 0.75rem;
+            border-top: 1px solid #eee;
+            padding-top: 1.2rem;
+        }
+
+        .powered-by strong {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        /* ===== DASHBOARD - NAVBAR BLANCO ===== */
+        .main-dashboard {
+            display: none;
+        }
+
+        /* Navbar superior blanco */
+        .top-navbar {
+            background: white;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            height: 80px;
+            gap: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* Botones + y lupa - SIN FONDO, COLOR #4e6975 */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-right: 1rem;
+        }
+
+        .btn-action {
+            width: auto;
+            height: auto;
+            background: transparent;
+            color: #4e6975;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        /* + más grande y robusto */
+        .btn-action.plus {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-top: -8px;
+        }
+
+        .btn-action.lupa {
+            font-size: 2.4rem;
+            font-weight: 300;
+        }
+
+        .btn-action:hover {
+            color: #ff6b35;
+            transform: scale(1.1);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f5f5f5;
+            color: #ff6b35;
+        }
+
+        .nav-item.active {
+            color: #ff6b35;
+            border-bottom: 3px solid #ff6b35;
+            border-radius: 0;
+            padding-bottom: 1.4rem;
+            margin-bottom: -1px;
+        }
+
+        .nav-item .icon {
+            font-size: 1.3rem;
+        }
+
+        .user-section {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #333;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+
+        /* Header - SIN BIENVENIDO */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .filter-text {
+            color: #666;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-text span {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        /* Search section */
+        .search-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-title .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: #4e6975;
+        }
+
+        .search-title .arrow.rotated {
+            transform: rotate(90deg);
+        }
+
+        .filters-container {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            max-height: 300px;
+        }
+
+        .filters-container.collapsed {
+            max-height: 0;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-item label {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .filter-item input, .filter-item select {
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background: white;
+        }
+
+        .filter-item input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .total-objects {
+            font-size: 1.1rem;
+            color: #4e6975;
+            font-weight: 700;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 5px solid #4e6975;
+        }
+
+        /* Tabla */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .crud-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .crud-table th {
+            text-align: left;
+            padding: 1rem 0.75rem;
+            color: #333;
+            font-weight: 700;
+            border-bottom: 5px solid #0caec4;
+            background: #f9f9f9;
+        }
+
+        .crud-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .crud-table tr:hover td {
+            background: #fff3e0;
+            cursor: pointer;
+        }
+
+        /* Colores naranja para textos */
+        .person-name {
+            font-weight: 600;
+            color: #ff6b35 !important;
+        }
+
+        .organization-name {
+            color: #ff6b35 !important;
+            font-weight: 500;
+        }
+
+        .email-address {
+            color: #ff6b35 !important;
+            text-decoration: none;
+        }
+
+        .email-address:hover {
+            text-decoration: underline;
+        }
+
+        /* Estados - SOLO TEXTO Y PUNTO */
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.creado {
+            background: #0d47a1;
+            box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
+        }
+
+        .status-dot.activo {
+            background: #1b5e20;
+            box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.2);
+        }
+
+        .status-dot.inactivo {
+            background: #b71c1c;
+            box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.2);
+        }
+
+        .status-select-clean {
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            padding: 0.2rem 0;
+            color: #333;
+        }
+
+        .status-select-clean.creado {
+            color: #0d47a1;
+        }
+
+        .status-select-clean.activo {
+            color: #1b5e20;
+        }
+
+        .status-select-clean.inactivo {
+            color: #b71c1c;
+        }
+
+        /* Paginación */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 5px solid #4e6975;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-pagination {
+            padding: 0.5rem 1.2rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-pagination:hover {
+            background: #f0f0f0;
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .per-page {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .items-total {
+            color: #4e6975;
+            font-weight: 700;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 5px solid #0caec4;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .btn-cerrar {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-cancelar {
+            background: white;
+            border: 1px solid #ccc;
+            color: #666;
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-guardar {
+            background: #ff6b35;
+            border: none;
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- ON BOARDING -->
+    <div class="onboarding-container" id="onboardingScreen">
+        <!-- Logo fuera del cuadro, arriba de "Bienvenido" -->
+        <div class="logo-arriba">
+            <img src="Inzur.png" alt="InzurAI+ Logo">
+        </div>
+        
+        <div class="onboarding-card">
+            <div class="welcome-message">
+                <h2>Bienvenido a InzurAI+</h2>
+                <p>Por favor identifíquese, para ingresar a la plataforma</p>
+            </div>
+
+            <div class="input-group">
+                <label>Usuario</label>
+                <input type="text" class="input-field" id="usuario" value="admin.corretaje">
+            </div>
+
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" class="input-field" id="password" value="12345678">
+            </div>
+
+            <button class="btn-ingresar" id="btnIngresarOnboarding">Ingresar InzurAI+</button>
+            <a href="#" class="forgot-link">¿Olvidó su clave?</a>
+
+            <div class="powered-by">
+                InzurAI+ Powered by <strong>Zynapxe</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD - SIN BIENVENIDO -->
+    <div class="main-dashboard" id="dashboardMain">
+        <!-- Navbar superior con botones a la izquierda -->
+        <div class="top-navbar">
+            <!-- Botones + y lupa -->
+            <div class="action-buttons">
+                <div class="btn-action plus" onclick="crearNuevoUsuario()">+</div>
+                <div class="btn-action lupa" onclick="buscarUsuarios()">🔍</div>
+            </div>
+            
+            <!-- Items de navegación funcionales -->
+            <div class="nav-item active" id="navDashboard" onclick="cambiarSeccion('dashboard')">
+                <span class="icon">📊</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" id="navPersonas" onclick="cambiarSeccion('personas')">
+                <span class="icon">👥</span>
+                <span>Personas</span>
+            </div>
+            <div class="nav-item" id="navPerfiles" onclick="cambiarSeccion('perfiles')">
+                <span class="icon">📋</span>
+                <span>Perfiles</span>
+            </div>
+            <div class="nav-item" id="navConfiguracion" onclick="cambiarSeccion('configuracion')">
+                <span class="icon">⚙️</span>
+                <span>Configuración</span>
+            </div>
+            
+            <div class="user-section">
+                <span class="user-name" id="userDisplay">Admin</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <!-- Header - SIN BIENVENIDO -->
+            <div class="page-header">
+                <h1 id="pageTitle">Buscar personas</h1>
+                <div class="filter-text" id="filterIndicator">
+                    <span>Filtro</span> | Todos los registros
+                </div>
+            </div>
+
+            <!-- Search section -->
+            <div class="search-section" id="searchSection">
+                <div class="search-title" onclick="toggleFilters()">
+                    Opciones de búsqueda:
+                    <span class="arrow" id="searchArrow">▶</span>
+                </div>
+                
+                <div class="filters-container" id="filtersContainer">
+                    <div class="filters-grid">
+                        <div class="filter-item">
+                            <label>Persona</label>
+                            <input type="text" id="filterPerson" placeholder="Cualquier..." onkeyup="aplicarFiltros()">
+                        </div>
+                        <div class="filter-item">
+                            <label>Email</label>
+                            <input type="text" id="filterEmail" placeholder="Cualquier..." onkeyup="aplicarFiltros()">
+                        </div>
+                        <div class="filter-item">
+                            <label>Organización</label>
+                            <select id="filterOrganization" onchange="aplicarFiltros()">
+                                <option value="">Cualquier</option>
+                                <option value="Démo">Démo</option>
+                                <option value="IT Department">IT Department</option>
+                                <option value="Corretaje Central">Corretaje Central</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="total-objects" id="totalObjects">Total: 7 personas</div>
+            </div>
+
+            <!-- Tabla funcional con estados -->
+            <div class="table-container" id="tableContainer">
+                <table class="crud-table" id="personasTable">
+                    <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Apellido</th>
+                            <th>Organización</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Se llena con JavaScript -->
+                    </tbody>
+                </table>
+
+                <!-- Paginación funcional -->
+                <div class="pagination-container">
+                    <div class="pagination-buttons">
+                        <button class="btn-pagination" onclick="paginaAnterior()" id="btnPrev" disabled>Anterior</button>
+                        <button class="btn-pagination" onclick="paginaSiguiente()" id="btnNext">Siguiente</button>
+                    </div>
+                    <div class="per-page">
+                        <span id="pageInfo">Página 1 de 1</span>
+                        <span class="items-total" id="totalItems">7 items</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA EDITAR/CREAR PERSONA - SIN PARÉNTESIS -->
+    <div class="modal" id="modalPersona">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nuevo Usuario</h3>
+                <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" class="form-control" id="editNombre">
+            </div>
+            <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" class="form-control" id="editApellido">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" id="editEmail">
+            </div>
+            <div class="form-group">
+                <label>Organización</label>
+                <select class="form-control" id="editOrganizacion">
+                    <option value="Démo">Démo</option>
+                    <option value="IT Department">IT Department</option>
+                    <option value="Corretaje Central">Corretaje Central</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Estado</label>
+                <select class="form-control" id="editEstado">
+                    <option value="CREADO">CREADO</option>
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="INACTIVO">INACTIVO</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-guardar" onclick="guardarPersona()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== DATOS INICIALES CON ESTADOS =====
+        let personas = [
+            { id: 1, nombre: 'Agathe', apellido: 'Chiriac', organizacion: 'Démo', estado: 'ACTIVO', email: 'agathe.chiriac@demo.com' },
+            { id: 2, nombre: 'Anna', apellido: 'Gavaldà', organizacion: 'IT Department', estado: 'ACTIVO', email: 'annav@gavaldà.it.com' },
+            { id: 3, nombre: 'Bence', apellido: 'Varga', organizacion: 'Démo', estado: 'CREADO', email: 'varga.bencev@gmail.com' },
+            { id: 4, nombre: 'Borca', apellido: 'Sáez', organizacion: 'IT Department', estado: 'ACTIVO', email: 'borca.saez@unipd.it' },
+            { id: 5, nombre: 'Charles', apellido: 'Armour', organizacion: 'IT Department', estado: 'ACTIVO', email: 'charles.armour@it.com' },
+            { id: 6, nombre: 'Charles', apellido: 'Patton', organizacion: 'IT Department', estado: 'INACTIVO', email: 'charles.patton@it.com' },
+            { id: 7, nombre: 'Claude', apellido: 'Monnet', organizacion: 'Démo', estado: 'ACTIVO', email: 'claude.monnet@democons' }
+        ];
+
+        let personasFiltradas = [...personas];
+        let personaEditandoId = null;
+        let paginaActual = 1;
+        const itemsPorPagina = 5;
+
+        // Elementos
+        const onboardingScreen = document.getElementById('onboardingScreen');
+        const dashboardMain = document.getElementById('dashboardMain');
+        const btnIngresar = document.getElementById('btnIngresarOnboarding');
+        const modal = document.getElementById('modalPersona');
+        const tableBody = document.getElementById('tableBody');
+        const totalObjects = document.getElementById('totalObjects');
+        const userDisplay = document.getElementById('userDisplay');
+        const pageTitle = document.getElementById('pageTitle');
+        const filterIndicator = document.getElementById('filterIndicator');
+        const searchSection = document.getElementById('searchSection');
+        const tableContainer = document.getElementById('tableContainer');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const pageInfo = document.getElementById('pageInfo');
+        const totalItems = document.getElementById('totalItems');
+        const filterPerson = document.getElementById('filterPerson');
+        const filterEmail = document.getElementById('filterEmail');
+        
+        // Elementos de navegación
+        const navDashboard = document.getElementById('navDashboard');
+        const navPersonas = document.getElementById('navPersonas');
+        const navPerfiles = document.getElementById('navPerfiles');
+        const navConfiguracion = document.getElementById('navConfiguracion');
+
+        // ===== FUNCIÓN PARA CAMBIAR ENTRE SECCIONES =====
+        function cambiarSeccion(seccion) {
+            // Quitar clase active de todos
+            navDashboard.classList.remove('active');
+            navPersonas.classList.remove('active');
+            navPerfiles.classList.remove('active');
+            navConfiguracion.classList.remove('active');
+            
+            // Activar el correspondiente
+            if (seccion === 'dashboard') {
+                navDashboard.classList.add('active');
+                pageTitle.textContent = 'Buscar personas';
+                filterIndicator.style.display = 'flex';
+                searchSection.style.display = 'block';
+                tableContainer.style.display = 'block';
+            } else if (seccion === 'personas') {
+                navPersonas.classList.add('active');
+                pageTitle.textContent = 'Gestión de Personas';
+                filterIndicator.style.display = 'none';
+                searchSection.style.display = 'none';
+                tableContainer.style.display = 'block';
+            } else if (seccion === 'perfiles') {
+                navPerfiles.classList.add('active');
+                pageTitle.textContent = 'Administración de Perfiles';
+                filterIndicator.style.display = 'none';
+                searchSection.style.display = 'none';
+                tableContainer.style.display = 'block';
+            } else if (seccion === 'configuracion') {
+                navConfiguracion.classList.add('active');
+                pageTitle.textContent = 'Configuración del Sistema';
+                filterIndicator.style.display = 'none';
+                searchSection.style.display = 'none';
+                tableContainer.style.display = 'block';
+            }
+        }
+
+        // ===== FUNCIÓN PARA DESPLEGAR/OCULTAR FILTROS =====
+        function toggleFilters() {
+            const container = document.getElementById('filtersContainer');
+            const arrow = document.getElementById('searchArrow');
+            container.classList.toggle('collapsed');
+            arrow.classList.toggle('rotated');
+        }
+
+        // ===== FUNCIÓN PARA CREAR NUEVO USUARIO =====
+        function crearNuevoUsuario() {
+            personaEditandoId = null;
+            document.getElementById('modalTitle').textContent = 'Nuevo Usuario';
+            document.getElementById('editNombre').value = '';
+            document.getElementById('editApellido').value = '';
+            document.getElementById('editEmail').value = '';
+            document.getElementById('editOrganizacion').value = 'Démo';
+            document.getElementById('editEstado').value = 'CREADO';
+            modal.classList.add('show');
+        }
+
+        // ===== FUNCIÓN PARA BUSCAR USUARIOS (LUPA) =====
+        function buscarUsuarios() {
+            // Cambiar a dashboard si no está activo
+            cambiarSeccion('dashboard');
+            
+            // Abrir el panel de filtros si está cerrado
+            const container = document.getElementById('filtersContainer');
+            const arrow = document.getElementById('searchArrow');
+            if (container.classList.contains('collapsed')) {
+                container.classList.remove('collapsed');
+                arrow.classList.remove('rotated');
+            }
+            // Enfocar el primer campo de búsqueda
+            setTimeout(() => filterPerson.focus(), 100);
+        }
+
+        // ===== FUNCIÓN PARA CAMBIAR ESTADO =====
+        function cambiarEstado(id, nuevoEstado) {
+            const persona = personas.find(p => p.id === id);
+            if (persona) {
+                persona.estado = nuevoEstado;
+                aplicarFiltros();
+            }
+        }
+
+        // ===== FUNCIONES DEL DASHBOARD =====
+        function renderizarTabla() {
+            const inicio = (paginaActual - 1) * itemsPorPagina;
+            const fin = inicio + itemsPorPagina;
+            const personasPaginadas = personasFiltradas.slice(inicio, fin);
+            
+            tableBody.innerHTML = '';
+            personasPaginadas.forEach(persona => {
+                const estadoClass = persona.estado === 'CREADO' ? 'creado' : 
+                                   persona.estado === 'ACTIVO' ? 'activo' : 'inactivo';
+                
+                const row = document.createElement('tr');
+                row.onclick = () => editarPersona(persona.id);
+                row.innerHTML = `
+                    <td><span class="person-name">${persona.nombre} ${persona.apellido}</span></td>
+                    <td>${persona.apellido}</td>
+                    <td><span class="organization-name">${persona.organizacion}</span></td>
+                    <td><span class="email-address">${persona.email}</span></td>
+                    <td>
+                        <div class="status-container">
+                            <span class="status-dot ${estadoClass}"></span>
+                            <select class="status-select-clean ${estadoClass}" onchange="cambiarEstado(${persona.id}, this.value)" onclick="event.stopPropagation()">
+                                <option value="CREADO" ${persona.estado === 'CREADO' ? 'selected' : ''}>CREADO</option>
+                                <option value="ACTIVO" ${persona.estado === 'ACTIVO' ? 'selected' : ''}>ACTIVO</option>
+                                <option value="INACTIVO" ${persona.estado === 'INACTIVO' ? 'selected' : ''}>INACTIVO</option>
+                            </select>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Actualizar contadores
+            totalObjects.textContent = `Total: ${personasFiltradas.length} personas`;
+            totalItems.textContent = `${personasFiltradas.length} items`;
+            
+            const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+            pageInfo.textContent = `Página ${paginaActual} de ${totalPaginas || 1}`;
+            
+            // Actualizar botones de paginación
+            btnPrev.disabled = paginaActual === 1;
+            btnNext.disabled = paginaActual === totalPaginas || totalPaginas === 0;
+        }
+
+        function aplicarFiltros() {
+            const filterPerson = document.getElementById('filterPerson').value.toLowerCase();
+            const filterEmail = document.getElementById('filterEmail').value.toLowerCase();
+            const filterOrg = document.getElementById('filterOrganization').value;
+
+            personasFiltradas = personas.filter(persona => {
+                const nombreCompleto = `${persona.nombre} ${persona.apellido}`.toLowerCase();
+                const cumplePersona = !filterPerson || nombreCompleto.includes(filterPerson);
+                const cumpleEmail = !filterEmail || persona.email.toLowerCase().includes(filterEmail);
+                const cumpleOrg = !filterOrg || persona.organizacion === filterOrg;
+                
+                return cumplePersona && cumpleEmail && cumpleOrg;
+            });
+
+            paginaActual = 1;
+            renderizarTabla();
+        }
+
+        function paginaAnterior() {
+            if (paginaActual > 1) {
+                paginaActual--;
+                renderizarTabla();
+            }
+        }
+
+        function paginaSiguiente() {
+            const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                renderizarTabla();
+            }
+        }
+
+        // ===== FUNCIONES DE EDICIÓN =====
+        function editarPersona(id) {
+            const persona = personas.find(p => p.id === id);
+            if (persona) {
+                personaEditandoId = id;
+                document.getElementById('modalTitle').textContent = 'Editar Usuario';
+                document.getElementById('editNombre').value = persona.nombre;
+                document.getElementById('editApellido').value = persona.apellido;
+                document.getElementById('editEmail').value = persona.email;
+                document.getElementById('editOrganizacion').value = persona.organizacion;
+                document.getElementById('editEstado').value = persona.estado;
+                modal.classList.add('show');
+            }
+        }
+
+        function guardarPersona() {
+            const nombre = document.getElementById('editNombre').value.trim();
+            const apellido = document.getElementById('editApellido').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const organizacion = document.getElementById('editOrganizacion').value;
+            const estado = document.getElementById('editEstado').value;
+
+            if (!nombre || !apellido || !email) {
+                alert('Por favor complete los campos obligatorios');
+                return;
+            }
+
+            if (personaEditandoId) {
+                // Editar existente
+                const index = personas.findIndex(p => p.id === personaEditandoId);
+                if (index !== -1) {
+                    personas[index] = {
+                        ...personas[index],
+                        nombre,
+                        apellido,
+                        email,
+                        organizacion,
+                        estado
+                    };
+                }
+            } else {
+                // Crear nuevo
+                const nuevoId = personas.length + 1;
+                personas.push({
+                    id: nuevoId,
+                    nombre,
+                    apellido,
+                    organizacion,
+                    estado,
+                    email
+                });
+            }
+
+            // Actualizar vista
+            aplicarFiltros();
+            cerrarModal();
+        }
+
+        function cerrarModal() {
+            modal.classList.remove('show');
+            personaEditandoId = null;
+        }
+
+        // ===== EVENTOS =====
+        btnIngresar.addEventListener('click', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('password').value;
+            
+            if (usuario && password) {
+                onboardingScreen.style.display = 'none';
+                dashboardMain.style.display = 'block';
+                
+                // Actualizar nombre de usuario
+                userDisplay.textContent = 'Admin';
+            } else {
+                alert('Por favor ingrese usuario y contraseña');
+            }
+        });
+
+        // Inicializar
+        renderizarTabla();
+
+        // Hacer funciones globales
+        window.toggleFilters = toggleFilters;
+        window.crearNuevoUsuario = crearNuevoUsuario;
+        window.buscarUsuarios = buscarUsuarios;
+        window.editarPersona = editarPersona;
+        window.cerrarModal = cerrarModal;
+        window.guardarPersona = guardarPersona;
+        window.aplicarFiltros = aplicarFiltros;
+        window.paginaAnterior = paginaAnterior;
+        window.paginaSiguiente = paginaSiguiente;
+        window.cambiarEstado = cambiarEstado;
+        window.cambiarSeccion = cambiarSeccion;
+    </script>
+</body>
+</html>
