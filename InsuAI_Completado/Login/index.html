@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InzurAI+ · Login</title>
+    <link rel="stylesheet" href="css/Styles.css">
+</head>
+<body>
+
+    <div class="onboarding-container" id="onboardingScreen">
+        <div class="logo-arriba">
+            <img src="Imagenes/Inzur (1) (1).svg" alt="InzurAI+ Logo">
+        </div>
+        
+        <div class="onboarding-card">
+            <div class="welcome-message">
+                <h2>Bienvenido a InzurAI+</h2>
+                <p>Por favor identifíquese para ingresar a la plataforma</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="usuario">Usuario</label>
+                    <input type="text" class="input-field" id="usuario" value="admin.corretaje" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="input-field" id="password" value="12345678" required>
+                </div>
+
+                <button type="submit" class="btn-ingresar" id="btnIngresarOnboarding" >
+                    Ingresar InzurAI+
+                </button>
+            </form>
+
+            <a href="#" class="forgot-link">¿Olvidó su clave?</a>
+
+            <div class="powered-by">
+           powered by 
+    <img src="Imagenes/Zynaoxe (2).png" alt="Zynapxe" class="logo-footer">
+</div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica básica de redirección o validación
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const pass = document.getElementById('password').value;
+            
+            if(usuario && pass) {
+                alert('Validando credenciales... Redirigiendo al Dashboard');
+                // Aquí podrías usar window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

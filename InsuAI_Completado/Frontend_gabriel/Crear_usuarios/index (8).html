@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Inzur - Gestión de Usuarios</title>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar-content">
+            <h1 class="main-title">Crear Perfil de Usuario</h1>
+        </div>
+
+        <div class="logo-box">
+            <img src="Imagenes/Inzur (1) (1).svg" alt="inzurAi+">
+        </div>
+
+        <header class="header">
+            <div class="header-actions" id="edit-trigger">
+                <span class="edit-icon"> ✎ </span>  ↻   ⚲   ⋮
+            </div>
+        </header>
+
+        <nav class="tabs-nav">
+            <div class="tab">Propiedades</div>
+        </nav>
+
+        <main class="content-grid" id="main-container">
+            <div class="col">
+                <section>
+                    <h2>Información del Usuario</h2>
+                    <div class="row">
+                        <div class="label">Nombre</div>
+                        <div class="value"><input type="text" id="u-nombre" value="Juan" readonly></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">Apellido</div>
+                        <div class="value"><input type="text" id="u-apellido" value="Pérez" readonly></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">Email</div>
+                        <div class="value"><input type="email" id="u-email" value="j.perez@corretaje.com" readonly></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">Organización</div>
+                        <div class="value">
+                            <select id="u-org" disabled>
+                                <option selected>Combodo Corretaje</option>
+                                <option>Seguros Generales</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="label">Estado</div>
+                        <div class="value">
+                            <select id="u-estado" disabled>
+                                <option value="activo" selected>Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                                <option value="creado">Creado</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col">
+                <section>
+                    <h2>Parámetros JSON de Salida</h2>
+                    <textarea class="json-area" id="json-preview" readonly>
+{
+  "operacion": "usuario/crear",
+  "datos": {
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "email": "j.perez@corretaje.com",
+    "organizacion": "Combodo Corretaje",
+    "estado": "activo"
+  }
+}</textarea>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <button class="btn-guardar-flotante" id="btn-save">GUARDAR CAMBIOS</button>
+
+    <script>
+        const editIcon = document.getElementById('edit-trigger');
+        const saveBtn = document.getElementById('btn-save');
+        const container = document.getElementById('main-container');
+        const inputs = document.querySelectorAll('input, select, textarea');
+
+        editIcon.addEventListener('click', () => {
+            container.classList.add('editing');
+            inputs.forEach(el => {
+                el.removeAttribute('readonly');
+                el.removeAttribute('disabled');
+            });
+            saveBtn.style.display = 'block';
+        });
+
+        saveBtn.addEventListener('click', () => {
+            container.classList.remove('editing');
+            inputs.forEach(el => {
+                el.setAttribute('readonly', true);
+                el.setAttribute('disabled', true);
+            });
+            saveBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+:root {
+    --itop-blue: #8ba3b6;
+    --itop-bg: #f5f7f9;
+    --itop-border: #d3dee3;
+    --linea-custom: #4c6774; /* Color solicitado */
+    --molkobain-orange: #e67e22;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--itop-bg);
+    margin: 0;
+    padding: 80px 20px;
+}
+
+.container {
+    max-width: 1250px;
+    margin: 0 auto;
+    background: white;
+    border: 1px solid var(--itop-border);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Título más grande y posicionado sobre la línea */
+.top-bar-content {
+    position: absolute;
+    top: -42px; /* Ajustado para centrar con el grosor de la línea */
+    left: 160px;
+    z-index: 110;
+}
+
+.main-title {
+    font-size: 26px; /* Texto más grande solicitado */
+    margin: 0;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: -0.5px;
+}
+
+/* Logo Circular - z-index alto */
+.logo-box {
+    position: absolute;
+    top: -50px;
+    left: 30px;
+    width: 110px; /* Círculo ligeramente más grande */
+    height: 110px;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid var(--itop-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 120;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    overflow: hidden;
+}
+
+/* Imagen del logo más grande dentro del círculo */
+.logo-box img {
+    width: 100%; /* Logo más grande solicitado */
+    height: auto;
+    object-fit: contain;
+    margin-top: -15px;
+}
+
+/* Línea gruesa superior */
+.header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 18px 20px;
+    border-top: 10px solid var(--linea-custom); /* Línea un poco más gruesa */
+    background: transparent;
+    position: relative;
+    z-index: 10;
+}
+
+.header-actions {
+    color: #666;
+    font-size: 18px;
+    letter-spacing: 12px;
+    cursor: pointer;
+}
+
+/* Pestañas alineadas con el título */
+.tabs-nav {
+    display: flex;
+    background: #f8fafb;
+    border-bottom: 1px solid var(--itop-border);
+    padding-left: 155px;
+}
+
+.tab {
+    padding: 12px 28px;
+    font-size: 14px;
+    color: #2c3e50;
+    background: white;
+    border-left: 1px solid var(--itop-border);
+    border-right: 1px solid var(--itop-border);
+    border-top: 4px solid var(--itop-blue);
+    font-weight: bold;
+    margin-bottom: -1px;
+}
+
+/* Grid de contenido */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    padding: 40px 30px;
+}
+
+h2 {
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #e1e8ed;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+
+.row { display: flex; margin-bottom: 15px; align-items: center; }
+.label { width: 160px; font-weight: 600; color: #000; font-size: 14px; }
+.value { width: 100%; }
+
+input, select, textarea {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 14px;
+    padding: 6px;
+    outline: none;
+    color: #444;
+}
+
+.editing input, .editing select, .editing textarea {
+    border: 1px solid #3498db;
+    background: #fff;
+}
+
+.json-area {
+    font-family: 'Consolas', 'Monaco', monospace;
+    min-height: 280px;
+    background: #fdfdfd !important;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.btn-guardar-flotante {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--molkobain-orange);
+    color: white;
+    padding: 14px 35px;
+    border-radius: 40px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
