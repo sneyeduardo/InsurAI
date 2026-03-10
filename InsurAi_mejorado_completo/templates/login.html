@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InzurAI+ · Login</title>
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body>
+
+    <div class="onboarding-container" id="onboardingScreen">
+        <div class="logo-arriba">
+            <img src="{% static 'imagenes/inzur.svg' %}" alt="InzurAI+ Logo">
+        </div>
+        
+        <div class="onboarding-card">
+            <div class="welcome-message">
+                <h2>Bienvenido a InzurAI+</h2>
+                <p>Por favor identifíquese para ingresar a la plataforma</p>
+            </div>
+
+            <form method="POST" action="{% url 'login' %}">
+    
+    {% csrf_token %} 
+    
+    <div class="input-group">
+        <label for="username">Usuario</label>
+        <input type="text" class="input-field" name="username" required>
+    </div>
+
+    <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input type="password" class="input-field" name="password" required>
+    </div>
+
+    <button type="submit" class="btn-ingresar">
+        Ingresar InzurAI+
+    </button>
+</form>
+
+            <a href="#" class="forgot-link">¿Olvidó su clave?</a>
+
+            <div class="powered-by">
+           powered by 
+    <img src="../static/imagenes/Zynaoxe (2).png" alt="Zynapxe" class="logo-footer">
+</div>
+        </div>
+    </div>
+
+    <script>
+   
+    </script>
+</body>
+</html>
