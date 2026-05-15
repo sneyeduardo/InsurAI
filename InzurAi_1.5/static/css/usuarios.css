@@ -1,0 +1,228 @@
+/* --- CABECERA Y BOTONES --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-title {
+    color: #1e293b;
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary-custom {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-primary-custom:hover { background-color: #172554; color: white; }
+
+/* --- CONSTRUCTOR DE FILTROS DINÁMICOS --- */
+.table-toolbar {
+    background: #ffffff;
+    border-radius: 12px 12px 0 0;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    padding: 20px;
+}
+
+.toolbar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-title {
+    margin: 0;
+    font-size: 1rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+.add-filter-wrapper { position: relative; }
+
+.btn-add-filter {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    color: #475569;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-add-filter:hover {
+    border-color: #1e3a8a;
+    color: #1e3a8a;
+    background: #eff6ff;
+}
+
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    width: 200px;
+    display: none;
+    z-index: 100;
+    overflow-y: auto;
+    max-height: 250px; /* Para que el menú de 14 opciones no sea infinito */
+}
+
+.filter-dropdown.show { display: block; }
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    color: #475569;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover { background: #f1f5f9; color: #1e3a8a; }
+
+.active-filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.filter-tag {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.filter-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.filter-input {
+    border: 1px solid transparent;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #1e293b;
+    outline: none;
+}
+
+.filter-input:focus { border-color: #cbd5e1; }
+
+.btn-remove-filter {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    margin-left: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+}
+.btn-remove-filter:hover { background: #fee2e2; color: #ef4444; }
+
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TABLA CON SCROLL HORIZONTAL --- */
+.table-container {
+    background: #ffffff;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.table-responsive {
+    overflow-x: auto; /* Permite scroll horizontal */
+    width: 100%;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap; /* Evita que los textos salten de línea */
+}
+
+.custom-table th {
+    background-color: #f8fafc;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #64748b;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.custom-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #1e293b;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr:hover { background-color: #f8fafc; }
+
+/* Mantener fijos los botones de acción a la derecha (Opcional pero recomendado) */
+.sticky-action {
+    position: sticky;
+    right: 0;
+    background-color: inherit;
+    border-left: 1px solid #e2e8f0;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.02);
+}
+.custom-table th.sticky-action { background-color: #f8fafc; z-index: 2; }
+
+/* --- BOTONES Y BADGES --- */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.bg-success { background: #dcfce7; color: #16a34a; }
+.bg-danger { background: #fee2e2; color: #ef4444; }
+
+.action-btns button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    transition: transform 0.2s, color 0.2s;
+}
+.btn-edit:hover { color: #2563eb; transform: scale(1.1); }
+.btn-view:hover { color: #10b981; transform: scale(1.1); }
+.user-cell { display: flex; align-items: center; }

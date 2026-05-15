@@ -1,0 +1,1414 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'perfiles.css' %}">
+    {% endblock %}
+    {% block content %}
+    <div class="container-fluid p-0 d-flex">
+        
+        <main class="main-content-wrapper">
+            <div class="main-dashboard" id="dashboardMain">
+                <div class="top-navbar">
+                    <div class="action-buttons">
+                        <a href="{% url 'dashboard' %}" class="btn-action back" title="Ir al Dashboard" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+    <i class="bi bi-chevron-left"></i>
+</a>
+
+                        <a href="{% url 'crear_usuario' %}" class="btn-action plus" style="text-decoration: none;">
+    +
+</a>
+                        
+                    </div> 
+                    
+                    <div class="nav-section-label" id="navPersonas">
+                        <i class="bi bi-people-fill"></i>
+                        <span>personas</span>
+                    </div>
+
+                    <div class="user-section">
+    <span class="user-name" id="userDisplay">{{ request.session.nombre_completo|default:"Administrador" }}</span>
+    
+    <div class="user-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #0d6efd; color: white; width: 40px; height: 40px; border-radius: 50%;">
+                        {% if request.session.imagen_perfil and request.session.imagen_perfil != 'None' %}
+                            <img src="{{ request.session.imagen_perfil }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <span style="display: none; font-size: 1.2rem; font-weight: bold;">{{ request.session.nombre_completo|make_list|first|upper|default:"A" }}</span>
+                        {% else %}
+                            <span style="font-size: 1.2rem; font-weight: bold;">{{ request.session.nombre_completo|make_list|first|upper|default:"A" }}</span>
+                        {% endif %}
+                    </div>
+</div>
+                </div>
+
+                <div class="main-content">
+                    <div class="page-header">
+                        <h1 id="pageTitle">Buscar usuarios</h1>
+                        <div class="filter-text" id="filterIndicator">
+                            <span>Filtro</span> | Todos los registros
+                        </div>
+                    </div>
+
+                     <div class="search-section" id="searchSection">
+                        <div class="search-header">
+                        <div class="search-title" onclick="toggleFilters()">
+                            Opciones de búsqueda:
+                            <span class="arrow" id="searchArrow">▼</span>
+                        </div>
+
+                        <div class="search-actions">
+                                <div class="dropdown search-dropdown">
+
+                                    <div class="btn-action" onclick="limpiarFiltros()" title="Recargar datos" style="cursor: pointer;">
+            <i class="bi bi-eraser action-icon icon-jefe"></i>
+        </div>
+                                    <div class="btn-action refresh" onclick="limpiarTodosLosFiltros()" title="Limpiar filtros">
+        <i class="bi bi-arrow-clockwise action-icon icon-jefe"></i>
+    </div>
+                                    <div class="btn-action plus" onclick="toggleSubmenuBusqueda(event)" style="cursor: pointer;">
+    <i class="bi bi-plus-lg action-icon icon-jefe"></i> </div>
+                                    <ul class="dropdown-menu search-dropdown-menu" id="searchOptionsMenu" style="max-height: 300px; overflow-y: auto;">
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('nombre')">Nombre</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('cedula')">Cédula</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('tipo_cliente')">Tipo de Persona</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('sexo')">Sexo</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('nacionalidad')">Nacionalidad</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('actividad')">Actividad Económica</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('profesion')">Profesión / Oficio</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('telefono_movil')">Teléfono Móvil</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('banco')">Banco</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('cuenta_bancaria')">Cuenta Bancaria</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('ultimo_login')">Último login</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('email')">Email</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('estatus')">Estatus</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('fecha_creacion')">Fecha de creación</a></li>
+    
+</ul>
+                                </div>
+                                
+                            </div>
+                        </div>
+                            <div class="filters-container" id="filtersContainer">
+                            <div class="filters-grid" id="filtersGrid">
+                                </div>
+                        </div>
+                    
+                        <div class="total-objects" id="totalObjects">Total: 7 personas</div>
+                    </div>
+                    <div class="table-container" id="tableContainer">
+    <div class="table-actions-header" style="display: flex; align-items: center; gap: 15px;">
+        <a href="{% url 'crear_usuario' %}" style="color: inherit; text-decoration: none;">
+    <i class="bi bi-plus-lg action-icon icon-jefe" title="Agregar"></i>
+</a>
+        <i class="bi bi-arrow-clockwise action-icon icon-jefe" onclick="refrescarDatos()" title="Refrescar" style="transition: transform 0.5s ease; cursor: pointer;"></i>
+        <i class="bi bi-trash action-icon animacion-aparecer" 
+           id="btn-papelera" 
+           onclick="eliminarSeleccionados()" 
+           title="Eliminar seleccionados" 
+           style="display: none; color: #dc3545; font-size: 1.3rem;">
+        </i>
+        
+        <div style="position: relative; display: inline-block;">
+            <i class="bi bi-three-dots-vertical action-icon icon-jefe" onclick="toggleMenuOpciones(event)" title="Más opciones"></i>
+            
+            <div id="menu-tres-puntos" class="menu-desplegable-acciones">
+    <a href="#" class="opcion-menu" onclick="exportarExcel(event)"><i class="bi bi-file-earmark-excel"></i> Exportar a Excel</a>
+    
+    <a href="#" class="opcion-menu" onclick="abrirModalCompartir()"><i class="bi bi-share"></i> Compartir</a>
+    <a href="#" class="opcion-menu" onclick="abrirModalCompartir()"><i class="bi bi-envelope"></i> Enviar por correo</a>
+    <a href="#" class="opcion-menu" onclick="accionExportarPDF()"><i class="bi bi-file-pdf"></i> Exportar a PDF</a>
+    <a href="#" class="opcion-menu" onclick="accionImprimir()"><i class="bi bi-printer"></i> Imprimir Reporte</a>
+    <a href="#" class="opcion-menu" onclick="accionConfigurarColumnas()"><i class="bi bi-layout-three-columns"></i> Configurar columnas</a>
+</div>
+        </div>
+        
+        <button id="btn-guardar-estado" class="btn-guardar-cambios" style="display: none;" onclick="confirmarCambio()">
+            <i class="bi bi-check2-circle"></i> Guardar
+        </button>
+    </div>
+
+                        <table class="crud-table" id="personasTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px; text-align: center;">✔</th>
+                                    <th>Nombre</th>
+                                    <th>ID</th>
+                                    <th>Ultimo login</th>
+                                    <th>Email</th>
+                                    <th>Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+
+                        <div class="pagination-container">
+                            <div class="pagination-buttons">
+                                <button class="btn-pagination" onclick="paginaAnterior()" id="btnPrev" disabled>Anterior</button>
+                                <button class="btn-pagination" onclick="paginaSiguiente()" id="btnNext">Siguiente</button>
+                            </div>
+                            <div class="per-page">
+                                <span id="pageInfo">Página 1 de 2</span>
+                                <span class="items-total" id="totalItems">7 items</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="modalCompartir" class="modal">
+            <div class="modal-content" style="max-width: 450px;">
+                <div class="ticket-header" style="border-bottom: none; padding-bottom: 0;">
+                    <h1 style="font-size: 1.2rem; color: #52247d;">
+                        <i class="bi bi-send-fill me-2"></i> Compartir Información
+                    </h1>
+                    <p class="subtitle" style="margin-top: 5px;">Envía los datos de esta tabla a un cliente.</p>
+                </div>
+                
+                <div class="ticket-section" style="border-bottom: none;">
+                    <div class="filter-item" style="margin-bottom: 15px;">
+                        <label for="correoCliente">Correo del destinatario <span style="color:red;">*</span></label>
+                        <input type="email" id="correoCliente" placeholder="ejemplo@cliente.com" required style="width: 100%;">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="formatoEnvio">Formato de archivo</label>
+                        <select id="formatoEnvio" style="width: 100%;">
+                            <option value="pdf">Documento PDF (.pdf)</option>
+                            <option value="excel">Hoja de cálculo Excel (.xlsx)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCompartir()">Cancelar</button>
+                    <button type="button" class="btn-guardar" onclick="enviarCorreoCompartir()">
+                        <i class="bi bi-send"></i> Enviar
+                    </button>
+                </div>
+            </div>
+        </div>
+{% endblock %}  
+{% block extra_js %}
+    <script>
+     // ==========================================
+// 1. VARIABLES Y CARGA INICIAL
+// ==========================================
+let personas = [];
+let personasFiltradas = [];
+let paginaActual = 1;
+const itemsPorPagina = 5;
+let estadosPendientes = {};
+var filtrosActivos = new Set();
+
+// NUEVO: Variable para guardar todos los catálogos
+let catalogosGlobales = {};
+
+document.addEventListener("DOMContentLoaded", function() {
+    cargarUsuariosDesdeDB();
+    cargarCatalogosDesdeDB(); // <-- NUEVO: Llamamos a los catálogos al iniciar
+});
+
+// ==========================================
+// 2. CONEXIONES A LA BASE DE DATOS (APIs)
+// ==========================================
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function cargarUsuariosDesdeDB() {
+    fetch("/app/api/listar-usuarios/") 
+        .then(response => response.json())
+        .then(data => {
+            if (data.usuarios) {
+                personas = data.usuarios.map(u => ({
+                    id: u.id,
+                    cedula: u.id.includes('-') ? u.id.split('-')[1] : u.id,
+                    nombre_completo: u.nombre_completo || '', 
+                    nombre: u.nombre_completo ? u.nombre_completo.split(' ')[0] : 'Sin nombre',
+                    ultimo_login: u.ultimo_login, 
+                    email: u.email,
+                    estado: u.estado,
+                    tipo_cliente: u.tipo_cliente,
+                    sexo: u.sexo,
+                    nacionalidad: u.nacionalidad,
+                    actividad: u.actividad,
+                    profesion: u.profesion,
+                    telefono_movil: u.telefono_movil,
+                    telefono_oficina: u.telefono_oficina,
+                    banco: u.banco,
+                    cuenta_bancaria: u.cuenta_bancaria,
+                    direccion: u.direccion,
+                    ingreso: u.ingreso,
+                    fecha_nac: u.fecha_nac,
+                    fecha_creacion: u.fecha_creacion || u.fecha_registro || '' // ✅ NUEVO
+                }));
+                personasFiltradas = [...personas];
+                renderizarTabla(); 
+            }
+        });
+}
+// ==========================================
+// 3. RENDERIZADO DE LA TABLA
+// ==========================================
+function renderizarTabla() {
+    const tableBody = document.getElementById('tableBody');
+    const inicio = (paginaActual - 1) * itemsPorPagina;
+    const fin = inicio + itemsPorPagina;
+    const personasPaginadas = personasFiltradas.slice(inicio, fin);
+
+    tableBody.innerHTML = '';
+
+    if (personasFiltradas.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: #6c757d;">
+                    No se encontró ningún usuario
+                </td>
+            </tr>
+        `;
+        return; 
+    }
+
+    personasPaginadas.forEach(persona => {
+        let estadoStr = persona.estado;
+        if (estadoStr === true) estadoStr = 'ACTIVO';
+        if (estadoStr === false) estadoStr = 'INACTIVO';
+
+        const estadoFinal = estadoStr === 'ACTIVO' ? 'ACTIVO' : 'INACTIVO'; 
+        const colorTexto = estadoFinal === 'ACTIVO' ? '#155724' : '#721c24'; 
+        const colorFondo = estadoFinal === 'ACTIVO' ? '#d4edda' : '#f8d7da'; 
+        const colorBorde = estadoFinal === 'ACTIVO' ? '#c3e6cb' : '#f5c6cb';
+
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td style="text-align: center; width: 40px;" onclick="event.stopPropagation();">
+                <input type="checkbox" class="check-usuario" value="${persona.id}" onchange="verificarSeleccion()" 
+                       style="width: 18px !important; height: 18px !important; display: inline-block !important; opacity: 1 !important; visibility: visible !important; appearance: checkbox !important; cursor: pointer;">
+            </td>
+            <td>
+                <a href="/app/usuarios/editar/${persona.id}/" class="person-name" style="color: #fd7e14; font-weight: 600; text-decoration: none; cursor: pointer;">
+                    ${persona.nombre} <i class="bi bi-pencil-square" style="font-size: 0.8rem; margin-left: 5px;"></i>
+                </a>
+            </td>
+            <td style="font-family: monospace; font-size: 1.05rem;">${persona.cedula}</td>
+            <td style="color: #333; user-select: none; cursor: default;">${persona.ultimo_login}</td>
+            <td style="color: #333; user-select: none; cursor: default;">${persona.email}</td>
+            <td>
+                <div class="status-container" style="display: flex; align-items: center; justify-content: flex-start;">
+                    <select class="status-select-clean" 
+                            onchange="cambiarEstado('${persona.id}', this.value); mostrarBotonGuardar(); 
+                                      this.style.backgroundColor = this.value === 'ACTIVO' ? '#d4edda' : '#f8d7da'; 
+                                      this.style.color = this.value === 'ACTIVO' ? '#155724' : '#721c24'; 
+                                      this.style.borderColor = this.value === 'ACTIVO' ? '#c3e6cb' : '#f5c6cb';" 
+                            onclick="event.stopPropagation()"
+                            style="background-color: ${colorFondo}; color: ${colorTexto}; border: 1px solid ${colorBorde}; 
+                                   border-radius: 20px; padding: 4px 12px; font-size: 0.85rem; font-weight: bold; 
+                                   cursor: pointer; outline: none; text-align: center; width: 145px; appearance: none;">
+                        <option value="ACTIVO" ${estadoFinal === 'ACTIVO' ? 'selected' : ''}>ACTIVO</option>
+                        <option value="INACTIVO" ${estadoFinal === 'INACTIVO' ? 'selected' : ''}>INACTIVO</option>
+                    </select>
+                </div>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    document.getElementById('totalObjects').textContent = `Total: ${personasFiltradas.length} usuarios`;
+    document.getElementById('totalItems').textContent = `${personasFiltradas.length} items`;
+    
+    const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+    document.getElementById('pageInfo').textContent = `Página ${paginaActual} de ${totalPaginas || 1}`;
+    
+    document.getElementById('btnPrev').disabled = paginaActual === 1;
+    document.getElementById('btnNext').disabled = paginaActual === totalPaginas || totalPaginas === 0;
+    
+    verificarSeleccion();
+}
+
+// ==========================================
+// 4. PAGINACIÓN Y FILTROS
+// ==========================================
+function paginaAnterior() {
+    if (paginaActual > 1) { paginaActual--; renderizarTabla(); }
+}
+
+function paginaSiguiente() {
+    const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+    if (paginaActual < totalPaginas) { paginaActual++; renderizarTabla(); }
+}
+
+function toggleFilters() {
+    document.getElementById('filtersContainer').classList.toggle('collapsed');
+    document.getElementById('searchArrow').classList.toggle('rotated');
+}
+
+function toggleSubmenuBusqueda(event) {
+    event.stopPropagation(); 
+    document.getElementById('searchOptionsMenu').classList.toggle('show'); 
+}
+
+function addSearchFilter(tipo) {
+    var e = window.event;
+    if (e) e.preventDefault();
+    document.getElementById('searchOptionsMenu').classList.remove('show');
+
+    if (filtrosActivos.has(tipo)) return;
+    filtrosActivos.add(tipo);
+    
+    const filtersGrid = document.getElementById('filtersGrid');
+    const filterItem = document.createElement('div');
+    filterItem.className = 'filter-item animacion-aparecer';
+    filterItem.id = `filtro-dinamico-${tipo}`;
+
+    let labelText = '';
+    let inputHtml = '';
+
+    switch(tipo) {
+        case 'nombre':
+            labelText = 'Nombre';
+            inputHtml = `
+                <div class="autocomplete-wrapper" style="position: relative; width: 100%; display: flex; align-items: center; border: 1px solid #d0d7de; border-radius: 8px; background-color: #ffffff; transition: box-shadow 0.2s, border-color 0.2s;" onfocusin="this.style.borderColor='#0969da'; this.style.boxShadow='0 0 0 3px rgba(9, 105, 218, 0.3)';" onfocusout="this.style.borderColor='#d0d7de'; this.style.boxShadow='none';">
+                    <input type="text" id="val-${tipo}" placeholder="Seleccionados..." 
+                           oninput="aplicarFiltros()" autocomplete="off"
+                           style="width: calc(100% - 38px); border: none; border-radius: 8px 0 0 8px; background-color: transparent; padding: 8px 12px; outline: none; font-style: italic; color: #57606a; font-size: 0.95rem; line-height: 1.5;" readonly>
+                    <button class="btn-lupa" onclick="abrirModalNombres(event)" 
+                        onmouseover="this.querySelector('i').style.transform='scale(1.15)'; this.querySelector('i').style.color='#0a58ca'; this.style.backgroundColor='#f6f8fa';" 
+                        onmouseout="this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='#0969da'; this.style.backgroundColor='transparent';"
+                        style="width: 38px; height: 38px; border: none; border-left: 1px solid #e1e4e8; background-color: transparent; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0;">
+                        <i class="bi bi-search" style="color: #0969da; font-size: 1.1rem; transition: all 0.2s ease;"></i>
+                    </button>
+
+                    <div id="dropdown-multi-${tipo}" class="search-dropdown-menu animacion-aparecer" 
+     style="display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); min-width: 320px; max-width: 500px; width: max-content; z-index: 1050; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; flex-direction: column;">
+                        
+                        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px solid #f1f1f1; padding-bottom: 8px;">
+                            <span style="font-weight: 600; color: #52247d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Seleccionar Usuarios</span>
+                        </div>
+
+                        <div style="margin-bottom: 15px; position: relative;">
+                            <i class="bi bi-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #adb5bd;"></i>
+                            <input type="text" id="buscador-interno-${tipo}" placeholder="Filtrar lista..." 
+                                   oninput="filtrarListaInterna(this.value, '${tipo}')" 
+                                   style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #dee2e6; border-radius: 20px; font-size: 0.85rem; outline: none; text-align: center; background-color: #fcfcfc;">
+                        </div>
+                        
+                        <div id="lista-checkboxes-${tipo}" style="display: flex; flex-direction: column; gap: 0; overflow-y: auto; max-height: 200px; padding: 0;">
+                            </div>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: center; border-top: 1px solid #f1f1f1; padding-top: 12px;">
+                            <button onclick="aplicarSeleccionMultiple('${tipo}')" 
+                                    style="background-color: #0d6efd; color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);">
+                                Aplicar Selección
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'cedula':
+            labelText = 'Cédula';
+            inputHtml = `
+                <div class="autocomplete-wrapper" style="position: relative; width: 100%; display: flex; align-items: center; border: 1px solid #d0d7de; border-radius: 8px; background-color: #ffffff; transition: box-shadow 0.2s, border-color 0.2s;" onfocusin="this.style.borderColor='#0969da'; this.style.boxShadow='0 0 0 3px rgba(9, 105, 218, 0.3)';" onfocusout="this.style.borderColor='#d0d7de'; this.style.boxShadow='none';">
+                    <input type="text" id="val-${tipo}" placeholder="Seleccionados..." 
+                           oninput="aplicarFiltros()" autocomplete="off"
+                           style="width: calc(100% - 38px); border: none; border-radius: 8px 0 0 8px; background-color: transparent; padding: 8px 12px; outline: none; font-style: italic; color: #57606a; font-size: 0.95rem; line-height: 1.5;" readonly>
+                    <button class="btn-lupa" onclick="abrirModalCedulas(event)" 
+                        onmouseover="this.querySelector('i').style.transform='scale(1.15)'; this.querySelector('i').style.color='#0a58ca'; this.style.backgroundColor='#f6f8fa';" 
+                        onmouseout="this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='#0969da'; this.style.backgroundColor='transparent';"
+                        style="width: 38px; height: 38px; border: none; border-left: 1px solid #e1e4e8; background-color: transparent; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0;">
+                        <i class="bi bi-search" style="color: #0969da; font-size: 1.1rem; transition: all 0.2s ease;"></i>
+                    </button>
+
+                    <div id="dropdown-multi-${tipo}" class="search-dropdown-menu animacion-aparecer" 
+                         style="display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); width: 280px; z-index: 1050; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; flex-direction: column;">
+                        
+                        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px solid #f1f1f1; padding-bottom: 8px;">
+                            <span style="font-weight: 600; color: #52247d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Seleccionar Cédulas</span>
+                        </div>
+
+                        <div style="margin-bottom: 15px; position: relative;">
+                            <i class="bi bi-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #adb5bd;"></i>
+                            <input type="text" id="buscador-interno-${tipo}" placeholder="Filtrar lista..." 
+                                   oninput="filtrarListaInterna(this.value, '${tipo}')" 
+                                   style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #dee2e6; border-radius: 20px; font-size: 0.85rem; outline: none; text-align: center; background-color: #fcfcfc;">
+                        </div>
+                        
+                        <div id="lista-checkboxes-${tipo}" style="display: flex; flex-direction: column; gap: 0; overflow-y: auto; max-height: 200px; padding: 0;">
+                        </div>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: center; border-top: 1px solid #f1f1f1; padding-top: 12px;">
+                            <button onclick="aplicarSeleccionMultiple('${tipo}')" 
+                                    style="background-color: #0d6efd; color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);">
+                                Aplicar Selección
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+        // ✅ BLOQUE COMBINADO PARA SEXO Y TIPO DE CLIENTE (MULTI-SELECT INTELIGENTE)
+        // ✅ SÚPER BLOQUE COMBINADO PARA TODOS LOS MULTI-SELECT DINÁMICOS
+        case 'sexo':
+        case 'tipo_cliente':
+        case 'nacionalidad':
+        case 'actividad':
+        case 'profesion':
+        case 'telefono_movil':
+        case 'banco':
+        case 'cuenta_bancaria':
+        case 'email':
+            let labelMap = {
+                'sexo': 'Sexo',
+                'tipo_cliente': 'Tipo de Cliente',
+                'nacionalidad': 'Nacionalidad',
+                'actividad': 'Actividad Económica',
+                'profesion': 'Profesión / Oficio',
+                'telefono_movil': 'Teléfono Móvil',
+                'banco': 'Banco',
+                'cuenta_bancaria': 'Cuenta Bancaria',
+                'email': 'Email'
+            };
+            
+            let tituloMap = {
+                'sexo': 'Seleccionar Sexo',
+                'tipo_cliente': 'Seleccionar Tipo',
+                'nacionalidad': 'Seleccionar Nacionalidad',
+                'actividad': 'Seleccionar Actividad',
+                'profesion': 'Seleccionar Profesión',
+                'telefono_movil': 'Seleccionar Teléfono',
+                'banco': 'Seleccionar Banco',
+                'cuenta_bancaria': 'Seleccionar Cuenta',
+                'email': 'Seleccionar Email'
+            };
+            
+            labelText = labelMap[tipo];
+            let tituloModal = tituloMap[tipo];
+            
+            inputHtml = `
+                <div class="autocomplete-wrapper" style="position: relative; width: 100%; display: flex; align-items: center; border: 1px solid #d0d7de; border-radius: 8px; background-color: #ffffff; transition: box-shadow 0.2s, border-color 0.2s;" onfocusin="this.style.borderColor='#0969da'; this.style.boxShadow='0 0 0 3px rgba(9, 105, 218, 0.3)';" onfocusout="this.style.borderColor='#d0d7de'; this.style.boxShadow='none';">
+                    <input type="text" id="val-${tipo}" placeholder="Seleccionados..." 
+                           oninput="aplicarFiltros()" autocomplete="off"
+                           style="width: calc(100% - 38px); border: none; border-radius: 8px 0 0 8px; background-color: transparent; padding: 8px 12px; outline: none; font-style: italic; color: #57606a; font-size: 0.95rem; line-height: 1.5;" readonly>
+                    
+                    <button class="btn-lupa" onclick="abrirModalOpcionesDinamicas(event, '${tipo}', '${tituloModal}')" 
+                        onmouseover="this.querySelector('i').style.transform='scale(1.15)'; this.querySelector('i').style.color='#0a58ca'; this.style.backgroundColor='#f6f8fa';" 
+                        onmouseout="this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='#0969da'; this.style.backgroundColor='transparent';"
+                        style="width: 38px; height: 38px; border: none; border-left: 1px solid #e1e4e8; background-color: transparent; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0;">
+                        <i class="bi bi-search" style="color: #0969da; font-size: 1.1rem; transition: all 0.2s ease;"></i>
+                    </button>
+
+                    <div id="dropdown-multi-${tipo}" class="search-dropdown-menu animacion-aparecer" 
+                         style="display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); width: 250px; z-index: 1050; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; flex-direction: column;">
+                        
+                        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px solid #f1f1f1; padding-bottom: 8px;">
+                            <span id="titulo-modal-${tipo}" style="font-weight: 600; color: #52247d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">${tituloModal}</span>
+                        </div>
+
+                        <div style="margin-bottom: 15px; position: relative; padding: 0 5px;">
+                            <i class="bi bi-filter" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #adb5bd;"></i>
+                            <input type="text" id="buscador-interno-${tipo}" placeholder="Buscar..." 
+                                   oninput="filtrarListaInterna(this.value, '${tipo}')" 
+                                   style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #dee2e6; border-radius: 20px; font-size: 0.85rem; outline: none; text-align: center; background-color: #fcfcfc;">
+                        </div>
+                        
+                        <div id="lista-checkboxes-${tipo}" style="display: flex; flex-direction: column; gap: 0; overflow-y: auto; max-height: 200px; padding: 0;">
+                        </div>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: center; border-top: 1px solid #f1f1f1; padding-top: 12px;">
+                            <button onclick="aplicarSeleccionMultiple('${tipo}')" 
+                                    style="background-color: #0d6efd; color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);">
+                                Aplicar Selección
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'estatus':
+            labelText = 'Estatus';
+            inputHtml = `<select id="val-${tipo}" onchange="aplicarFiltros()"><option value="">Todos</option><option value="ACTIVO">ACTIVO</option><option value="INACTIVO">INACTIVO</option></select>`;
+            break;
+        case 'ultimo_login':
+            labelText = 'Último login';
+            inputHtml = `
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="val-${tipo}-desde" placeholder="Desde" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                    <input type="text" id="val-${tipo}-hasta" placeholder="Hasta" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                </div>
+            `;
+            break;
+        case 'fecha_creacion':
+            labelText = 'Fecha de Creación';
+            inputHtml = `
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="val-${tipo}-desde" placeholder="Desde" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                    <input type="text" id="val-${tipo}-hasta" placeholder="Hasta" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                </div>
+            `;
+            break;
+        default: // nacionalidad, actividad, profesion, telefono_movil, banco, cuenta_bancaria, email
+            let titulos = {
+                'nacionalidad': 'Nacionalidad', 'actividad': 'Actividad Económica', 'profesion': 'Profesión',
+                'telefono_movil': 'Teléfono Móvil', 'banco': 'Banco', 'cuenta_bancaria': 'Cuenta Bancaria', 'email': 'Email'
+            };
+            labelText = titulos[tipo] || tipo;
+            inputHtml = `<input type="text" id="val-${tipo}" placeholder="Buscar ${labelText.toLowerCase()}..." onkeyup="aplicarFiltros()">`;
+            break;
+    }
+
+    filterItem.innerHTML = `
+        <div class="filter-header">
+            <label>${labelText}</label>
+            <i class="bi bi-dash-circle remove-filter" onclick="removeSearchFilter('${tipo}')" title="Quitar filtro" style="cursor:pointer; color:#dc3545; float:right;"></i>
+        </div>
+        ${inputHtml}
+    `;
+    filtersGrid.appendChild(filterItem);
+
+    const container = document.getElementById('filtersContainer');
+    if (container.classList.contains('collapsed')) {
+        container.classList.remove('collapsed');
+        document.getElementById('searchArrow').classList.remove('rotated');
+    }
+}
+
+function removeSearchFilter(tipo) {
+    const filterItem = document.getElementById(`filtro-dinamico-${tipo}`);
+    if (filterItem) {
+        filterItem.remove();
+        filtrosActivos.delete(tipo);
+        aplicarFiltros();
+    }
+}
+
+function aplicarFiltros() {
+    personasFiltradas = [...personas];
+
+    filtrosActivos.forEach(tipo => {
+        let valoresBuscados = []; 
+        let valorDesde = "";
+        let valorHasta = "";
+
+        // Verificamos si es un filtro de rango de fechas
+        if (tipo === 'fecha_creacion' || tipo === 'ultimo_login') {
+            const inputDesde = document.getElementById(`val-${tipo}-desde`);
+            const inputHasta = document.getElementById(`val-${tipo}-hasta`);
+            if (inputDesde) valorDesde = inputDesde.value; 
+            if (inputHasta) valorHasta = inputHasta.value; 
+            if (!valorDesde && !valorHasta) return;
+            
+        } else {
+            const inputElement = document.getElementById(`val-${tipo}`);
+            if (!inputElement) return;
+
+            valoresBuscados = inputElement.value.toLowerCase().split(',').map(v => v.trim()).filter(v => v !== '');
+            if (valoresBuscados.length === 0) return; 
+        }
+            
+
+        personasFiltradas = personasFiltradas.filter(persona => {
+            switch(tipo) {
+                case 'nombre':
+                    return valoresBuscados.some(val => persona.nombre_completo && persona.nombre_completo.toLowerCase() === val.toLowerCase());
+                
+                // ✅ NUEVO CASO PARA MULTI-SELECCIÓN DE CÉDULA
+                case 'cedula':
+                    return valoresBuscados.some(val => persona.cedula && String(persona.cedula).toLowerCase() === val.toLowerCase());
+                
+                case 'estatus':
+                    let estadoActual = persona.estado === true ? 'ACTIVO' : (persona.estado === false ? 'INACTIVO' : persona.estado);
+                    return valoresBuscados.some(val => estadoActual.toLowerCase() === val);
+                
+                case 'fecha_creacion':
+                    let fechaBase = persona.fecha_creacion || persona.fecha_registro || persona.date_joined || persona.ingreso;
+                    if (!fechaBase || fechaBase === 'Sin ingreso' || fechaBase === '') {
+                        console.log("⚠️ Alerta: El usuario " + persona.nombre + " no recibió ninguna fecha desde la Base de Datos.");
+                        return false; 
+                    }
+                    
+                    let fechaFormatHTML = "";
+                    let soloFecha = String(fechaBase).split(' ')[0].split('T')[0];
+
+                    if (soloFecha.includes('/')) {
+                        let p = soloFecha.split('/');
+                        if (p[2].length === 4) { 
+                            fechaFormatHTML = `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+                        } else if (p[0].length === 4) { 
+                            fechaFormatHTML = `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}`;
+                        }
+                    } else if (soloFecha.includes('-')) {
+                        let p = soloFecha.split('-');
+                        if (p[2].length === 4) { 
+                            fechaFormatHTML = `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+                        } else if (p[0].length === 4) { 
+                            fechaFormatHTML = `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}`;
+                        }
+                    } else {
+                        let d = new Date(fechaBase);
+                        if (!isNaN(d)) {
+                            fechaFormatHTML = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    let cumpleDesde = true;
+                    let cumpleHasta = true;
+                    if (valorDesde) cumpleDesde = (fechaFormatHTML >= valorDesde);
+                    if (valorHasta) cumpleHasta = (fechaFormatHTML <= valorHasta);
+                
+                    // ✅ LÓGICA DE FILTRADO PARA RANGO DE ÚLTIMO LOGIN
+                case 'ultimo_login':
+                    if (!persona.ultimo_login || persona.ultimo_login === 'Sin ingreso') return false;
+                    
+                    // Separamos la fecha de la hora (viene como DD/MM/YYYY HH:MM)
+                    let soloFechaLogin = persona.ultimo_login.split(' ')[0];
+                    let pLogin = soloFechaLogin.split('/');
+                    
+                    // Lo convertimos al formato matemático YYYY-MM-DD
+                    let fechaLoginFormatHTML = `${pLogin[2]}-${pLogin[1].padStart(2, '0')}-${pLogin[0].padStart(2, '0')}`;
+                    
+                    let cumpleDesdeLogin = true;
+                    let cumpleHastaLogin = true;
+
+                    if (valorDesde) cumpleDesdeLogin = (fechaLoginFormatHTML >= valorDesde);
+                    if (valorHasta) cumpleHastaLogin = (fechaLoginFormatHTML <= valorHasta);
+
+                    return cumpleDesdeLogin && cumpleHastaLogin;
+
+                    return cumpleDesde && cumpleHasta;
+                
+                // ✅ CASO POR DEFECTO REPARADO (Para Email, Banco, Sexo, etc.)
+                default: 
+                    const valorPersona = persona[tipo] ? String(persona[tipo]).toLowerCase() : "";
+                    return valoresBuscados.some(val => valorPersona.includes(val));
+            }
+        });
+    });
+
+    paginaActual = 1;
+    renderizarTabla();
+}
+
+// ==========================================
+// 5. GUARDAR ESTADOS (PÍLDORAS)
+// ==========================================
+function cambiarEstado(id, nuevoEstado) {
+    estadosPendientes[id] = nuevoEstado;
+}
+
+function mostrarBotonGuardar() {
+    const boton = document.getElementById('btn-guardar-estado');
+    if (boton) {
+        boton.style.display = 'inline-flex';
+        boton.classList.add('animacion-aparecer');
+    }
+}
+
+function confirmarCambio() {
+    const boton = document.getElementById('btn-guardar-estado');
+    boton.innerHTML = '<i class="bi bi-hourglass-split"></i> Guardando...';
+    boton.style.backgroundColor = '#ffc107'; 
+
+    fetch("/app/api/actualizar-estados-usuarios/", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ 'cambios': estadosPendientes })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            boton.innerHTML = '<i class="bi bi-check2-all"></i> ¡Guardado!';
+            boton.style.backgroundColor = '#20c997'; 
+            setTimeout(() => {
+                boton.style.display = 'none';
+                boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar'; 
+                boton.style.backgroundColor = '#28a745'; 
+                estadosPendientes = {}; 
+                cargarUsuariosDesdeDB(); 
+            }, 1500);
+        } else {
+            alert('Error: ' + data.mensaje);
+            boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar';
+            boton.style.backgroundColor = '#28a745';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error de conexión al guardar.');
+        boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar';
+        boton.style.backgroundColor = '#28a745';
+    });
+}
+
+// ==========================================
+// 6. ELIMINAR SELECCIONADOS (PAPELERA)
+// ==========================================
+function verificarSeleccion() {
+    const seleccionados = document.querySelectorAll('.check-usuario:checked');
+    const btnPapelera = document.getElementById('btn-papelera');
+    if (btnPapelera) {
+        btnPapelera.style.display = seleccionados.length > 0 ? 'inline-block' : 'none'; 
+    }
+}
+
+function eliminarSeleccionados() {
+    const seleccionados = document.querySelectorAll('.check-usuario:checked');
+    if (seleccionados.length === 0) return;
+    if (!confirm(`¿Estás seguro de que deseas eliminar ${seleccionados.length} usuario(s)?`)) return;
+
+    const idsParaBorrar = Array.from(seleccionados).map(cb => cb.value);
+
+    fetch("/app/api/eliminar-usuario/", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ 'ids': idsParaBorrar })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('btn-papelera').style.display = 'none'; 
+            alert(data.mensaje);
+            cargarUsuariosDesdeDB(); 
+        } else {
+            alert('Error: ' + data.mensaje);
+        }
+    })
+    .catch(error => alert('Hubo un error de conexión al eliminar.'));
+}
+
+// ==========================================
+// 7. MENÚ 3 PUNTITOS Y EXPORTAR EXCEL
+// ==========================================
+function toggleMenuOpciones(event) {
+    event.stopPropagation(); 
+    document.getElementById('menu-tres-puntos').classList.toggle('mostrar');
+}
+
+document.addEventListener('click', function(event) {
+    const menuPuntos = document.getElementById('menu-tres-puntos');
+    if (menuPuntos && menuPuntos.classList.contains('mostrar')) {
+        menuPuntos.classList.remove('mostrar');
+    }
+    const menuSearch = document.getElementById('searchOptionsMenu');
+    if (menuSearch && menuSearch.classList.contains('show')) {
+        menuSearch.classList.remove('show');
+    }
+});
+
+function limpiarFiltros() {
+    document.querySelectorAll('.filter-item').forEach(item => item.remove());
+    filtrosActivos.clear();
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    aplicarFiltros(); 
+}
+
+function refrescarDatos() {
+    const icono = document.querySelector('.bi-arrow-clockwise');
+    if (icono) {
+        icono.style.transform = "rotate(360deg)";
+        setTimeout(() => { icono.style.transform = "rotate(0deg)"; }, 500);
+    }
+    cargarUsuariosDesdeDB();
+}
+
+function exportarExcel(event) {
+    if (event) event.preventDefault();
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    
+    if (personasFiltradas.length === 0) {
+        alert("No hay datos para exportar.");
+        return;
+    }
+    
+    let csvContent = "\uFEFF"; // Para que los acentos y las ñ se vean bien en Excel
+    csvContent += "Nombre,Cédula,Último Login,Email,Estatus\n";
+
+    personasFiltradas.forEach(p => {
+        let nombre = `"${p.nombre || ''}"`;
+        let cedula = `"${p.cedula || ''}"`;
+        let ultimo = `"${p.ultimo_login || 'Sin ingreso'}"`;
+        let email = `"${p.email || ''}"`;
+        let estadoStr = p.estado === true ? 'ACTIVO' : (p.estado === false ? 'INACTIVO' : p.estado);
+        
+        csvContent += `${nombre},${cedula},${ultimo},${email},${estadoStr}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Reporte_Usuarios_InzurAi.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// ==========================================
+// 8. AUTOCOMPLETADO PERSONALIZADO
+// ==========================================
+function mostrarSugerencias(valor, tipo) {
+    const dropdown = document.getElementById(`sugerencias-${tipo}`);
+    const input = document.getElementById(`val-${tipo}`);
+    
+    let partes = valor.split(',');
+    let busquedaActual = partes[partes.length - 1].trim();
+
+    aplicarFiltros();
+
+    if (busquedaActual === '') {
+        if(dropdown) dropdown.style.display = 'none';
+        return;
+    }
+
+    let listaValores = [];
+    
+    // Filtramos según las columnas actualizadas (Nombre y Cédula)
+    if (tipo === 'nombre') {
+        listaValores = [...new Set(personas.map(p => p.nombre))].filter(Boolean);
+    } else if (tipo === 'cedula') {
+        listaValores = [...new Set(personas.map(p => p.cedula))].filter(Boolean);
+    } else if (tipo === 'email') {
+        listaValores = [...new Set(personas.map(p => p.email))].filter(Boolean);
+    }
+    
+    const coincidencias = listaValores.filter(texto => 
+        texto.toLowerCase().startsWith(busquedaActual.toLowerCase())
+    );
+
+    if(dropdown) dropdown.innerHTML = '';
+
+    if (coincidencias.length > 0 && dropdown) {
+        coincidencias.forEach(texto => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item'; 
+            item.href = '#';
+            item.textContent = texto; // Quité el @ ya que no usamos username
+            
+            item.onclick = function(e) {
+                e.preventDefault();
+                partes.pop(); 
+                partes.push(texto);
+                input.value = partes.join(', ') + ', '; 
+                dropdown.style.display = 'none'; 
+                input.focus(); 
+                aplicarFiltros(); 
+            };
+            
+            dropdown.appendChild(item);
+        });
+        dropdown.style.display = 'block'; 
+    } else if (dropdown) {
+        dropdown.style.display = 'none'; 
+    }
+}
+
+document.addEventListener('click', function(e) {
+    const wrappers = document.querySelectorAll('.autocomplete-wrapper');
+    wrappers.forEach(wrapper => {
+        if (!wrapper.contains(e.target)) {
+            const dropdown = wrapper.querySelector('.search-dropdown-menu');
+            if (dropdown) dropdown.style.display = 'none';
+        }
+    });
+});
+
+function limpiarTodosLosFiltros() {
+    const contenedorFiltros = document.querySelector('.filters-grid');
+    if (!contenedorFiltros) return;
+
+    const inputs = contenedorFiltros.querySelectorAll('input');
+    const selects = contenedorFiltros.querySelectorAll('select');
+
+    inputs.forEach(input => input.value = '');
+    selects.forEach(select => select.selectedIndex = 0);
+
+    const icono = document.querySelector('.btn-action.refresh i');
+    if (icono) {
+        icono.style.transition = "transform 0.5s ease";
+        icono.style.transform = "rotate(360deg)";
+        setTimeout(() => { icono.style.transform = "rotate(0deg)"; }, 500);
+    }
+
+    aplicarFiltros();
+}
+
+// --- FUNCIONES DEL MODAL COMPARTIR ---
+function abrirModalCompartir() {
+    const menu = document.getElementById('menu-tres-puntos');
+    if (menu) menu.classList.remove('mostrar');
+    
+    document.getElementById('correoCliente').value = '';
+    document.getElementById('modalCompartir').classList.add('show');
+}
+
+function cerrarModalCompartir() {
+    document.getElementById('modalCompartir').classList.remove('show');
+}
+
+function enviarCorreoCompartir() {
+    const correo = document.getElementById('correoCliente').value;
+    const formato = document.getElementById('formatoEnvio').value;
+    const botonEnviar = document.querySelector('#modalCompartir .btn-guardar');
+    
+    if (!correo || !correo.includes('@')) {
+        alert("Por favor, ingresa un correo electrónico válido.");
+        return;
+    }
+    
+    const textoOriginal = botonEnviar.innerHTML;
+    botonEnviar.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+    botonEnviar.disabled = true;
+    
+    setTimeout(() => {
+        alert(`¡Éxito! La información ha sido enviada a ${correo} en formato ${formato.toUpperCase()}.`);
+        botonEnviar.innerHTML = textoOriginal;
+        botonEnviar.disabled = false;
+        cerrarModalCompartir();
+    }, 1500);
+}
+
+// --- ALERTAS PARA LOS DEMÁS BOTONES ---
+function accionImprimir() {
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    
+    // Validamos que haya datos
+    if (personasFiltradas.length === 0) {
+        alert("No hay datos para imprimir.");
+        return;
+    }
+
+    // Creamos una ventana emergente para imprimir
+    let printWindow = window.open('', '_blank');
+    let htmlContent = `
+        <html>
+        <head>
+            <title>Reporte Integral de Usuarios - InzurAi+</title>
+            <style>
+                /* Forzamos a que la impresora lo ponga en Horizontal */
+                @page { size: landscape; margin: 10mm; }
+                body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; padding: 0; color: #333; }
+                .header-container { text-align: center; margin-bottom: 20px; }
+                h1 { color: #52247d; font-size: 20px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+                p.subtitle { color: #6c757d; margin-top: 0; font-size: 11px; }
+                
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { border: 1px solid #dee2e6; padding: 8px 6px; text-align: left; vertical-align: top; }
+                th { background-color: #f8f9fa; color: #52247d; font-weight: bold; font-size: 9px; text-transform: uppercase; }
+                
+                .dato-principal { font-weight: bold; font-size: 11px; color: #000; display: block; margin-bottom: 3px; }
+                .dato-secundario { color: #6c757d; font-size: 9px; display: block; line-height: 1.3; }
+                
+                .status-activo { color: #155724; font-weight: bold; background-color: #d4edda; text-align: center; border-radius: 4px; padding: 3px; display: inline-block; width: 100%; box-sizing: border-box;}
+                .status-inactivo { color: #721c24; font-weight: bold; background-color: #f8d7da; text-align: center; border-radius: 4px; padding: 3px; display: inline-block; width: 100%; box-sizing: border-box;}
+            </style>
+        </head>
+        <body>
+            <div class="header-container">
+                <h1>Reporte Integral de Usuarios</h1>
+                <p class="subtitle">Base de datos completa - Zynapxe AI Engineers<br>Generado el: ${new Date().toLocaleString('es-VE')}</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Datos Personales</th>
+                        <th style="width: 12%;">Perfil Base</th>
+                        <th style="width: 15%;">Ocupación</th>
+                        <th style="width: 18%;">Contacto</th>
+                        <th style="width: 15%;">Datos Financieros</th>
+                        <th style="width: 15%;">Dirección Fiscal</th>
+                        <th style="width: 10%;">Sistema</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    // Llenamos la tabla agrupando los datos en las 7 columnas
+    personasFiltradas.forEach(p => {
+        let estadoStr = p.estado === true ? 'ACTIVO' : (p.estado === false ? 'INACTIVO' : p.estado);
+        let statusClass = estadoStr === 'ACTIVO' ? 'status-activo' : 'status-inactivo';
+        
+        htmlContent += `
+            <tr>
+                <td>
+                    <span class="dato-principal">${p.nombre_completo || p.nombre || 'N/A'}</span>
+                    <span class="dato-secundario"><b>C.I/RIF:</b> ${p.cedula || 'N/A'}</span>
+                    <span class="dato-secundario"><b>F. Nac:</b> ${p.fecha_nac}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-secundario"><b>Tipo:</b> ${p.tipo_cliente}</span>
+                    <span class="dato-secundario"><b>Sexo:</b> ${p.sexo}</span>
+                    <span class="dato-secundario"><b>Nac.:</b> ${p.nacionalidad}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-principal" style="font-size: 10px;">${p.profesion}</span>
+                    <span class="dato-secundario"><b>Actividad:</b> ${p.actividad}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-secundario"><b>Móvil:</b> ${p.telefono_movil}</span>
+                    <span class="dato-secundario"><b>Ofc:</b> ${p.telefono_oficina}</span>
+                    <span class="dato-secundario" style="color: #0d6efd;">${p.email}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-principal" style="font-size: 10px;">${p.banco}</span>
+                    <span class="dato-secundario"><b>Cta:</b> ${p.cuenta_bancaria}</span>
+                    <span class="dato-secundario"><b>Ingreso:</b> $${p.ingreso}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-secundario">${p.direccion}</span>
+                </td>
+                
+                <td>
+                    <div class="${statusClass}" style="margin-bottom: 5px;">${estadoStr}</div>
+                    <span class="dato-secundario" style="text-align: center; font-size: 8px;"><b>Login:</b><br>${p.ultimo_login || 'N/A'}</span>
+                </td>
+            </tr>
+        `;
+    });
+
+    htmlContent += `
+                </tbody>
+            </table>
+            <p style="text-align: right; margin-top: 15px; font-size: 11px; font-weight: bold; color: #52247d;">
+                Total de registros impresos: ${personasFiltradas.length}
+            </p>
+        </body>
+        </html>
+    `;
+
+    // Escribimos el HTML en la nueva ventana y lanzamos la impresión
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    
+    // Le damos un pequeño tiempo para que el navegador renderice antes de imprimir
+    setTimeout(() => {
+        printWindow.print();
+    }, 800);
+}
+
+function accionConfigurarColumnas() {
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    alert("Has hecho clic en: Configurar columnas (Aquí podrás ocultar/mostrar columnas)");
+}
+
+function accionExportarPDF() {
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    alert("Has hecho clic en: Exportar a PDF (Generando documento...)");
+}
+// ==========================================
+// 9. LÓGICA PARA MULTI-SELECT (LUPA)
+// ==========================================
+
+function abrirModalNombres(event) {
+    event.stopPropagation();
+    const tipo = 'nombre';
+    const dropdown = document.getElementById(`dropdown-multi-${tipo}`);
+    
+    // Si ya está abierto, lo cerramos
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Cerrar otros dropdowns si existen
+    document.querySelectorAll('[id^="dropdown-multi-"]').forEach(el => el.style.display = 'none');
+
+    // Obtener valores únicos (DISTINCT)
+    // Usamos Set para asegurar que no haya repetidos y filter(Boolean) para quitar vacíos
+    let nombresUnicos = [...new Set(personas.map(p => p.nombre_completo))].filter(Boolean);
+    
+    // Ordenar alfabéticamente
+    nombresUnicos.sort();
+
+    const contenedorLista = document.getElementById(`lista-checkboxes-${tipo}`);
+    contenedorLista.innerHTML = '';
+
+    // Obtener los valores que ya estaban seleccionados en el input principal
+    const inputPrincipal = document.getElementById(`val-${tipo}`);
+    const seleccionadosPrevios = inputPrincipal.value.split(',').map(v => v.trim()).filter(Boolean);
+
+    // Generar checkboxes con el diseño ordenado a la izquierda
+    nombresUnicos.forEach(nombre => {
+        const isChecked = seleccionadosPrevios.includes(nombre) ? 'checked' : '';
+        
+        const div = document.createElement('div');
+        div.className = 'checkbox-item-multi';
+        
+        // ESTILOS DE FILA: Alineación total a la izquierda
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'flex-start'; // Pegado a la izquierda
+        div.style.padding = '10px 15px'; // Más espacio interno
+        div.style.borderBottom = '1px solid #f8f9fa'; // Línea sutil divisoria
+        div.style.cursor = 'pointer';
+        div.style.transition = 'background 0.2s';
+        
+        // Efecto Hover (ilumina la fila)
+        div.onmouseover = () => div.style.backgroundColor = '#f1f3f5';
+        div.onmouseout = () => div.style.backgroundColor = 'transparent';
+
+        div.innerHTML = `
+                <div style="display: flex; align-items: flex-start; width: 100%;">
+                    <input type="checkbox" id="chk-${tipo}-${opcion}" value="${opcion}" class="chk-multi-${tipo}" ${isChecked} 
+                           style="width: 18px; height: 18px; cursor: pointer; margin: 2px 15px 0 0; accent-color: #0d6efd; flex-shrink: 0;">
+                    
+                    <label for="chk-${tipo}-${opcion}" style="cursor: pointer; margin: 0; font-size: 0.9rem; color: #333; width: 100%; white-space: normal; line-height: 1.4; text-align: left; font-weight: 500;">
+                        ${opcion}
+                    </label>
+                </div>
+            `;
+
+        // Hacer que toda la fila sea clicable (no solo el cuadrito)
+        div.onclick = function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const cb = this.querySelector('input');
+                cb.checked = !cb.checked;
+            }
+        };
+
+        contenedorLista.appendChild(div);
+    });
+
+    // Limpiar el buscador interno y mostrar
+    document.getElementById(`buscador-interno-${tipo}`).value = '';
+    dropdown.style.display = 'block';
+}
+function filtrarListaInterna(valor, tipo) {
+    // Convertimos lo que el usuario escribe a minúsculas y quitamos espacios extra
+    const termino = valor.toLowerCase().trim();
+    const items = document.querySelectorAll(`#lista-checkboxes-${tipo} .checkbox-item-multi`);
+    
+    items.forEach(item => {
+        // Obtenemos el nombre de la etiqueta, a minúsculas y SIN espacios al inicio
+        const labelText = item.querySelector('label').textContent.toLowerCase().trim();
+        
+        // ¡LA MAGIA AQUÍ! Usamos startsWith en lugar de includes
+        if (labelText.startsWith(termino)) {
+            item.style.display = 'flex'; // Mantiene nuestro diseño ordenado
+        } else {
+            item.style.display = 'none'; // Lo oculta si no empieza por esa letra
+        }
+    });
+}
+
+function aplicarSeleccionMultiple(tipo) {
+    const checkboxes = document.querySelectorAll(`.chk-multi-${tipo}:checked`);
+    const valoresSeleccionados = Array.from(checkboxes).map(cb => cb.value);
+    
+    // Actualizar el input visual
+    const inputElement = document.getElementById(`val-${tipo}`);
+    inputElement.value = valoresSeleccionados.join(', ');
+    
+    // Cerrar el dropdown
+    document.getElementById(`dropdown-multi-${tipo}`).style.display = 'none';
+    
+    // Disparar el filtro principal
+    aplicarFiltros();
+}
+
+// Cerrar el dropdown si se hace clic afuera
+document.addEventListener('click', function(e) {
+    const dropdowns = document.querySelectorAll('[id^="dropdown-multi-"]');
+    dropdowns.forEach(dropdown => {
+        if (dropdown.style.display === 'block') {
+            // Verificar si el clic fue dentro del dropdown o en su botón (lupa)
+            const wrapper = dropdown.closest('.autocomplete-wrapper');
+            if (!wrapper.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        }
+    });
+});
+// ==========================================
+// LÓGICA PARA MULTI-SELECT DE CÉDULA
+// ==========================================
+function abrirModalCedulas(event) {
+    event.stopPropagation();
+    const tipo = 'cedula';
+    const dropdown = document.getElementById(`dropdown-multi-${tipo}`);
+    
+    // Si ya está abierto, lo cerramos
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Cerrar otros dropdowns si existen
+    document.querySelectorAll('[id^="dropdown-multi-"]').forEach(el => el.style.display = 'none');
+
+    // Extraer cédulas únicas (sin repetidos ni vacíos)
+    let cedulasUnicas = [...new Set(personas.map(p => p.cedula))].filter(Boolean);
+    cedulasUnicas.sort(); // Ordenar numéricamente
+
+    const contenedorLista = document.getElementById(`lista-checkboxes-${tipo}`);
+    contenedorLista.innerHTML = '';
+
+    const inputPrincipal = document.getElementById(`val-${tipo}`);
+    const seleccionadosPrevios = inputPrincipal.value.split(',').map(v => v.trim()).filter(Boolean);
+
+    // Generar los checkboxes
+    cedulasUnicas.forEach(cedula => {
+        const isChecked = seleccionadosPrevios.includes(cedula) ? 'checked' : '';
+        
+        const div = document.createElement('div');
+        div.className = 'checkbox-item-multi';
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'flex-start'; 
+        div.style.padding = '10px 15px'; 
+        div.style.borderBottom = '1px solid #f8f9fa'; 
+        div.style.cursor = 'pointer';
+        div.style.transition = 'background 0.2s';
+        
+        div.onmouseover = () => div.style.backgroundColor = '#f1f3f5';
+        div.onmouseout = () => div.style.backgroundColor = 'transparent';
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; width: 100%;">
+                <input type="checkbox" id="chk-${tipo}-${cedula}" value="${cedula}" class="chk-multi-${tipo}" ${isChecked} 
+                       style="width: 18px; height: 18px; cursor: pointer; margin: 0 15px 0 0; accent-color: #0d6efd; flex-shrink: 0;">
+                
+                <label for="chk-${tipo}-${cedula}" style="cursor: pointer; margin: 0; font-size: 0.9rem; color: #333; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                    ${cedula}
+                </label>
+            </div>
+        `;
+
+        div.onclick = function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const cb = this.querySelector('input');
+                cb.checked = !cb.checked;
+            }
+        };
+
+        contenedorLista.appendChild(div);
+    });
+
+    document.getElementById(`buscador-interno-${tipo}`).value = '';
+    dropdown.style.display = 'block';
+}
+// ==========================================
+// LÓGICA PARA MULTI-SELECT DINÁMICO (Sexo, Tipo de Cliente, etc)
+// ==========================================
+// ==========================================
+// LÓGICA PARA MULTI-SELECT DINÁMICO (Sexo, Tipo de Cliente, etc)
+// ==========================================
+function abrirModalOpcionesDinamicas(event, tipo, titulo) {
+    event.stopPropagation();
+    const dropdown = document.getElementById(`dropdown-multi-${tipo}`);
+    
+    // Si ya está abierto, lo cerramos
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Cerrar otros dropdowns si existen
+    document.querySelectorAll('[id^="dropdown-multi-"]').forEach(el => el.style.display = 'none');
+
+    // 1. LÓGICA MEJORADA: Buscar primero en los catálogos de la Base de Datos
+    let opcionesUnicas = [];
+    
+    // Si el tipo (ej: 'banco', 'nacionalidad') existe en la BD, usamos toda esa lista
+    if (catalogosGlobales[tipo] && catalogosGlobales[tipo].length > 0) {
+        opcionesUnicas = catalogosGlobales[tipo];
+    } else {
+        // Fallback: Si es 'email', 'cuenta_bancaria' o 'telefono_movil', lo sacamos de los usuarios actuales
+        opcionesUnicas = [...new Set(personas.map(p => p[tipo]))].filter(val => val && val !== 'N/A' && val.trim() !== '');
+    }
+    
+    opcionesUnicas.sort(); // Ordenar alfabéticamente
+
+    const contenedorLista = document.getElementById(`lista-checkboxes-${tipo}`);
+    contenedorLista.innerHTML = '';
+
+    const inputPrincipal = document.getElementById(`val-${tipo}`);
+    const seleccionadosPrevios = inputPrincipal.value.split(',').map(v => v.trim()).filter(Boolean);
+
+    // 2. Generar los checkboxes dinámicamente
+    if (opcionesUnicas.length === 0) {
+        contenedorLista.innerHTML = '<div style="text-align:center; color:#6c757d; font-size:0.85rem; padding: 10px;">No hay datos registrados aún.</div>';
+    } else {
+        opcionesUnicas.forEach(opcion => {
+            const isChecked = seleccionadosPrevios.includes(opcion) ? 'checked' : '';
+            
+            const div = document.createElement('div');
+            div.className = 'checkbox-item-multi';
+            div.style.display = 'flex';
+            div.style.alignItems = 'flex-start'; // Esto es clave para que el contenido no se descentre si hay 2 líneas
+            div.style.justifyContent = 'flex-start'; 
+            div.style.minHeight = '45px'; // Agrega esto para asegurar buen espacio
+            div.style.height = 'auto'; // Permite que crezca
+            div.style.padding = '10px 15px'; 
+            div.style.borderBottom = '1px solid #f8f9fa'; 
+            div.style.cursor = 'pointer';
+            div.style.transition = 'background 0.2s';
+            
+            div.onmouseover = () => div.style.backgroundColor = '#f1f3f5';
+            div.onmouseout = () => div.style.backgroundColor = 'transparent';
+
+            div.innerHTML = `
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <input type="checkbox" id="chk-${tipo}-${opcion}" value="${opcion}" class="chk-multi-${tipo}" ${isChecked} 
+                           style="width: 18px; height: 18px; cursor: pointer; margin: 0 15px 0 0; accent-color: #0d6efd; flex-shrink: 0;">
+                    
+                    <label for="chk-${tipo}-${opcion}" style="cursor: pointer; margin: 0; font-size: 0.9rem; color: #333; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-weight: 500;">
+                        ${opcion}
+                    </label>
+                </div>
+            `;
+
+            div.onclick = function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    const cb = this.querySelector('input');
+                    cb.checked = !cb.checked;
+                }
+            };
+
+            contenedorLista.appendChild(div);
+        });
+    }
+
+    dropdown.style.display = 'block';
+}
+function cargarCatalogosDesdeDB() {
+    fetch("/app/api/obtener-catalogos/")
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                catalogosGlobales = data.catalogos;
+            }
+        })
+        .catch(error => console.error("Error cargando catálogos:", error));
+}
+    </script>
+{% endblock %}

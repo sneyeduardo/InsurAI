@@ -1,0 +1,195 @@
+:root {
+    --primary-dark: #0f172a;
+    --accent-blue: #1e3a8a; /* Azul más oscuro y elegante */
+    --accent-hover: #172554; /* Azul aún más oscuro para el hover */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --bg-main: #f3f4f6; /* Gris clarito liso */
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: white;
+    padding: 50px 40px 30px; /* Arriba 50px, Lados 40px, Abajo 30px */
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border-top: 5px solid var(--accent-blue);
+}
+
+.logo-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Estilos para el logo principal */
+.main-logo {
+    max-width: 300px; /* Ajusta este valor según el tamaño de tu logo */
+    height: auto;
+    margin-bottom: 10px;
+    margin-top: -10px;
+}
+
+.logo-header p {
+    color: var(--text-muted);
+    margin: 5px 0 0 0;
+    font-size: 0.95rem;
+}
+
+.form-group {
+    margin-bottom: 25px; /* Subimos de 20px a 25px */
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-main);
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15); /* Sombra ajustada al nuevo azul */
+}
+
+.btn-login {
+    width: 100%;
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 15px; /* Más espacio arriba del botón */
+    margin-bottom: 10px;
+}
+
+.btn-login:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-login:active {
+    transform: scale(0.98); /* Efecto sutil al presionar el botón */
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-align: center;
+    display: none;
+}
+
+/* Estilos para el footer "Powered by" */
+.powered-by {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 35px; /* Separa el footer del botón de login */
+    padding-top: 20px; /* Espacio interno para la línea divisoria */
+    border-top: 1px solid #e2e8f0; /* Línea separadora muy sutil */
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.zynapxe-logo {
+    height: 50px; /* Ajusta según la proporción del logo de Zynapxe */
+    width: auto;
+    opacity: 0.8; /* Le da un toque sutil */
+    transition: opacity 0.2s;
+}
+
+.zynapxe-logo:hover {
+    opacity: 1;
+}
+
+/* --- NUEVOS ESTILOS PARA CONTRASEÑA Y RECUPERACIÓN --- */
+
+/* Contenedor relativo para poder colocar el ojito encima del input */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Le damos un poco más de padding a la derecha para que el texto no pise el ojito */
+.password-container input {
+    width: 100%;
+    padding-right: 40px; 
+}
+
+/* Estilo del ojito */
+.password-container i {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    font-size: 1.1rem;
+}
+
+.password-container i:hover {
+    color: var(--accent-blue);
+}
+
+/* Contenedor para alinear el label y el enlace de recuperar en la misma línea */
+.label-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.label-flex label {
+    margin-bottom: 0; /* Quitamos el margen inferior porque ya lo maneja el flex */
+}
+
+/* Enlace de Olvidó su contraseña */
+.forgot-password {
+    font-size: 0.8rem;
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.forgot-password:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}

@@ -1,0 +1,613 @@
+:root {
+    --primary-dark: #0f172a;
+    --accent-blue: #1e3a8a;
+    --bg-main: #f8fafc;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    display: flex; /* Mantiene Sidebar y Dashboard lado a lado */
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- CONTENIDO PRINCIPAL (Dashboard) --- */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.content-body {
+    width: 100%;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+    overflow: visible; /* Clave para el botón flotante */
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+.sidebar::-webkit-scrollbar {
+    display: none; /* Chrome y Safari */
+}
+
+.sidebar-logo {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo-img {
+    max-width: 200px; /* Ajusta el tamaño a tu gusto */
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* --- LOGO PEQUEÑO (Zynapxe) --- */
+.logo-mini {
+    max-width: 200px; /* Ajusta este tamaño según lo necesites */
+    height: auto;
+    margin-top: 40px;
+    position: absolute; /* Lo coloca exactamente encima del grande */
+    opacity: 0; /* Invisible al inicio */
+    transform: scale(0.5); /* Empieza chiquito */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 15px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+.sidebar-nav::-webkit-scrollbar { 
+    display: none; /* Chrome/Safari */
+}
+
+/* --- BOTONES DEL MENÚ --- */
+.nav-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 15px;
+    color: #475569;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    transition: all 0.2s;
+}
+
+.nav-item i {
+    width: 20px;
+    font-size: 1.1rem;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.nav-item .arrow {
+    margin-left: auto;
+    margin-right: 0;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: #f1f5f9;
+    color: var(--accent-blue);
+}
+
+/* --- ACORDEÓN / SUBMENÚ --- */
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    padding-left: 30px;
+    transition: max-height 0.3s ease-out;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin-bottom: 2px;
+}
+
+.submenu-item i { margin-right: 8px; font-size: 0.9rem; }
+.submenu-item:hover { color: var(--accent-blue); background-color: #f8fafc; }
+
+/* Animación de apertura */
+.nav-group.open .submenu {
+    max-height: 300px; /* Expande el menú */
+}
+.nav-group.open .arrow {
+    transform: rotate(180deg); /* Gira la flecha */
+}
+
+.nav-item span, .user-details, .logo-img {
+    transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+/* --- FOOTER DEL SIDEBAR --- */
+.sidebar-footer {
+    padding: 15px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    min-width: 0; 
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile-dropdown {
+    position: absolute;
+    bottom: calc(100% + 5px); /* Aparece justo encima del footer */
+    left: 15px;
+    width: 200px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    z-index: 1000;
+}
+
+/* Esta clase la pondremos con Javascript para mostrarlo */
+.profile-dropdown.show {
+    display: flex;
+    animation: slideUp 0.2s ease-out;
+}
+
+.profile-dropdown a {
+    color: #475569;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.profile-dropdown a i {
+    width: 20px;
+    margin-right: 8px;
+}
+
+.profile-dropdown a:hover {
+    background-color: #f1f5f9;
+    color: #1e3a8a; /* Tu azul marino oscuro */
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-info:hover {
+    background-color: rgba(0,0,0,0.05); /* Un brillito sutil al pasar el mouse */
+}
+
+.user-avatar i {
+    font-size: 2rem;
+    color: #cbd5e1;
+    margin-right: 10px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Pone "..." si el nombre es muy largo */
+}
+
+.user-role { font-size: 0.75rem; color: #64748b; }
+
+.logout-btn {
+    color: #ef4444;
+    padding: 8px;
+    border-radius: 6px;
+}
+.logout-btn:hover { background-color: #fef2f2; }
+
+/* --- HEADER DEL SIDEBAR (Logo y Botón) --- */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 20px 15px;
+    min-height: 70px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-sidebar);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.toggle-btn:hover { color: #ffffff; }
+
+/* --- ESTADO MINIMIZADO (.collapsed) --- */
+.sidebar.collapsed {
+    width: 80px; /* Se encoge a 80px */
+}
+
+/* Ocultar textos, flechas y logo al minimizar */
+.sidebar.collapsed span,
+.sidebar.collapsed .arrow,
+.sidebar.collapsed .logo-img,
+.sidebar.collapsed .user-details,
+.sidebar.collapsed .logout-btn {
+    display: none;
+}
+
+.sidebar.collapsed .nav-item span, 
+.sidebar.collapsed .user-details,
+.sidebar.collapsed .logo-img {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Centrar iconos */
+.sidebar.collapsed .sidebar-header,
+.sidebar.collapsed .nav-item,
+.sidebar.collapsed .sidebar-footer {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sidebar.collapsed .nav-item i {
+    margin-right: 0;
+    font-size: 1.3rem; /* Iconos un poco más grandes para que destaquen */
+}
+
+/* Ocultar submenús por la fuerza si está colapsado */
+.sidebar.collapsed .submenu {
+    display: none !important; 
+}
+
+/* Ajustar el menú del perfil para que no se oculte al minimizar */
+.sidebar.collapsed .profile-dropdown {
+    left: 85px; 
+    width: 150px;
+}
+
+/* El Botón Circular Flotante */
+.floating-toggle {
+    position: absolute;
+    right: -14px; /* Ajustado para que quede centrado en el borde */
+    top: 35px;
+    width: 28px;
+    height: 28px;
+    background-color: #1e3a8a;
+    border: 2px solid #8d8d8d;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1001; /* Asegura que esté por encima de todo */
+    transition: transform 0.3s ease;
+}
+
+/* Rotación del icono al colapsar */
+.sidebar.collapsed .floating-toggle {
+    transform: rotate(180deg);
+}
+
+.nav-item span, 
+.user-details, 
+.logo-img, 
+.arrow {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .user-details,
+.sidebar.collapsed .logo-img,
+.sidebar.collapsed .arrow {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- EFECTO AL MINIMIZAR EL SIDEBAR (.collapsed) --- */
+
+/* El grande desaparece */
+.sidebar.collapsed .logo-img {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
+/* El pequeño (Zynapxe) aparece */
+.sidebar.collapsed .logo-mini {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Estilos para Tablas CRUD */
+.card-table {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th {
+    background-color: #f8fafc;
+    padding: 15px;
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #64748b;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.custom-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.user-img-mini { font-size: 1.5rem; color: #cbd5e1; }
+
+.role-tag {
+    background: #eff6ff;
+    color: #1e3a8a;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-primary-custom {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-primary-custom:hover { background-color: #172554; }
+
+.action-btns button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 5px;
+    color: #94a3b8;
+    transition: color 0.2s;
+}
+.btn-edit:hover { color: #2563eb; }
+.btn-delete:hover { color: #ef4444; }
+
+/* --- ESTILOS COMPARTIDOS DE TABLAS --- */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th {
+    background-color: #f8fafc;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #64748b;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.custom-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #1e293b;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f8fafc; /* Efecto hover en las filas */
+}
+
+/* Chips de estado */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.bg-success { background: #dcfce7; color: #16a34a; }
+.bg-secondary { background: #f1f5f9; color: #64748b; }
+
+/* Botones de acción (Editar/Borrar) */
+.action-btns button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    transition: transform 0.2s, color 0.2s;
+}
+.btn-edit:hover { color: #2563eb; transform: scale(1.1); }
+.btn-delete:hover { color: #ef4444; transform: scale(1.1); }
+
+/* Filtros rápidos (Chips sobre la tabla) */
+.quick-filters {
+    display: flex;
+    gap: 10px;
+}
+.filter-btn {
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+.filter-btn:hover { border-color: #cbd5e1; }
+.filter-btn.active {
+    background: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+}
+
+/* --- CHATBOT ZYBANNA PREMIUM --- */
+.zybanna-launcher {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #1e3a8a;
+    color: white;
+    padding: 8px 20px 8px 8px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    transition: transform 0.3s ease;
+}
+
+.zybanna-launcher:hover { transform: scale(1.05); }
+
+.zybanna-launcher img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+}
+
+.zybanna-chat-container {
+    position: fixed;
+    bottom: 90px;
+    right: 30px;
+    width: 350px;
+    height: 450px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    z-index: 2000;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.zybanna-chat-container.active { display: flex; animation: slideUp 0.3s ease; }
+
+.chat-header {
+    background: #1e3a8a;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-info { display: flex; align-items: center; gap: 10px; }
+.header-info img { width: 35px; height: 35px; }
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f8fafc;
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    max-width: 80%;
+}
+
+.message.bot { background: white; border: 1px solid #e2e8f0; align-self: flex-start; }
+.message.user { background: #1e3a8a; color: white; align-self: flex-end; }
+
+.chat-input {
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.chat-input input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px;
+    outline: none;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

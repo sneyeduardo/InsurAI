@@ -1,0 +1,121 @@
+/* --- CONTENEDOR Y CABECERA DEL DASHBOARD --- */
+.dashboard-container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.search-wrapper {
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    width: 350px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.search-wrapper i { color: #94a3b8; margin-right: 12px; }
+.search-wrapper input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.header-date {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.header-date i { margin-right: 8px; color: #1e3a8a; }
+
+/* --- GRID DE MÓDULOS (Las 4 tarjetas principales) --- */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.module-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.module-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.module-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.module-info h3 { margin: 0; font-size: 1.25rem; color: #1e293b; }
+.module-info p { margin: 5px 0 0; font-size: 0.9rem; color: #64748b; line-height: 1.4; }
+
+/* Colores Dinámicos de las tarjetas */
+.card-blue .module-icon { background: #eff6ff; color: #2563eb; }
+.card-red .module-icon { background: #fef2f2; color: #ef4444; }
+.card-green .module-icon { background: #f0fdf4; color: #22c55e; }
+.card-yellow .module-icon { background: #fffbeb; color: #f59e0b; }
+
+/* --- FOOTER DE ESTADO (Infraestructura) --- */
+.section-title {
+    color: #334155;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.system-status-footer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.status-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-card i { font-size: 1.4rem; }
+.status-card span { font-size: 0.85rem; font-weight: 600; color: #475569; }
+
+.icon-v { color: #2563eb; }
+.icon-s { color: #22c55e; }
+.icon-i { color: #f59e0b; }
+.icon-z { color: #ef4444; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

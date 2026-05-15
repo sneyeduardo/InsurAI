@@ -1,0 +1,1398 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'perfiles.css' %}">
+    {% endblock %}
+    {% block content %}
+        <div class="container-fluid p-0 d-flex">
+        
+        <main class="main-content-wrapper">
+            <div class="main-dashboard" id="dashboardMain">
+                <div class="top-navbar">
+                    <div class="action-buttons">
+                        <a href="{% url 'dashboard' %}" class="btn-action back" title="Ir al Dashboard" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+    <i class="bi bi-chevron-left"></i>
+</a>
+                        <a href="{% url 'perfil_nuevo' %}" class="btn-action plus" style="text-decoration: none;">
+    +
+</a>
+                        
+                    </div> 
+                    
+                    <div class="nav-section-label" id="navPersonas">
+                        <i class="bi bi-people-fill"></i>
+                        <span>perfiles</span>
+                    </div>
+
+                    <div class="user-section">
+    <span class="user-name" id="userDisplay">{{ request.session.nombre_completo|default:"Administrador" }}</span>
+    
+    <div class="user-avatar" style="overflow: hidden;">
+        {% if request.session.imagen_perfil %}
+            <img src="{{ request.session.imagen_perfil }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+            {{ request.session.nombre_completo|make_list|first|upper|default:"A" }}
+        {% endif %}
+    </div>
+</div>
+                </div>
+
+                <div class="main-content">
+                    <div class="page-header">
+                        <h1 id="pageTitle">Administracion de Perfiles</h1>
+                        <div class="filter-text" id="filterIndicator">
+                            <span>Filtro</span> | Todos los registros
+                        </div>
+                    </div>
+
+                    <div class="search-section" id="searchSection">
+                        <div class="search-header">
+                        <div class="search-title" onclick="toggleFilters()">
+                            Opciones de búsqueda:
+                            <span class="arrow" id="searchArrow">▼</span>
+                        </div>
+
+                        <div class="search-actions">
+    <div class="dropdown search-dropdown" style="display: flex; gap: 10px;">
+        
+        <div class="btn-action refresh" onclick="limpiarFiltros()" title="Recargar datos" style="cursor: pointer;">
+            <i class="bi bi-eraser action-icon icon-jefe"></i>
+        </div>
+        
+        <div class="btn-action refresh" onclick="limpiarTodosLosFiltros()" title="Limpiar todos los filtros" style="cursor: pointer;">
+            <i class="bi bi-arrow-clockwise action-icon icon-jefe"></i>
+        </div>
+        
+        <div class="btn-action plus" onclick="toggleSubmenuBusqueda(event)" style="cursor: pointer;">
+            <i class="bi bi-plus-lg action-icon icon-jefe"></i> 
+        </div>
+                                    <ul class="dropdown-menu search-dropdown-menu" id="searchOptionsMenu">
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('perfil')">Perfil</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('descripcion')">Descripción</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('fecha_creacion')">Fecha de creación</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('fecha_actualizacion')">Fecha de actualización</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); addSearchFilter('estatus')">Estatus</a></li>
+</ul>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                            <div class="filters-container" id="filtersContainer">
+                            <div class="filters-grid" id="filtersGrid">
+                                </div>
+                        </div>
+                    
+                        <div class="total-objects" id="totalObjects">Total: 7 perfiles</div>
+                    </div>
+
+                    <div class="table-container" id="tableContainer">
+    <div class="table-actions-header" style="display: flex; align-items: center; gap: 15px;">
+        <a href="{% url 'perfil_nuevo' %}" style="color: inherit; text-decoration: none;">
+    <i class="bi bi-plus-lg action-icon icon-jefe" title="Agregar"></i>
+</a>
+        <i class="bi bi-arrow-clockwise action-icon icon-jefe" 
+   onclick="refrescarPerfiles()" 
+   title="Refrescar" 
+   style="transition: transform 0.5s ease; cursor: pointer;">
+</i>
+        <i class="bi bi-trash action-icon animacion-aparecer" 
+           id="btn-papelera" 
+           onclick="eliminarSeleccionados()" 
+           title="Eliminar seleccionados" 
+           style="display: none; color: #dc3545; font-size: 1.3rem;">
+        </i>
+        <i class="bi bi-slash-circle action-icon animacion-aparecer" 
+   id="btn-deshabilitar" 
+   onclick="deshabilitarSeleccionados()" 
+   title="Deshabilitar seleccionados" 
+   style="display: none; color: #6c757d; font-size: 1.3rem; margin-left: 10px;">
+</i>
+        <div style="position: relative; display: inline-block;">
+            <i class="bi bi-three-dots-vertical action-icon icon-jefe" onclick="toggleMenuOpciones(event)" title="Más opciones"></i>
+            
+            <div id="menu-tres-puntos" class="menu-desplegable-acciones">
+    <a href="#" class="opcion-menu" onclick="exportarAExcel(event)"><i class="bi bi-file-earmark-excel"></i> Exportar a Excel</a>
+    <a href="#" class="opcion-menu" onclick="abrirModalCompartir()"><i class="bi bi-share"></i> Compartir</a>
+    <a href="#" class="opcion-menu" onclick="abrirModalCompartir()"><i class="bi bi-envelope"></i> Enviar por correo</a>
+    <a href="#" class="opcion-menu" onclick="accionExportarPDF()"><i class="bi bi-file-pdf"></i> Exportar a PDF</a>
+    <a href="#" class="opcion-menu" onclick="imprimirReporte()"><i class="bi bi-printer"></i> Imprimir Reporte</a>
+    <a href="#" class="opcion-menu" onclick="accionConfigurarColumnas()"><i class="bi bi-layout-three-columns"></i> Configurar columnas</a>
+</div>
+        </div>
+        
+        <button id="btn-guardar-estado" class="btn-guardar-cambios" style="display: none;" onclick="confirmarCambio()">
+            <i class="bi bi-check2-circle"></i> Guardar
+        </button>
+    </div>
+    
+
+                        <table class="crud-table" id="personasTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">✔</th>
+                                    <th style="width: 100px; text-align: center;">ID</th>
+                                    <th>Perfil</th>
+                                    <th>Descripcion</th>
+                                    <th>Fecha de creacion</th>
+                                    <th>Fecha de actualizacion</th>
+                                    <th>Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+
+                        <div class="pagination-container">
+                            <div class="pagination-buttons">
+                                <button class="btn-pagination" onclick="paginaAnterior()" id="btnPrev" disabled>Anterior</button>
+                                <button class="btn-pagination" onclick="paginaSiguiente()" id="btnNext">Siguiente</button>
+                            </div>
+                            <div class="per-page">
+                                <span id="pageInfo">Página 1 de 2</span>
+                                <span class="items-total" id="totalItems">7 items</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="modalCompartir" class="modal">
+            <div class="modal-content" style="max-width: 450px;">
+                <div class="ticket-header" style="border-bottom: none; padding-bottom: 0;">
+                    <h1 style="font-size: 1.2rem; color: #52247d;">
+                        <i class="bi bi-send-fill me-2"></i> Compartir Información
+                    </h1>
+                    <p class="subtitle" style="margin-top: 5px;">Envía los datos de esta tabla a un cliente.</p>
+                </div>
+                
+                <div class="ticket-section" style="border-bottom: none;">
+                    <div class="filter-item" style="margin-bottom: 15px;">
+                        <label for="correoCliente">Correo del destinatario <span style="color:red;">*</span></label>
+                        <input type="email" id="correoCliente" placeholder="ejemplo@cliente.com" required style="width: 100%;">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="formatoEnvio">Formato de archivo</label>
+                        <select id="formatoEnvio" style="width: 100%;">
+                            <option value="pdf">Documento PDF (.pdf)</option>
+                            <option value="excel">Hoja de cálculo Excel (.xlsx)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCompartir()">Cancelar</button>
+                    <button type="button" class="btn-guardar" onclick="enviarCorreoCompartir()">
+                        <i class="bi bi-send"></i> Enviar
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    {% block extra_js %}
+    <script>
+ // Dejamos los arreglos vacíos para llenarlos desde la base de datos
+let personas = [];
+let personasFiltradas = [];
+
+// Ejecutamos la búsqueda a la base de datos apenas cargue la página
+document.addEventListener("DOMContentLoaded", function() {
+    cargarPerfilesDesdeDB();
+});
+
+function cargarPerfilesDesdeDB() {
+    fetch("{% url 'api_listar_perfiles' %}") 
+        .then(response => response.json())
+        .then(data => {
+            if (data.perfiles) {
+                //MAPEAMOS LAS ETIQUETAS QUE VIENEN DEL VIEWS.PY
+                personas = data.perfiles.map(p => ({
+                    id: p.id,            // Antes tenías p.id_rol, pero Python envía 'id'
+                    nombre: p.nombre,    // Antes tenías p.nombre_rol, pero Python envía 'nombre'
+                    apellido: p.descripcion, 
+                    organizacion: p.fecha_actualizacion, 
+                    email: p.fecha_creacion,
+                    estado: p.estado     // Antes tenías p.estatus, pero Python envía 'estado'
+                }));
+                personasFiltradas = [...personas];
+                renderizarTabla(); 
+            }
+        })
+        .catch(error => console.error('Error cargando perfiles:', error));
+}
+
+let personaEditandoId = null;
+let paginaActual = 1;
+const itemsPorPagina = 5;
+
+// Elementos DOM
+const dashboardMain = document.getElementById('dashboardMain');
+const modal = document.getElementById('modalPersona');
+const tableBody = document.getElementById('tableBody');
+const totalObjects = document.getElementById('totalObjects');
+const userDisplay = document.getElementById('userDisplay');
+const pageTitle = document.getElementById('pageTitle');
+const filterIndicator = document.getElementById('filterIndicator');
+const searchSection = document.getElementById('searchSection');
+const tableContainer = document.getElementById('tableContainer');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+const pageInfo = document.getElementById('pageInfo');
+const totalItems = document.getElementById('totalItems');
+const filterPerson = document.getElementById('filterPerson');
+const filterEmail = document.getElementById('filterEmail');
+const navDashboard = document.getElementById('navDashboard');
+const navPersonas = document.getElementById('navPersonas');
+const navPerfiles = document.getElementById('navPerfiles');
+const navConfiguracion = document.getElementById('navConfiguracion');
+
+function cambiarSeccion(seccion) {
+    navDashboard.classList.remove('active');
+    navPersonas.classList.remove('active');
+    navPerfiles.classList.remove('active');
+    navConfiguracion.classList.remove('active');
+
+    if (seccion === 'dashboard') {
+        navDashboard.classList.add('active');
+        pageTitle.textContent = 'Buscar personas';
+        filterIndicator.style.display = 'flex';
+        searchSection.style.display = 'block';
+        tableContainer.style.display = 'block';
+    } else if (seccion === 'personas') {
+        navPersonas.classList.add('active');
+        pageTitle.textContent = 'Gestión de Personas';
+        filterIndicator.style.display = 'none';
+        searchSection.style.display = 'none';
+        tableContainer.style.display = 'block';
+    } else if (seccion === 'perfiles') {
+        navPerfiles.classList.add('active');
+        pageTitle.textContent = 'Administración de Perfiles';
+        filterIndicator.style.display = 'none';
+        searchSection.style.display = 'none';
+        tableContainer.style.display = 'block';
+    } else if (seccion === 'configuracion') {
+        navConfiguracion.classList.add('active');
+        pageTitle.textContent = 'Configuración del Sistema';
+        filterIndicator.style.display = 'none';
+        searchSection.style.display = 'none';
+        tableContainer.style.display = 'block';
+    }
+}
+
+function toggleFilters() {
+    const container = document.getElementById('filtersContainer');
+    const arrow = document.getElementById('searchArrow');
+    
+    if (container && arrow) {
+        container.classList.toggle('collapsed');
+        arrow.classList.toggle('rotated');
+    } else {
+        console.error("No se encontraron los elementos 'filtersContainer' o 'searchArrow'");
+    }
+}
+
+function cambiarEstado(id, nuevoEstado) {
+    estadosPendientes[id] = nuevoEstado;
+}
+
+function renderizarTabla() {
+    const inicio = (paginaActual - 1) * itemsPorPagina;
+    const fin = inicio + itemsPorPagina;
+    const personasPaginadas = personasFiltradas.slice(inicio, fin);
+
+    tableBody.innerHTML = '';
+
+    if (personasFiltradas.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 30px; color: #6c757d;">
+                    No se encontró ningún perfil
+                </td>
+            </tr>
+        `;
+        return; 
+    }
+
+    personasPaginadas.forEach(persona => {
+        // --- NUEVO: Formateamos el ID (Ej: 1 -> PRF-001) ---
+        // Ahora solo mostramos el número original
+        const idFormateado = "PRF-" + String(persona.id).padStart(3, '0');
+
+        let estadoFinal = persona.estado;
+        if (estadoFinal === true) estadoFinal = 'ACTIVO';
+        if (estadoFinal === false) estadoFinal = 'INACTIVO';
+        
+        if (estadoFinal !== 'ACTIVO' && estadoFinal !== 'INACTIVO' && estadoFinal !== 'DESHABILITADO') {
+            estadoFinal = 'INACTIVO'; 
+        }
+
+        const row = document.createElement('tr');
+        
+        let colorTexto, colorFondo, colorBorde;
+        if (estadoFinal === 'ACTIVO') {
+            colorTexto = '#155724'; colorFondo = '#d4edda'; colorBorde = '#c3e6cb'; 
+        } else if (estadoFinal === 'INACTIVO') {
+            colorTexto = '#721c24'; colorFondo = '#f8d7da'; colorBorde = '#f5c6cb'; 
+        } else { 
+            colorTexto = '#383d41'; colorFondo = '#e2e3e5'; colorBorde = '#d6d8db'; 
+        }
+
+        let opcionesHTML = '';
+        if (estadoFinal === 'ACTIVO') {
+            opcionesHTML = `
+                <option value="ACTIVO" selected>ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+                <option value="DESHABILITADO">DESHABILITADO</option>
+            `;
+        } else if (estadoFinal === 'INACTIVO') {
+            opcionesHTML = `
+                <option value="INACTIVO" selected>INACTIVO</option>
+                <option value="ACTIVO">ACTIVO</option>
+            `;
+        } else if (estadoFinal === 'DESHABILITADO') {
+            opcionesHTML = `
+                <option value="DESHABILITADO" selected>DESHABILITADO</option>
+                <option value="ACTIVO">ACTIVO</option>
+            `;
+        }
+
+        row.innerHTML = `
+            <td style="text-align: center; width: 40px;" onclick="event.stopPropagation();">
+                <input type="checkbox" class="check-perfil" value="${persona.id}" onchange="verificarSeleccion()" 
+                       style="width: 18px !important; height: 18px !important; display: inline-block !important; opacity: 1 !important; visibility: visible !important; appearance: checkbox !important; z-index: 100 !important; cursor: pointer;">
+            </td>
+            <td style="text-align: center; font-weight: bold; color: #6c757d; font-family: monospace; font-size: 1.05rem; white-space: nowrap;">
+                ${idFormateado}
+            </td>
+            <td>
+                <a href="/app/perfiles/editar/${persona.id}/" class="person-name" style="color: #fd7e14; font-weight: 600; text-decoration: none; cursor: pointer;">
+                    ${persona.nombre} <i class="bi bi-pencil-square" style="font-size: 0.8rem; margin-left: 5px;"></i>
+                </a>
+            </td>
+            <td>${persona.apellido}</td>
+            <td style="color: #333; user-select: none; cursor: default;">${persona.email}</td>
+            <td style="color: #333; user-select: none; cursor: default;">${persona.organizacion}</td>
+            <td>
+                <div class="status-container" style="display: flex; align-items: center; justify-content: flex-start;">
+        <select class="status-select-clean" 
+                onchange="manejarCambioEstado(event, ${persona.id}, this.value)" 
+                onclick="event.stopPropagation()"
+                style="background-color: ${colorFondo}; color: ${colorTexto}; border: 1px solid ${colorBorde}; 
+                       border-radius: 20px; padding: 4px 12px; font-size: 0.85rem; font-weight: bold; 
+                       cursor: pointer; outline: none; text-align: center; width: 145px; appearance: none;">
+            ${opcionesHTML}
+        </select>
+                </div>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    totalObjects.textContent = `Total: ${personasFiltradas.length} perfiles`;
+    totalItems.textContent = `${personasFiltradas.length} items`;
+    const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+    pageInfo.textContent = `Página ${paginaActual} de ${totalPaginas || 1}`;
+    btnPrev.disabled = paginaActual === 1;
+    btnNext.disabled = paginaActual === totalPaginas || totalPaginas === 0;
+    
+    verificarSeleccion();
+}
+function aplicarFiltros() {
+    // 1. Empezamos con la lista completa de personas
+    personasFiltradas = [...personas];
+
+    // 2. Revisamos qué filtros están activos en la pantalla
+    filtrosActivos.forEach(tipo => {
+        // === CAMBIO 1: Ahora es un Array para guardar múltiples nombres ===
+        let valoresBuscados = []; 
+        let valorDesde = "";
+        let valorHasta = "";
+
+        // Si es un filtro de fecha, capturamos los dos inputs (Desde y Hasta)
+        if (tipo === 'fecha_creacion' || tipo === 'fecha_actualizacion') {
+            const inputDesde = document.getElementById(`val-${tipo}-desde`);
+            const inputHasta = document.getElementById(`val-${tipo}-hasta`);
+            
+            if (inputDesde) valorDesde = inputDesde.value; // Formato YYYY-MM-DD
+            if (inputHasta) valorHasta = inputHasta.value; // Formato YYYY-MM-DD
+
+            // Si ambos están vacíos, no aplicamos este filtro
+            if (!valorDesde && !valorHasta) return; 
+        } else {
+            // Para el resto de filtros normales
+            const inputElement = document.getElementById(`val-${tipo}`);
+            if (!inputElement) return;
+
+            // === CAMBIO 2: Separamos lo escrito por comas y limpiamos los espacios ===
+            valoresBuscados = inputElement.value.toLowerCase().split(',').map(v => v.trim()).filter(v => v !== '');
+            if (valoresBuscados.length === 0) return; // Si está vacío, lo saltamos
+        }
+
+        // 3. Filtramos la lista dependiendo del tipo de filtro
+        personasFiltradas = personasFiltradas.filter(persona => {
+            switch(tipo) {
+                case 'perfil':
+                    // === CAMBIO 3: Usamos .some() para ver si coincide con ALGUNO de los seleccionados ===
+                    return valoresBuscados.some(val => persona.nombre && persona.nombre.toLowerCase().includes(val));
+                
+                case 'descripcion':
+                    return valoresBuscados.some(val => persona.apellido && persona.apellido.toLowerCase().includes(val));
+                
+                case 'estatus':
+                    let estadoActual = persona.estado;
+                    if (estadoActual === true) estadoActual = 'ACTIVO';
+                    if (estadoActual === false) estadoActual = 'INACTIVO';
+                    return valoresBuscados.some(val => estadoActual.toLowerCase() === val);
+
+                case 'fecha_creacion':
+                case 'fecha_actualizacion':
+                    // Obtenemos la fecha (email = creacion, organizacion = actualizacion en tu DB)
+                    let fechaString = tipo === 'fecha_creacion' ? persona.email : persona.organizacion;
+                    if (!fechaString) return false;
+
+                    // Extraemos solo la fecha por si trae horas (Ej: "24/02/2026 14:30" -> "24/02/2026")
+                    let soloFecha = fechaString.split(' ')[0];
+                    let partes = soloFecha.split('/');
+                    
+                    // Si el formato no es DD/MM/YYYY, lo descartamos para evitar errores
+                    if (partes.length !== 3) return false; 
+
+                    // Convertimos la fecha del registro a YYYY-MM-DD para poder compararla con los inputs
+                    let fechaRegistro = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+                    let cumpleDesde = true;
+                    let cumpleHasta = true;
+
+                    // Si el usuario puso un "Desde", verificamos que la fecha del registro sea mayor o igual
+                    if (valorDesde) {
+                        cumpleDesde = fechaRegistro >= valorDesde;
+                    }
+                    
+                    // Si el usuario puso un "Hasta", verificamos que la fecha del registro sea menor o igual
+                    if (valorHasta) {
+                        cumpleHasta = fechaRegistro <= valorHasta;
+                    }
+
+                    return cumpleDesde && cumpleHasta;
+
+                default:
+                    return true;
+            }
+        });
+    });
+
+    // 4. Regresamos a la página 1 y redibujamos la tabla con los resultados
+    paginaActual = 1;
+    renderizarTabla();
+}
+
+function paginaAnterior() {
+    if (paginaActual > 1) {
+        paginaActual--;
+        renderizarTabla();
+    }
+}
+
+function paginaSiguiente() {
+    const totalPaginas = Math.ceil(personasFiltradas.length / itemsPorPagina);
+    if (paginaActual < totalPaginas) {
+        paginaActual++;
+        renderizarTabla();
+    }
+}
+
+// LOGICA DE ESTADOS Y MENUS
+let estadosPendientes = {};
+
+function mostrarBotonGuardar() {
+    const boton = document.getElementById('btn-guardar-estado');
+    if (boton) {
+        boton.style.display = 'inline-flex';
+        boton.classList.add('animacion-aparecer');
+    }
+}
+
+function confirmarCambio() {
+    const boton = document.getElementById('btn-guardar-estado');
+    
+    // Cambiamos el botón para que diga "Guardando..."
+    boton.innerHTML = '<i class="bi bi-hourglass-split"></i> Guardando...';
+    boton.style.backgroundColor = '#ffc107'; // Color amarillo de carga
+
+    // Enviamos los cambios a Aiven
+    fetch("/app/api/actualizar-estados/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            'cambios': estadosPendientes // Enviamos el diccionario con los cambios
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Éxito: Ponemos el botón verde y decimos "¡Guardado!"
+            boton.innerHTML = '<i class="bi bi-check2-all"></i> ¡Guardado!';
+            boton.style.backgroundColor = '#20c997'; 
+            
+            setTimeout(() => {
+                boton.style.display = 'none';
+                boton.classList.remove('animacion-aparecer');
+                boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar'; 
+                boton.style.backgroundColor = '#28a745'; // Regresa a su verde original
+                
+                estadosPendientes = {}; // Limpiamos la memoria
+                cargarPerfilesDesdeDB(); // Descargamos los datos frescos de la base de datos
+            }, 1500);
+        } else {
+            alert('Error en el servidor: ' + data.mensaje);
+            boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar';
+            boton.style.backgroundColor = '#28a745';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error de conexión al guardar.');
+        boton.innerHTML = '<i class="bi bi-check2-circle"></i> Guardar';
+        boton.style.backgroundColor = '#28a745';
+    });
+}
+
+function toggleMenuOpciones(event) {
+    event.stopPropagation(); 
+    const menu = document.getElementById('menu-tres-puntos');
+    menu.classList.toggle('mostrar');
+}
+
+function accionVisual(event, nombreAccion) {
+    event.preventDefault(); 
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    alert("Has hecho clic en: " + nombreAccion + "\n(Esta función se conectará pronto)");
+}
+
+var filtrosActivos = new Set();
+function addSearchFilter(tipo) {
+    var e = window.event;
+    if (e) e.preventDefault();
+
+    var menu = document.getElementById('searchOptionsMenu');
+    if (menu) menu.classList.remove('show');
+
+    if (filtrosActivos.has(tipo)) return;
+    
+    filtrosActivos.add(tipo);
+    const filtersGrid = document.getElementById('filtersGrid');
+    const filterItem = document.createElement('div');
+    filterItem.className = 'filter-item animacion-aparecer';
+    filterItem.id = `filtro-dinamico-${tipo}`;
+
+    let labelText = '';
+    let inputHtml = '';
+
+    switch(tipo) {
+        case 'perfil':
+            labelText = 'Perfil';
+            inputHtml = `
+                <div class="autocomplete-wrapper" style="position: relative; width: 100%; display: flex; align-items: center; border: 1px solid #d0d7de; border-radius: 8px; background-color: #ffffff; transition: box-shadow 0.2s, border-color 0.2s;" onfocusin="this.style.borderColor='#0969da'; this.style.boxShadow='0 0 0 3px rgba(9, 105, 218, 0.3)';" onfocusout="this.style.borderColor='#d0d7de'; this.style.boxShadow='none';">
+                    <input type="text" id="val-${tipo}" placeholder="Seleccionados..." 
+                           oninput="aplicarFiltros()" autocomplete="off"
+                           style="width: calc(100% - 38px); border: none; border-radius: 8px 0 0 8px; background-color: transparent; padding: 8px 12px; outline: none; font-style: italic; color: #57606a; font-size: 0.95rem; line-height: 1.5;" readonly>
+                    <button class="btn-lupa" onclick="abrirModalPerfiles(event)" 
+                        onmouseover="this.querySelector('i').style.transform='scale(1.15)'; this.querySelector('i').style.color='#0a58ca'; this.style.backgroundColor='#f6f8fa';" 
+                        onmouseout="this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='#0969da'; this.style.backgroundColor='transparent';"
+                        style="width: 38px; height: 38px; border: none; border-left: 1px solid #e1e4e8; background-color: transparent; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0;">
+                        <i class="bi bi-search" style="color: #0969da; font-size: 1.1rem; transition: all 0.2s ease;"></i>
+                    </button>
+
+                    <div id="dropdown-multi-${tipo}" class="search-dropdown-menu animacion-aparecer" 
+                         style="display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); width: 280px; z-index: 1050; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; flex-direction: column;">
+                        
+                        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px solid #f1f1f1; padding-bottom: 8px;">
+                            <span style="font-weight: 600; color: #52247d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Seleccionar Perfiles</span>
+                        </div>
+
+                        <div style="margin-bottom: 15px; position: relative;">
+                            <i class="bi bi-filter" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #adb5bd;"></i>
+                            <input type="text" id="buscador-interno-${tipo}" placeholder="Filtrar lista..." 
+                                   oninput="filtrarListaInterna(this.value, '${tipo}')" 
+                                   style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #dee2e6; border-radius: 20px; font-size: 0.85rem; outline: none; text-align: center; background-color: #fcfcfc;">
+                        </div>
+                        
+                        <div id="lista-checkboxes-${tipo}" style="display: flex; flex-direction: column; gap: 0; overflow-y: auto; max-height: 200px; padding: 0;">
+                            </div>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: center; border-top: 1px solid #f1f1f1; padding-top: 12px;">
+                            <button onclick="aplicarSeleccionMultiple('${tipo}')" 
+                                    style="background-color: #0d6efd; color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);">
+                                Aplicar Selección
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 'descripcion':
+            labelText = 'Descripción';
+            inputHtml = `<input type="text" id="val-${tipo}" placeholder="Buscar descripción..." onkeyup="aplicarFiltros()">`;
+            break;
+            
+        case 'estatus':
+            labelText = 'Estatus';
+            inputHtml = `
+                <div class="autocomplete-wrapper" style="position: relative; width: 100%; display: flex; align-items: center; border: 1px solid #d0d7de; border-radius: 8px; background-color: #ffffff; transition: box-shadow 0.2s, border-color 0.2s;" onfocusin="this.style.borderColor='#0969da'; this.style.boxShadow='0 0 0 3px rgba(9, 105, 218, 0.3)';" onfocusout="this.style.borderColor='#d0d7de'; this.style.boxShadow='none';">
+                    <input type="text" id="val-${tipo}" placeholder="Seleccionados..." 
+                           oninput="aplicarFiltros()" autocomplete="off"
+                           style="width: calc(100% - 38px); border: none; border-radius: 8px 0 0 8px; background-color: transparent; padding: 8px 12px; outline: none; font-style: italic; color: #57606a; font-size: 0.95rem; line-height: 1.5;" readonly>
+                    <button class="btn-lupa" onclick="abrirModalEstatus(event)" 
+                        onmouseover="this.querySelector('i').style.transform='scale(1.15)'; this.querySelector('i').style.color='#0a58ca'; this.style.backgroundColor='#f6f8fa';" 
+                        onmouseout="this.querySelector('i').style.transform='scale(1)'; this.querySelector('i').style.color='#0969da'; this.style.backgroundColor='transparent';"
+                        style="width: 38px; height: 38px; border: none; border-left: 1px solid #e1e4e8; background-color: transparent; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0;">
+                        <i class="bi bi-search" style="color: #0969da; font-size: 1.1rem; transition: all 0.2s ease;"></i>
+                    </button>
+
+                    <div id="dropdown-multi-${tipo}" class="search-dropdown-menu animacion-aparecer" 
+                         style="display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); width: 250px; z-index: 1050; box-shadow: 0 10px 25px rgba(0,0,0,0.15); background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; flex-direction: column;">
+                        
+                        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px solid #f1f1f1; padding-bottom: 8px;">
+                            <span style="font-weight: 600; color: #52247d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Seleccionar Estatus</span>
+                        </div>
+                        
+                        <div id="lista-checkboxes-${tipo}" style="display: flex; flex-direction: column; gap: 0; overflow-y: auto; max-height: 200px; padding: 0;">
+                        </div>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: center; border-top: 1px solid #f1f1f1; padding-top: 12px;">
+                            <button onclick="aplicarSeleccionMultiple('${tipo}')" 
+                                    style="background-color: #0d6efd; color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; font-size: 0.85rem; font-weight: 600; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);">
+                                Aplicar Selección
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 'fecha_creacion':
+        case 'fecha_actualizacion':
+            labelText = tipo === 'fecha_creacion' ? 'Fecha de Creación' : 'Fecha de Actualización';
+            inputHtml = `
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="val-${tipo}-desde" placeholder="Desde" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                    <input type="text" id="val-${tipo}-hasta" placeholder="Hasta" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="aplicarFiltros()" style="width: 50%;">
+                </div>
+            `;
+            break;
+    }
+
+    filterItem.innerHTML = `
+        <div class="filter-header">
+            <label>${labelText}</label>
+            <i class="bi bi-dash-circle remove-filter" onclick="removeSearchFilter('${tipo}')" title="Quitar filtro"></i>
+        </div>
+        ${inputHtml}
+    `;
+    filtersGrid.appendChild(filterItem);
+
+    const container = document.getElementById('filtersContainer');
+    const arrow = document.getElementById('searchArrow');
+    if (container && container.classList.contains('collapsed')) {
+        container.classList.remove('collapsed');
+        if (arrow) arrow.classList.remove('rotated');
+    }
+}
+
+function removeSearchFilter(tipo) {
+    const filterItem = document.getElementById(`filtro-dinamico-${tipo}`);
+    if (filterItem) {
+        filterItem.remove();
+        filtrosActivos.delete(tipo);
+        if (typeof aplicarFiltros === 'function') aplicarFiltros();
+    }
+}
+
+function toggleSubmenuBusqueda(event) {
+    event.stopPropagation(); 
+    const menu = document.getElementById('searchOptionsMenu');
+    menu.classList.toggle('show'); 
+}
+
+// =====================================
+// FUNCIONES DE LA PAPELERA (ELIMINAR)
+// =====================================
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function verificarSeleccion() {
+    const seleccionados = document.querySelectorAll('.check-perfil:checked');
+    const btnPapelera = document.getElementById('btn-papelera');
+    const btnDeshabilitar = document.getElementById('btn-deshabilitar'); // NUEVO
+    
+    if (seleccionados.length > 0) {
+        if (btnPapelera) btnPapelera.style.display = 'inline-block'; 
+        if (btnDeshabilitar) btnDeshabilitar.style.display = 'inline-block'; // NUEVO
+    } else {
+        if (btnPapelera) btnPapelera.style.display = 'none'; 
+        if (btnDeshabilitar) btnDeshabilitar.style.display = 'none'; // NUEVO
+    }
+}
+
+function eliminarSeleccionados() {
+    const seleccionados = document.querySelectorAll('.check-perfil:checked');
+    if (seleccionados.length === 0) return;
+
+    if (!confirm(`¿Estás seguro de que deseas eliminar ${seleccionados.length} perfil(es)?`)) return;
+
+    const idsParaBorrar = Array.from(seleccionados).map(cb => cb.value);
+
+    fetch("/app/api/eliminar-perfil/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ 'ids': idsParaBorrar })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('btn-papelera').style.display = 'none'; 
+            alert(data.mensaje);
+            cargarPerfilesDesdeDB(); 
+        } else {
+            alert('Error: ' + data.mensaje);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error de conexión al eliminar.');
+    });
+}
+
+// Event Listeners globales (Cerrar menús)
+document.addEventListener('click', function(event) {
+    const menuSearch = document.getElementById('searchOptionsMenu');
+    if (menuSearch && menuSearch.classList.contains('show')) {
+        menuSearch.classList.remove('show');
+    }
+    
+    const menuPuntos = document.getElementById('menu-tres-puntos');
+    if (menuPuntos && menuPuntos.classList.contains('mostrar')) {
+        menuPuntos.classList.remove('mostrar');
+    }
+});
+// Función para limpiar todos los filtros de un golpe
+function limpiarFiltros(event) {
+    if (event) event.preventDefault();
+
+    // 1. Vaciamos el contenedor visual de los filtros
+    const filtersGrid = document.getElementById('filtersGrid');
+    if (filtersGrid) filtersGrid.innerHTML = '';
+
+    // 2. Limpiamos el Set lógico de filtros activos
+    filtrosActivos.clear();
+
+    // 3. Restauramos la lista completa de personas y volvemos a la página 1
+    personasFiltradas = [...personas];
+    paginaActual = 1;
+
+    // 4. Cerramos el menú y redibujamos la tabla
+    document.getElementById('menu-tres-puntos').classList.remove('mostrar');
+    renderizarTabla();
+    
+    console.log("🧹 Filtros limpiados y tabla restaurada.");
+}
+
+// Función para exportar (Por ahora visual, hasta que conectemos la librería XLSX)
+// ==========================================
+// EXPORTAR A EXCEL (CSV) - PERFILES
+// ==========================================
+function exportarAExcel(event) {
+    if (event) event.preventDefault();
+    
+    const menu = document.getElementById('menu-tres-puntos');
+    if (menu) menu.classList.remove('mostrar');
+    
+    if (personasFiltradas.length === 0) {
+        alert("No hay datos para exportar.");
+        return;
+    }
+    
+    let csvContent = "\uFEFF"; 
+    csvContent += "ID,Perfil,Descripción,Fecha de Creación,Fecha de Actualización,Estatus\n";
+
+    personasFiltradas.forEach(p => {
+        // --- NUEVO: Formateamos el ID para el Excel también ---
+        let id = `"${p.id || '0'}"`;
+        
+        let nombre = `"${p.nombre || 'Sin nombre'}"`;
+        let descripcion = `"${p.apellido || 'Sin descripción'}"`; 
+        let f_creacion = `"${p.email || 'N/A'}"`;                 
+        let f_actualizacion = `"${p.organizacion || 'N/A'}"`;     
+        
+        let estadoActual = p.estado;
+        if (estadoActual === true) estadoActual = 'ACTIVO';
+        if (estadoActual === false) estadoActual = 'INACTIVO';
+        let estadoStr = `"${estadoActual}"`;
+        
+        csvContent += `${id},${nombre},${descripcion},${f_creacion},${f_actualizacion},${estadoStr}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Reporte_Perfiles_InzurAi.csv"; 
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+// ==========================================
+// AUTOCOMPLETADO PERSONALIZADO PARA PERFILES
+// ==========================================
+function mostrarSugerencias(valor, tipo) {
+    const dropdown = document.getElementById(`sugerencias-${tipo}`);
+    const input = document.getElementById(`val-${tipo}`);
+    
+    // 1. Separar por comas y tomar solo la última palabra que está escribiendo
+    let partes = valor.split(',');
+    let busquedaActual = partes[partes.length - 1].trim();
+
+    aplicarFiltros();
+
+    if (busquedaActual === '') {
+        if(dropdown) dropdown.style.display = 'none';
+        return;
+    }
+
+    let listaValores = [];
+    
+    // === AQUÍ ESTABA EL DETALLE: Agregamos 'perfil' a la validación ===
+    if (tipo === 'persona' || tipo === 'perfil') {
+        listaValores = [...new Set(personas.map(p => p.nombre))].filter(Boolean);
+    } else if (tipo === 'username') {
+        listaValores = [...new Set(personas.map(p => p.username))].filter(Boolean);
+    } else if (tipo === 'descripcion') {
+        listaValores = [...new Set(personas.map(p => p.apellido))].filter(Boolean);
+    }
+    
+    // 2. Filtramos usando la ÚLTIMA palabra escrita
+    const coincidencias = listaValores.filter(texto => 
+        texto.toLowerCase().startsWith(busquedaActual.toLowerCase())
+    );
+
+    if(dropdown) dropdown.innerHTML = '';
+
+    if (coincidencias.length > 0 && dropdown) {
+        coincidencias.forEach(texto => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item'; 
+            item.href = '#';
+            item.textContent = tipo === 'username' ? `@${texto}` : texto;
+            
+            item.onclick = function(e) {
+                e.preventDefault();
+                // 3. Quitamos la palabra a medias y metemos el nombre completo
+                partes.pop(); 
+                partes.push(texto);
+                
+                // 4. Unimos todo con comas y dejamos un espacio al final para la siguiente búsqueda
+                input.value = partes.join(', ') + ', '; 
+                
+                dropdown.style.display = 'none'; 
+                input.focus(); // Mantiene el cursor en la barra
+                aplicarFiltros(); 
+            };
+            
+            dropdown.appendChild(item);
+        });
+        dropdown.style.display = 'block'; 
+    } else if (dropdown) {
+        dropdown.style.display = 'none'; 
+    }
+}
+
+// 6. Evento extra: Si el usuario hace clic fuera del input, ocultamos el menú
+document.addEventListener('click', function(e) {
+    const wrappers = document.querySelectorAll('.autocomplete-wrapper');
+    wrappers.forEach(wrapper => {
+        if (!wrapper.contains(e.target)) {
+            const dropdown = wrapper.querySelector('.search-dropdown-menu');
+            if (dropdown) dropdown.style.display = 'none';
+        }
+    });
+});
+function deshabilitarSeleccionados() {
+    const seleccionados = document.querySelectorAll('.check-perfil:checked');
+    if (seleccionados.length === 0) return;
+
+    // 1. Validar primero si hay algún perfil INACTIVO o DESHABILITADO en la selección
+    let seleccionInvalida = false;
+
+    seleccionados.forEach(cb => {
+        const id = cb.value;
+        const persona = personasFiltradas.find(p => p.id == id);
+        
+        if (persona) {
+            let estadoActual = persona.estado;
+            if (estadoActual === true) estadoActual = 'ACTIVO';
+            if (estadoActual === false) estadoActual = 'INACTIVO';
+
+            // Si detecta un Inactivo o uno que ya está Deshabilitado, marca la bandera
+            if (estadoActual === 'INACTIVO' || estadoActual === 'DESHABILITADO') {
+                seleccionInvalida = true;
+            }
+        }
+    });
+
+    // 2. Si la selección es inválida, mostramos la alerta y cortamos la función
+    if (seleccionInvalida) {
+        alert('No está permitido deshabilitar un perfil inactivo. Por favor, selecciona únicamente perfiles Activos.');
+        return; // Detiene la ejecución para que no se rompa la tabla
+    }
+
+    // 3. Si todos son válidos (ACTIVOS), procedemos con la confirmación
+    if (!confirm(`¿Estás seguro de que deseas deshabilitar ${seleccionados.length} perfil(es)?`)) return;
+
+    // 4. Aplicamos los cambios
+    seleccionados.forEach(cb => {
+        const id = cb.value;
+        const personaIndex = personasFiltradas.findIndex(p => p.id == id);
+        
+        if (personaIndex !== -1) {
+            cambiarEstado(id, 'DESHABILITADO');
+            personasFiltradas[personaIndex].estado = 'DESHABILITADO';
+            
+            const pMainIndex = personas.findIndex(p => p.id == id);
+            if (pMainIndex !== -1) personas[pMainIndex].estado = 'DESHABILITADO';
+        }
+    });
+
+    // Opcional: Desmarcar los checkboxes después de la acción para evitar bugs visuales
+    seleccionados.forEach(cb => cb.checked = false);
+
+    // 5. Redibujamos y mostramos botón de guardar
+    renderizarTabla();
+    mostrarBotonGuardar();
+    
+    document.getElementById('btn-papelera').style.display = 'none'; 
+    document.getElementById('btn-deshabilitar').style.display = 'none';
+}
+function manejarCambioEstado(evento, id, nuevoEstado) {
+    if (evento) evento.stopPropagation();
+    
+    cambiarEstado(id, nuevoEstado);
+    
+    // Actualizamos el array local para no perder el estado al redibujar
+    const pIndex = personasFiltradas.findIndex(p => p.id == id);
+    if(pIndex !== -1) personasFiltradas[pIndex].estado = nuevoEstado;
+    
+    const pMainIndex = personas.findIndex(p => p.id == id);
+    if(pMainIndex !== -1) personas[pMainIndex].estado = nuevoEstado;
+
+    // Redibujamos la tabla para que las opciones del <select> se actualicen según la regla
+    renderizarTabla();
+    mostrarBotonGuardar();
+}
+// perfiles.html - Sección de Scripts
+
+function refrescarPerfiles() {
+    // 1. Buscamos el icono para darle el efecto visual
+    const icono = document.querySelector('.bi-arrow-clockwise');
+    
+    if (icono) {
+        // Hacemos que gire 360 grados
+        icono.style.transform = "rotate(360deg)";
+        
+        // Después de medio segundo (cuando termine el giro), reseteamos la rotación
+        setTimeout(() => { 
+            icono.style.transform = "rotate(0deg)"; 
+        }, 500);
+    }
+
+    // 2. Llamamos a tu función existente que descarga los datos de la DB
+    // Esto actualizará la tabla con los últimos estados (ACTIVO, INACTIVO, DESHABILITADO)
+    cargarPerfilesDesdeDB();
+    
+    console.log("🔄 Tabla de perfiles sincronizada con la base de datos.");
+}
+// --- FUNCIONES DEL MODAL COMPARTIR ---
+function abrirModalCompartir() {
+    // 1. Ocultamos el menú de los 3 puntitos para que no estorbe
+    const menu = document.getElementById('menuOpcionesTabla');
+    if (menu) menu.classList.remove('mostrar');
+    
+    // 2. Limpiamos el campo de correo por si se usó antes
+    document.getElementById('correoCliente').value = '';
+    
+    // 3. Mostramos el modal
+    document.getElementById('modalCompartir').classList.add('show');
+}
+
+function cerrarModalCompartir() {
+    document.getElementById('modalCompartir').classList.remove('show');
+}
+
+function enviarCorreoCompartir() {
+    const correo = document.getElementById('correoCliente').value;
+    const formato = document.getElementById('formatoEnvio').value;
+    const botonEnviar = document.querySelector('#modalCompartir .btn-guardar');
+    
+    // Validación básica
+    if (!correo || !correo.includes('@')) {
+        alert("Por favor, ingresa un correo electrónico válido.");
+        return;
+    }
+    
+    // Simulamos el envío cambiando el texto del botón
+    const textoOriginal = botonEnviar.innerHTML;
+    botonEnviar.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+    botonEnviar.disabled = true;
+    
+    // Simulamos un tiempo de carga y luego mostramos éxito
+    setTimeout(() => {
+        alert(`¡Éxito! La información ha sido enviada a ${correo} en formato ${formato.toUpperCase()}.`);
+        
+        // Restauramos el botón y cerramos
+        botonEnviar.innerHTML = textoOriginal;
+        botonEnviar.disabled = false;
+        cerrarModalCompartir();
+    }, 1500);
+}
+
+// --- ALERTAS PARA LOS DEMÁS BOTONES ---
+function accionImportar() {
+    alert("Has hecho clic en: Importar datos (Se abrirá un selector de archivos próximamente)");
+}
+
+function accionConfigurarColumnas() {
+    alert("Has hecho clic en: Configurar columnas (Aquí podrás ocultar/mostrar columnas)");
+}
+
+function accionExportarPDF() {
+    alert("Has hecho clic en: Exportar a PDF (Generando documento...)");
+}
+
+function abrirModalPerfiles(event) {
+    event.stopPropagation();
+    const tipo = 'perfil';
+    const dropdown = document.getElementById(`dropdown-multi-${tipo}`);
+    
+    // Si ya está abierto, lo cerramos
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Cerrar otros dropdowns si existen
+    document.querySelectorAll('[id^="dropdown-multi-"]').forEach(el => el.style.display = 'none');
+
+    // Obtener valores únicos (DISTINCT)
+    let perfilesUnicos = [...new Set(personas.map(p => p.nombre))].filter(Boolean);
+    
+    // Ordenar alfabéticamente
+    perfilesUnicos.sort();
+
+    const contenedorLista = document.getElementById(`lista-checkboxes-${tipo}`);
+    contenedorLista.innerHTML = '';
+
+    // Obtener los valores que ya estaban seleccionados en el input principal
+    const inputPrincipal = document.getElementById(`val-${tipo}`);
+    const seleccionadosPrevios = inputPrincipal.value.split(',').map(v => v.trim()).filter(Boolean);
+
+    // Generar checkboxes con el diseño ordenado a la izquierda
+    perfilesUnicos.forEach(nombrePerfil => {
+        const isChecked = seleccionadosPrevios.includes(nombrePerfil) ? 'checked' : '';
+        
+        const div = document.createElement('div');
+        div.className = 'checkbox-item-multi';
+        
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'flex-start';
+        div.style.padding = '10px 15px';
+        div.style.borderBottom = '1px solid #f8f9fa';
+        div.style.cursor = 'pointer';
+        div.style.transition = 'background 0.2s';
+        
+        div.onmouseover = () => div.style.backgroundColor = '#f1f3f5';
+        div.onmouseout = () => div.style.backgroundColor = 'transparent';
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; width: 100%;">
+                <input type="checkbox" id="chk-${tipo}-${nombrePerfil}" value="${nombrePerfil}" class="chk-multi-${tipo}" ${isChecked} 
+                       style="width: 18px; height: 18px; cursor: pointer; margin: 0 15px 0 0; accent-color: #0d6efd; flex-shrink: 0;">
+                
+                <label for="chk-${tipo}-${nombrePerfil}" style="cursor: pointer; margin: 0; font-size: 0.9rem; color: #333; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                    ${nombrePerfil}
+                </label>
+            </div>
+        `;
+
+        div.onclick = function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const cb = this.querySelector('input');
+                cb.checked = !cb.checked;
+            }
+        };
+
+        contenedorLista.appendChild(div);
+    });
+
+    document.getElementById(`buscador-interno-${tipo}`).value = '';
+    dropdown.style.display = 'block';
+}
+
+function filtrarListaInterna(valor, tipo) {
+    const termino = valor.toLowerCase().trim();
+    const items = document.querySelectorAll(`#lista-checkboxes-${tipo} .checkbox-item-multi`);
+    
+    items.forEach(item => {
+        const labelText = item.querySelector('label').textContent.toLowerCase().trim();
+        
+        if (labelText.startsWith(termino)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function aplicarSeleccionMultiple(tipo) {
+    const checkboxes = document.querySelectorAll(`.chk-multi-${tipo}:checked`);
+    const valoresSeleccionados = Array.from(checkboxes).map(cb => cb.value);
+    
+    const inputElement = document.getElementById(`val-${tipo}`);
+    inputElement.value = valoresSeleccionados.join(', ');
+    
+    document.getElementById(`dropdown-multi-${tipo}`).style.display = 'none';
+    
+    aplicarFiltros();
+}
+
+// Cerrar el dropdown si se hace clic afuera
+document.addEventListener('click', function(e) {
+    const dropdowns = document.querySelectorAll('[id^="dropdown-multi-"]');
+    dropdowns.forEach(dropdown => {
+        if (dropdown.style.display === 'block') {
+            const wrapper = dropdown.closest('.autocomplete-wrapper');
+            if (!wrapper.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        }
+    });
+});
+// ==========================================
+// LIMPIAR TODOS LOS FILTROS VISUALES
+// ==========================================
+function limpiarTodosLosFiltros() {
+    const contenedorFiltros = document.querySelector('.filters-grid');
+    if (!contenedorFiltros) return;
+
+    // 1. Limpiamos las cajas de texto y selects que estén en la pantalla
+    const inputs = contenedorFiltros.querySelectorAll('input');
+    const selects = contenedorFiltros.querySelectorAll('select');
+
+    inputs.forEach(input => input.value = '');
+    selects.forEach(select => select.selectedIndex = 0);
+
+    // 2. Efecto visual de giro en el botón
+    const icono = document.querySelector('.btn-action.refresh i');
+    if (icono) {
+        icono.style.transition = "transform 0.5s ease";
+        icono.style.transform = "rotate(360deg)";
+        setTimeout(() => { icono.style.transform = "rotate(0deg)"; }, 500);
+    }
+
+    // 3. Volvemos a aplicar los filtros (como están vacíos, mostrará toda la lista)
+    aplicarFiltros();
+}
+// ==========================================
+// IMPRIMIR REPORTE DE PERFILES
+// ==========================================
+// ==========================================
+// IMPRIMIR REPORTE DE PERFILES
+// ==========================================
+function imprimirReporte() {
+    // Ocultar el menú de tres puntos si está abierto (ajustado para el dropdown de Bootstrap)
+    const dropdown = document.querySelector('.options-dropdown .dropdown-menu');
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
+    
+    // Validamos que haya datos
+    if (personasFiltradas.length === 0) {
+        alert("No hay perfiles para imprimir con los filtros actuales.");
+        return;
+    }
+
+    // Creamos una ventana emergente para imprimir
+    let printWindow = window.open('', '_blank');
+    let htmlContent = `
+        <html>
+        <head>
+            <title>Reporte de Perfiles de Sistema - InzurAi+</title>
+            <style>
+                /* Forzamos a que la impresora lo ponga en Horizontal */
+                @page { size: landscape; margin: 10mm; }
+                body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; padding: 0; color: #333; }
+                .header-container { text-align: center; margin-bottom: 25px; }
+                h1 { color: #52247d; font-size: 22px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+                p.subtitle { color: #6c757d; margin-top: 0; font-size: 12px; }
+                
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                th, td { border: 1px solid #dee2e6; padding: 12px 10px; text-align: left; vertical-align: middle; }
+                th { background-color: #f8f9fa; color: #52247d; font-weight: bold; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #52247d; }
+                
+                .dato-principal { font-weight: bold; font-size: 13px; color: #000; display: block; margin-bottom: 3px; }
+                .dato-secundario { color: #6c757d; font-size: 11px; display: block; line-height: 1.4; }
+                
+                .status-activo { color: #155724; font-weight: bold; background-color: #d4edda; text-align: center; border-radius: 4px; padding: 5px; display: inline-block; width: 80px; box-sizing: border-box;}
+                .status-inactivo { color: #721c24; font-weight: bold; background-color: #f8d7da; text-align: center; border-radius: 4px; padding: 5px; display: inline-block; width: 80px; box-sizing: border-box;}
+            </style>
+        </head>
+        <body>
+            <div class="header-container">
+                <h1>Reporte de Perfiles de Sistema</h1>
+                <p class="subtitle">Módulo de Seguridad y Accesos - Zynapxe AI Engineers<br>Generado el: ${new Date().toLocaleString('es-VE')}</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Código de Perfil</th>
+                        <th style="width: 65%;">Descripción del Perfil</th>
+                        <th style="width: 20%; text-align: center;">Estado Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    // Llenamos la tabla con los datos de personasFiltradas (que en este caso son los perfiles)
+    personasFiltradas.forEach(p => {
+        // Aseguramos de que el estado sea un string ('ACTIVO' o 'INACTIVO')
+        let estadoStr = p.estado === true ? 'ACTIVO' : (p.estado === false ? 'INACTIVO' : String(p.estado).toUpperCase());
+        let statusClass = estadoStr === 'ACTIVO' ? 'status-activo' : 'status-inactivo';
+        
+        htmlContent += `
+            <tr>
+                <td>
+                    <span class="dato-principal">${p.id || 'N/A'}</span>
+                </td>
+                
+                <td>
+                    <span class="dato-principal">${p.nombre || p.descripcion || 'Sin descripción'}</span>
+                    <span class="dato-secundario">Nivel de acceso configurado en InzurAi+</span>
+                </td>
+                
+                <td style="text-align: center;">
+                    <div class="${statusClass}">${estadoStr}</div>
+                </td>
+            </tr>
+        `;
+    });
+
+    htmlContent += `
+                </tbody>
+            </table>
+            <p style="text-align: right; margin-top: 20px; font-size: 12px; font-weight: bold; color: #52247d;">
+                Total de perfiles impresos: ${personasFiltradas.length}
+            </p>
+        </body>
+        </html>
+    `;
+
+    // Escribimos el HTML en la nueva ventana y lanzamos la impresión
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    
+    // Le damos un pequeño tiempo para que el navegador renderice antes de imprimir
+    setTimeout(() => {
+        printWindow.print();
+    }, 800);
+}
+function abrirModalEstatus(event) {
+    event.stopPropagation();
+    const tipo = 'estatus';
+    const dropdown = document.getElementById(`dropdown-multi-${tipo}`);
+    
+    // Si ya está abierto, lo cerramos
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Cerrar otros dropdowns si existen para que no se sobrepongan
+    document.querySelectorAll('[id^="dropdown-multi-"]').forEach(el => el.style.display = 'none');
+
+    // Las opciones fijas de estatus
+    let estatusUnicos = ['ACTIVO', 'INACTIVO', 'DESHABILITADO'];
+
+    const contenedorLista = document.getElementById(`lista-checkboxes-${tipo}`);
+    contenedorLista.innerHTML = '';
+
+    // Obtener los valores que ya estaban seleccionados
+    const inputPrincipal = document.getElementById(`val-${tipo}`);
+    const seleccionadosPrevios = inputPrincipal.value.split(',').map(v => v.trim()).filter(Boolean);
+
+    // Generar checkboxes
+    estatusUnicos.forEach(estado => {
+        const isChecked = seleccionadosPrevios.includes(estado) ? 'checked' : '';
+        
+        const div = document.createElement('div');
+        div.className = 'checkbox-item-multi';
+        
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'flex-start';
+        div.style.padding = '10px 15px';
+        div.style.borderBottom = '1px solid #f8f9fa';
+        div.style.cursor = 'pointer';
+        div.style.transition = 'background 0.2s';
+        
+        div.onmouseover = () => div.style.backgroundColor = '#f1f3f5';
+        div.onmouseout = () => div.style.backgroundColor = 'transparent';
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; width: 100%;">
+                <input type="checkbox" id="chk-${tipo}-${estado}" value="${estado}" class="chk-multi-${tipo}" ${isChecked} 
+                       style="width: 18px; height: 18px; cursor: pointer; margin: 0 15px 0 0; accent-color: #0d6efd; flex-shrink: 0;">
+                
+                <label for="chk-${tipo}-${estado}" style="cursor: pointer; margin: 0; font-size: 0.9rem; color: #333; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-weight: 500;">
+                    ${estado}
+                </label>
+            </div>
+        `;
+
+        div.onclick = function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                const cb = this.querySelector('input');
+                cb.checked = !cb.checked;
+            }
+        };
+
+        contenedorLista.appendChild(div);
+    });
+
+    dropdown.style.display = 'block';
+}
+    </script>
+    {% endblock %}
