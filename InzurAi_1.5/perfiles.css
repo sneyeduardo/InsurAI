@@ -1,0 +1,883 @@
+.main-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+    z-index: 10;
+}
+
+.main-dashboard {
+    display: block;
+}
+
+.top-navbar {
+    background: white;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    height: 80px;
+    gap: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* Botón volver atrás (<) con mismo estilo que + y lupa */
+.btn-action.back {
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1;
+    margin-top: -8px;
+    color: #4e6975;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: auto;
+    height: auto;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action.back:hover {
+    color: #5475E3;
+    transform: scale(1.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-right: 1rem;
+}
+
+.btn-action {
+    width: auto;
+    height: auto;
+    background: transparent;
+    color: #4e6975;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.btn-action.plus {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin-top: -8px;
+}
+
+.btn-action.lupa {
+    font-size: 2.4rem;
+    font-weight: 300;
+}
+
+.btn-action:hover {
+    color: #5475E3;
+    transform: scale(1.1);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.nav-item:hover {
+    background: #f5f5f5;
+    color: #5475E3;
+}
+
+.nav-item.active {
+    color: #5475E3;
+    border-bottom: 3px solid #5475E3;
+    border-radius: 0;
+    padding-bottom: 1.4rem;
+    margin-bottom: -1px;
+}
+
+.user-section {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #333;
+}
+
+.user-name {
+    font-weight: 10;
+    color: #333;
+}
+
+.user-avatar {
+    width: 70px;
+    height: 70px;
+    background: #5475E3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.main-content {
+    padding: 2rem;
+    background: #f5f5f5;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.filter-text {
+    color: #666;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-text span {
+    color: #5475E3;
+    font-weight: 600;
+}
+
+.search-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    border-top: 5px solid #04a8c0;
+    position: relative;
+    z-index: 999;
+}
+
+.search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.search-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #5475E3;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-plus {
+    font-size: 2.2rem !important;
+    font-weight: 500 !important;
+    margin-top: -8px;
+    color: #4e6975;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.search-plus:hover {
+    color: #5475E3;
+    transform: scale(1.1);
+}
+
+/* Dropdown de búsqueda */
+.search-dropdown .dropdown-menu {
+    min-width: 180px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.search-dropdown .dropdown-item {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.search-option {
+    color: #4c6774;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-option:hover {
+    color: #ff6b35;
+    transform: scale(1.1);
+}
+
+.search-title .arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    color: #4e6975;
+}
+
+.search-title .arrow.rotated {
+    transform: rotate(90deg);
+}
+
+.filters-container {
+    transition: max-height 0.3s ease;
+    max-height: 1000px;
+    overflow: visible; /* PERMITE QUE EL MENÚ SALGA HACIA ABAJO */
+}
+
+.filters-container.collapsed {
+    max-height: 0;
+    overflow: hidden; /* SOLO CORTA EL CONTENIDO CUANDO ESTÁ CERRADO */
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+.filter-item:focus-within {
+    z-index: 9999 !important;
+}
+
+/* Para asegurarnos de que el autocompletado también se eleve */
+.autocomplete-wrapper {
+    z-index: inherit; 
+}
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-item label {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.remove-filter {
+    color: #dc3545;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.remove-filter:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    color: #c82333;
+}
+
+.filter-item input, .filter-item select {
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background: white;
+    width: 100%;
+}
+
+.filter-item input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.total-objects {
+    font-size: 1.1rem;
+    color: #4c6774;
+    font-weight: 700;
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.table-container {
+    background: rgb(255, 255, 255);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    overflow-x: visible;
+    margin-bottom: 2rem;
+    margin-top: 40px;
+    border-top: 5px solid #00aaff;
+    position: relative;
+}
+
+.table-actions-header {
+    position: absolute;
+    top: -35px;
+    right: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    z-index: 10;
+}
+
+.action-icon {
+    color: #4c6774;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+}
+
+.action-icon:hover {
+    color: #ff6b35;
+    transform: scale(1.1);
+}
+
+/* Quitar fondo azul al botón guardar */
+.save-icon {
+    color: #4c6774;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+}
+
+.save-icon:hover {
+    color: #ff6b35;
+    transform: scale(1.1);
+    background: none !important;
+}
+
+/* Dropdown de tres puntos */
+.three-dots-dropdown {
+    display: inline-block;
+}
+
+.three-dots-dropdown .dropdown-menu {
+    min-width: 120px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.three-dots-dropdown .dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.three-dots-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.bi-arrow-clockwise:hover {
+    transform: rotate(90deg);
+}
+
+.crud-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.crud-table th {
+    text-align: left;
+    padding: 1rem 0.75rem;
+    color: #333;
+    font-weight: 700;
+    background: #f9f9f9;
+}
+
+.crud-table td {
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.crud-table tr:hover td {
+    background: #fff3e0;
+    cursor: pointer;
+}
+
+.person-name {
+    font-weight: 600;
+    color: #ff6b35 !important;
+}
+
+.organization-name {
+    color: #ff6b35 !important;
+    font-weight: 500;
+}
+
+.email-address {
+    color: #ff6b35 !important;
+    text-decoration: none;
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.creado {
+    background: #0d47a1;
+    box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
+}
+
+.status-dot.activo {
+    background: #1b5e20;
+    box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.2);
+}
+
+.status-dot.inactivo {
+    background: #b71c1c;
+    box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.2);
+}
+
+.status-dot.pendiente {
+    background: #ff9800;
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+.status-select-clean {
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    padding: 0.2rem 0;
+    color: #333;
+}
+
+.status-select-clean.creado {
+    color: #0d47a1;
+}
+
+.status-select-clean.activo {
+    color: #1b5e20;
+}
+
+.status-select-clean.inactivo {
+    color: #b71c1c;
+}
+
+.status-select-clean.pendiente {
+    color: #ff9800;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 5px solid #4c6774;
+}
+
+.pagination-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-pagination {
+    padding: 0.5rem 1.2rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-pagination:hover {
+    background: #f0f0f0;
+    border-color: #5475E3;
+    color: #5475E3;
+}
+
+.btn-pagination:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.per-page {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.items-total {
+    color: #4c6774;
+    font-weight: 700;
+}
+
+.ticket-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #d0d7de;
+    background-color: #ffffff;
+}
+
+.ticket-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0969da;
+    margin: 0 0 4px 0;
+}
+
+.ticket-header .subtitle {
+    font-size: 14px;
+    color: #57606a;
+    margin: 0;
+}
+
+.ticket-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid #d0d7de;
+}
+
+.ticket-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #24292f;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.info-table tr {
+    border-bottom: 1px solid #eaeef2;
+}
+
+.info-table td {
+    padding: 8px 12px;
+    vertical-align: top;
+}
+
+.info-table td:first-child {
+    width: 140px;
+    font-weight: 500;
+    color: #24292f;
+    background-color: #f6f8fa;
+}
+
+.info-table td:last-child {
+    color: #24292f;
+}
+
+.info-table input, .info-table select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-actions {
+    padding: 20px 24px;
+    background-color: #f6f8fa;
+    border-top: 1px solid #d0d7de;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancelar {
+    background-color: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #24292f;
+    cursor: pointer;
+}
+
+.btn-cancelar:hover {
+    background-color: #f6f8fa;
+}
+
+.btn-guardar {
+    background-color: #0969da;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-guardar:hover {
+    background-color: #0a58ca;
+}
+
+/* ===== CHATWOOT CUSTOMIZATION ===== */
+.woot-widget-bubble.woot-elements--expanded {
+    display: flex !important;
+    align-items: center !important;
+    padding-left: 58px !important;
+    position: relative !important;
+    overflow: visible !important;
+    border-radius: 35px !important;
+    min-height: 48px !important;
+}
+
+.woot-widget-bubble.woot-elements--expanded::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 6px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 42px !important;
+    height: 42px !important;
+    background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    border-radius: 50% !important;
+    border: 2px solid #ffffff !important;
+    z-index: 100 !important;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.woot-widget-bubble.woot-elements--expanded span {
+    margin-left: 2px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+/* Estilo del botón Guardar */
+.btn-guardar-cambios {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+    margin-top: -17px;
+    
+}
+
+.btn-guardar-cambios:hover {
+    background-color: #218838;
+}
+
+/* Animación de aparición */
+@keyframes aparecerSuave {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animacion-aparecer {
+    animation: aparecerSuave 0.2s ease forwards;
+}
+/* ==========================================
+   MENÚ DESPLEGABLE DE LOS 3 PUNTITOS
+   ========================================== */
+.menu-desplegable-acciones {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    right: 0; /* Lo alinea a la derecha del icono */
+    top: 100%;
+    margin-top: 8px;
+    background-color: #ffffff;
+    min-width: 190px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    border-radius: 8px;
+    border: 1px solid #ebebeb;
+    z-index: 1000;
+    overflow: hidden;
+    animation: fadeInMenu 0.2s ease;
+}
+
+/* Esta clase es la que inyecta JavaScript para mostrarlo */
+.menu-desplegable-acciones.mostrar {
+    display: block;
+}
+
+.opcion-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #444444;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.opcion-menu:hover {
+    background-color: #f5f7f9;
+    color: var(--sidebar-bg, #52247d); /* Se pinta de tu morado */
+}
+
+.opcion-menu i {
+    font-size: 16px;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.opcion-menu:hover i {
+    color: var(--sidebar-bg, #52247d);
+}
+
+/* Animación para que baje suavemente */
+@keyframes fadeInMenu {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.search-dropdown-menu.show {
+    display: block !important;
+}
+/* Aseguramos que el botón actúe como "ancla" para el menú */
+.btn-action.plus {
+    position: relative !important; 
+}
+
+/* Modificamos la posición exacta del submenú */
+.search-dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;     /* Lo coloca justo debajo del botón '+' */
+    right: 0 !important;      /* Lo alinea al borde derecho del botón */
+    left: auto !important;    /* Anula cualquier configuración previa que lo empujara a la derecha */
+    margin-top: 8px;          /* Separación visual para que no quede pegado al botón */
+    min-width: 200px;         /* Ancho mínimo para que las palabras no se corten */
+    z-index: 1050 !important; /* Asegura que flote por encima de cualquier otro elemento (como tablas) */
+}
+input, select, textarea {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    /* ... */
+}
+/* ===== ETIQUETA DE SECCIÓN ESTÁTICA ===== */
+.nav-section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5475E3; /* Mantenemos el color activo */
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: default; /* Cambia la manito por la flecha normal */
+    user-select: none; /* Evita que el usuario resalte el texto por error */
+    border-bottom: 3px solid #5475E3; /* Mantiene la línea indicadora */
+    padding-bottom: 1.4rem;
+    margin-bottom: -1px;
+}
+
+/* Sin efectos al pasar el mouse */
+.nav-section-label:hover {
+    background: transparent;
+    color: #5475E3;
+}
+/* Estilo para engrosar y agrandar los iconos superiores */
+.icon-jefe {
+    font-size: 1.8rem !important; /* Aumenta el tamaño considerablemente */
+    -webkit-text-stroke: 1.5px currentColor; /* EL TRUCO: Le da grosor (Stroke) a las líneas */
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    position: relative; /* Prepara el terreno */
+    top: -8px;
+    left: 5px;
+    color: #dc3545 !important;
+}
+
+/* Efecto hover para que se vea más interactivo */
+.icon-jefe:hover {
+    transform: scale(1.15); /* Crece un poquito más al pasar el mouse */
+    color: #0d6efd; /* Opcional: Azul clásico de Bootstrap al pasar el mouse */
+}
+/* Subir específicamente la basurita (el de arriba) y los de la tabla si los hay */
+#btn-papelera,
+.bi-trash {
+    position: relative;
+    top: -10px; /* Ajusta este número según necesites (ej: -3px o -5px) */
+}
+
+/* Subir el icono de deshabilitar */
+/* NOTA: Reemplaza ".bi-x-circle" con la clase real del icono que usas para deshabilitar 
+   (por ejemplo: .bi-toggle-off, .bi-ban, .bi-power, o si tiene un ID como #btn-deshabilitar) */
+.bi-slash-circle {
+    position: relative;
+    top: -10px; 
+}   
+#btn-papelera,
+.bi-trash,
+.bi-slash-circle { 
+    color: #dc3545 !important;    /* Mismo Rojo corporativo */
+    -webkit-text-stroke: 1px currentColor !important; /* Mismo Grosor de trazo */
+    font-size: 1.3rem !important; /* Mismo Tamaño (igual al de refrescar) */
+}
+
