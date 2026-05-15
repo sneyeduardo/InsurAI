@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if perfil %}Editar{% else %}Nuevo{% endif %} Perfil{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <a href="{% url 'perfiles' %}" class="btn-back"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="form-title">{% if perfil %}Editar{% else %}Crear Nuevo{% endif %} Perfil</h2>
+    </div>
+
+    <form method="POST" class="custom-form">
+        {% csrf_token %}
+        <div class="form-card">
+            <div class="form-group">
+                <label for="nombre_rol">Nombre del Perfil</label>
+                <input type="text" name="nombre_rol" id="nombre_rol" value="{{ perfil.nombre_rol|default:'' }}" placeholder="Ej: Administrador, Analista..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea name="descripcion" id="descripcion" rows="4" placeholder="Describe brevemente las funciones de este rol...">{{ perfil.descripcion|default:'' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="estatus">Estatus</label>
+                <select name="estatus" id="estatus">
+                    <option value="Activo" {% if perfil.estatus == 'Activo' %}selected{% endif %}>Activo</option>
+                    <option value="Inactivo" {% if perfil.estatus == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-save">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Perfil
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

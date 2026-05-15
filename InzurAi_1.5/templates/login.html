@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InzurAi+ | Acceso al Sistema</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <div class="logo-header">
+                <img src="{% static 'imagenes/inzur.png' %}" alt="Logo InzurAi+" class="main-logo">
+                <p>Panel de Administración y Corretaje</p>
+            </div>
+
+            {% if messages %}
+                <div class="error-message" style="display: block;">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="cedula">Cédula de Identidad</label>
+                    <input type="text" id="cedula" name="cedula" placeholder="Ej: 12345678" required autofocus>
+                </div>
+                
+                <div class="form-group">
+    <div class="label-flex">
+        <label for="password">Contraseña</label>
+        <a href="#" class="forgot-password">¿Olvidó su contraseña?</a>
+    </div>
+    
+    <div class="password-container">
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+        <i class="fa-regular fa-eye" id="togglePassword"></i>
+    </div>
+</div>
+                
+                <button type="submit" class="btn-login">Ingresar al Sistema</button>
+            </form>
+
+        
+        <div class="powered-by">
+            <span>Powered by</span>
+            <img src="{% static 'imagenes/zynapxe.png' %}" alt="Zynapxe" class="zynapxe-logo">
+        </div>
+    </div>
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // Alterna el tipo de input entre 'password' y 'text'
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        
+        // Alterna la clase del icono (ojo abierto / ojo con raya)
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+</body>
+</html>

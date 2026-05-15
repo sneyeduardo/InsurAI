@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Perfiles{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/perfiles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h2 class="page-title">
+            <i class="fa-solid fa-user-shield" style="color: #1e3a8a;"></i> 
+            Perfiles del Sistema
+        </h2>
+        <a href="{% url 'crear_perfil' %}" class="btn-primary-custom">
+    <i class="fa-solid fa-user-plus me-1"></i> Registrar Usuario
+</a>
+    </div>
+
+    <div class="table-toolbar">
+        <div class="toolbar-top">
+            <h4 class="filter-title"><i class="fa-solid fa-filter"></i> Filtros de Búsqueda</h4>
+            
+            <div class="add-filter-wrapper">
+                <button class="btn-add-filter" id="btn-add-filter">
+                    <i class="fa-solid fa-plus"></i> Agregar Filtro
+                </button>
+                <div class="filter-dropdown" id="filter-dropdown">
+                    <button class="dropdown-item" data-type="text" data-column="0" data-name="Perfil">Perfil</button>
+                    <button class="dropdown-item" data-type="text" data-column="1" data-name="Descripción">Descripción</button>
+                    <button class="dropdown-item" data-type="text" data-column="2" data-name="Fecha de Creación">Fecha de Creación</button>
+                    <button class="dropdown-item" data-type="text" data-column="3" data-name="Fecha de Actualización">Fecha de Actualización</button>
+                    <button class="dropdown-item" data-type="select" data-column="4" data-name="Estatus">Estatus</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="active-filters-container" id="active-filters">
+            </div>
+    </div>
+
+    <div class="table-container">
+        <table class="custom-table" id="data-table">
+            <thead>
+                <tr>
+                    <th>Perfil</th>
+                    <th>Descripción</th>
+                    <th>Fecha de Creación</th>
+                    <th>Fecha de Actual.</th>
+                    <th>Estatus</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rol in roles %}
+                <tr class="data-row">
+                    <td><strong>{{ rol.nombre_rol }}</strong></td>
+                    <td>{{ rol.descripcion|default:"Sin descripción" }}</td>
+                    <td>{{ rol.fecha_creacion|date:"d/m/Y"|default:"-" }}</td>
+                    <td>{{ rol.fecha_actualizacion|date:"d/m/Y"|default:"-" }}</td>
+                    <td>
+                        <span class="badge {% if rol.estatus == 'Activo' %}bg-success{% else %}bg-secondary{% endif %}">
+                            {{ rol.estatus|default:"Activo" }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn-delete" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr id="empty-message">
+                    <td colspan="6" class="text-center py-4 text-muted">No hay perfiles registrados.</td>
+                </tr>
+                {% endfor %}
+                
+                <tr id="no-results-row" style="display: none;">
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-magnifying-glass-minus mb-2" style="font-size: 2rem;"></i><br>
+                        No se encontraron coincidencias con los filtros aplicados.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btnAddFilter = document.getElementById('btn-add-filter');
+    const filterDropdown = document.getElementById('filter-dropdown');
+    const activeFiltersContainer = document.getElementById('active-filters');
+    const tableRows = document.querySelectorAll('.data-row');
+    const noResultsRow = document.getElementById('no-results-row');
+
+    // Mostrar/Ocultar dropdown
+    btnAddFilter.addEventListener('click', (e) => {
+        e.stopPropagation();
+        filterDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+        filterDropdown.classList.remove('show');
+    });
+
+    // Agregar nueva barra
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const colIndex = this.getAttribute('data-column');
+            const colName = this.getAttribute('data-name');
+            const inputType = this.getAttribute('data-type');
+
+            if (document.getElementById(`filter-col-${colIndex}`)) return;
+
+            const filterTag = document.createElement('div');
+            filterTag.className = 'filter-tag fade-in';
+            filterTag.id = `filter-col-${colIndex}`;
+
+            const label = document.createElement('span');
+            label.className = 'filter-label';
+            label.textContent = `${colName}:`;
+            filterTag.appendChild(label);
+
+            let inputControl;
+            if (inputType === 'select') {
+                inputControl = document.createElement('select');
+                inputControl.innerHTML = `
+                    <option value="">Todos</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                `;
+            } else {
+                inputControl = document.createElement('input');
+                inputControl.type = 'text';
+                inputControl.placeholder = inputType === 'date' ? 'DD/MM/YYYY' : `Buscar...`;
+            }
+            
+            inputControl.className = 'filter-input';
+            inputControl.dataset.column = colIndex;
+            
+            inputControl.addEventListener('input', applyAllFilters);
+            filterTag.appendChild(inputControl);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn-remove-filter';
+            removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            removeBtn.addEventListener('click', () => {
+                filterTag.remove();
+                applyAllFilters();
+            });
+            filterTag.appendChild(removeBtn);
+
+            activeFiltersContainer.appendChild(filterTag);
+        });
+    });
+
+    // LÓGICA DE BÚSQUEDA ESTRICTA A LA PRIMERA LETRA
+    function applyAllFilters() {
+        const activeInputs = activeFiltersContainer.querySelectorAll('.filter-input');
+        let visibleCount = 0;
+
+        tableRows.forEach(row => {
+            let rowMatchesAll = true;
+
+            activeInputs.forEach(input => {
+                const colIndex = input.dataset.column;
+                const searchTerm = input.value.toLowerCase().trim();
+                
+                if (searchTerm !== "") {
+                    // Extraemos el texto de la celda y le quitamos los espacios en blanco de los bordes
+                    const cellText = row.querySelectorAll('td')[colIndex].textContent.toLowerCase().trim();
+                    
+                    // AQUÍ ESTÁ LA MAGIA: startsWith() exige que empiece exactamente con lo escrito
+                    if (!cellText.startsWith(searchTerm)) {
+                        rowMatchesAll = false;
+                    }
+                }
+            });
+
+            if (rowMatchesAll) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        noResultsRow.style.display = (visibleCount === 0 && tableRows.length > 0) ? '' : 'none';
+    }
+});
+</script>
+{% endblock %}

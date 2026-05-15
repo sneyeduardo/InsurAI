@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Panel Principal{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    
+    <header class="dashboard-header">
+        <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar pólizas, clientes o siniestros..." id="global-search">
+        </div>
+        <div class="header-date">
+            <i class="fa-regular fa-calendar-days"></i>
+            <span id="current-date"></span>
+        </div>
+    </header>
+
+    <section class="modules-grid">
+        <div class="module-card card-blue">
+            <div class="module-icon"><i class="fa-solid fa-file-signature"></i></div>
+            <div class="module-info">
+                <h3>Suscripción</h3>
+                <p>Gestión de pólizas y nuevas emisiones.</p>
+            </div>
+        </div>
+
+        <div class="module-card card-red">
+            <div class="module-icon"><i class="fa-solid fa-car-burst"></i></div>
+            <div class="module-info">
+                <h3>Siniestros</h3>
+                <p>Reporte y seguimiento de reclamos.</p>
+            </div>
+        </div>
+
+        <div class="module-card card-green">
+            <div class="module-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+            <div class="module-info">
+                <h3>Cobranzas</h3>
+                <p>Control de pagos y primas pendientes.</p>
+            </div>
+        </div>
+
+        <div class="module-card card-yellow">
+            <div class="module-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="module-info">
+                <h3>Estadísticas</h3>
+                <p>Análisis de rendimiento y comisiones.</p>
+            </div>
+        </div>
+    </section>
+
+    <h4 class="section-title">Estado del Sistema InzurAi+</h4>
+    <footer class="system-status-footer">
+        <div class="status-card">
+            <i class="fa-solid fa-code-branch icon-v"></i>
+            <span>Versión 2.0</span>
+        </div>
+        <div class="status-card">
+            <i class="fa-solid fa-shield-check icon-s"></i>
+            <span>Seguridad</span>
+        </div>
+        <div class="status-card">
+            <i class="fa-solid fa-server icon-i"></i>
+            <span>Infraestructura</span>
+        </div>
+        <div class="status-card">
+            <i class="fa-solid fa-microchip icon-z"></i>
+            <span>Zybanna Core</span>
+        </div>
+    </footer>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date().toLocaleDateString('es-ES', options);
+        document.getElementById('current-date').textContent = today.charAt(0).toUpperCase() + today.slice(1);
+    });
+</script>
+{% endblock %}

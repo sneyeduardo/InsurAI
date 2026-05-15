@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/usuarios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h2 class="page-title">
+            <i class="fa-solid fa-users" style="color: #1e3a8a;"></i> 
+            Gestión de Usuarios
+        </h2>
+        <a href="{% url 'crear_usuario' %}" class="btn-primary-custom">
+    <i class="fa-solid fa-user-plus me-1"></i> Registrar Usuario
+</a>
+    </div>
+
+    <div class="table-toolbar">
+        <div class="toolbar-top">
+            <h4 class="filter-title"><i class="fa-solid fa-filter"></i> Filtros de Búsqueda</h4>
+            
+            <div class="add-filter-wrapper">
+                <button class="btn-add-filter" id="btn-add-filter">
+                    <i class="fa-solid fa-plus"></i> Agregar Filtro
+                </button>
+                
+                <div class="filter-dropdown" id="filter-dropdown">
+                    <button class="dropdown-item" data-type="text" data-column="0" data-name="Nombre">Nombre</button>
+                    <button class="dropdown-item" data-type="text" data-column="1" data-name="Cédula">Cédula</button>
+                    <button class="dropdown-item" data-type="select" data-column="2" data-name="Tipo de persona">Tipo de persona</button>
+                    <button class="dropdown-item" data-type="select" data-column="3" data-name="Sexo">Sexo</button>
+                    <button class="dropdown-item" data-type="text" data-column="4" data-name="Nacionalidad">Nacionalidad</button>
+                    <button class="dropdown-item" data-type="text" data-column="5" data-name="Actividad económica">Actividad económica</button>
+                    <button class="dropdown-item" data-type="text" data-column="6" data-name="Profesión/Oficio">Profesión/Oficio</button>
+                    <button class="dropdown-item" data-type="text" data-column="7" data-name="Teléfono Móvil">Teléfono Móvil</button>
+                    <button class="dropdown-item" data-type="text" data-column="8" data-name="Banco">Banco</button>
+                    <button class="dropdown-item" data-type="text" data-column="9" data-name="Cuenta bancaria">Cuenta bancaria</button>
+                    <button class="dropdown-item" data-type="text" data-column="10" data-name="Email">Email</button>
+                    <button class="dropdown-item" data-type="text" data-column="11" data-name="Último login">Último login</button>
+                    <button class="dropdown-item" data-type="select" data-column="12" data-name="Estatus">Estatus</button>
+                    <button class="dropdown-item" data-type="text" data-column="13" data-name="Fecha creación">Fecha creación</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="active-filters-container" id="active-filters">
+            </div>
+    </div>
+
+    <div class="table-container table-responsive">
+        <table class="custom-table" id="data-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Tipo</th>
+                    <th>Sexo</th>
+                    <th>Nacionalidad</th>
+                    <th>Actividad Econ.</th>
+                    <th>Profesión</th>
+                    <th>Teléfono</th>
+                    <th>Banco</th>
+                    <th>Cuenta Bancaria</th>
+                    <th>Email</th>
+                    <th>Último Login</th>
+                    <th>Estatus</th>
+                    <th>Fecha Creación</th>
+                    <th class="sticky-action">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in usuarios %}
+                <tr class="data-row">
+                    <td>
+                        <div class="user-cell">
+                            <i class="fa-solid fa-circle-user text-muted" style="font-size: 1.2rem; margin-right: 8px;"></i>
+                            <strong>{{ user.nombre_completo }}</strong>
+                        </div>
+                    </td>
+                    <td>{{ user.cedula|default:"-" }}</td>
+                    <td>{{ user.tipo_persona|default:"-" }}</td>
+                    <td>{{ user.sexo|default:"-" }}</td>
+                    <td>{{ user.nacionalidad|default:"-" }}</td>
+                    <td>{{ user.actividad_economica|default:"-" }}</td>
+                    <td>{{ user.profesion_oficio|default:"-" }}</td>
+                    <td>{{ user.telefono_movil|default:"-" }}</td>
+                    <td>{{ user.banco|default:"-" }}</td>
+                    <td>{{ user.cuenta_bancaria|default:"-" }}</td>
+                    <td>{{ user.email|default:"-" }}</td>
+                    <td>{{ user.ultimo_login|date:"d/m/Y H:i"|default:"-" }}</td>
+                    <td>
+                        {% if user.bloqueado == 1 %}
+                            <span class="badge bg-danger">Bloqueado</span>
+                        {% else %}
+                            <span class="badge bg-success">Activo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.fecha_creacion|date:"d/m/Y"|default:"-" }}</td>
+                    <td class="sticky-action">
+                        <div class="action-btns">
+                            <button class="btn-view" title="Ver Detalle"><i class="fa-solid fa-eye"></i></button>
+                            <button class="btn-edit" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr id="empty-message">
+                    <td colspan="15" class="text-center py-4 text-muted">No hay usuarios registrados.</td>
+                </tr>
+                {% endfor %}
+                
+                <tr id="no-results-row" style="display: none;">
+                    <td colspan="15" class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-user-xmark mb-2" style="font-size: 2rem;"></i><br>
+                        No se encontraron usuarios con los filtros aplicados.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btnAddFilter = document.getElementById('btn-add-filter');
+    const filterDropdown = document.getElementById('filter-dropdown');
+    const activeFiltersContainer = document.getElementById('active-filters');
+    const tableRows = document.querySelectorAll('.data-row');
+    const noResultsRow = document.getElementById('no-results-row');
+
+    // Mostrar/Ocultar dropdown
+    btnAddFilter.addEventListener('click', (e) => {
+        e.stopPropagation();
+        filterDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+        filterDropdown.classList.remove('show');
+    });
+
+    // Agregar nuevo filtro
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const colIndex = this.getAttribute('data-column');
+            const colName = this.getAttribute('data-name');
+            const inputType = this.getAttribute('data-type');
+
+            if (document.getElementById(`filter-col-${colIndex}`)) return;
+
+            const filterTag = document.createElement('div');
+            filterTag.className = 'filter-tag fade-in';
+            filterTag.id = `filter-col-${colIndex}`;
+
+            const label = document.createElement('span');
+            label.className = 'filter-label';
+            label.textContent = `${colName}:`;
+            filterTag.appendChild(label);
+
+            let inputControl;
+            if (inputType === 'select') {
+                inputControl = document.createElement('select');
+                let optionsHTML = '<option value="">Todos</option>';
+                
+                // Lógica de Selects según el campo
+                if (colName === 'Estatus') {
+                    optionsHTML += '<option value="Activo">Activo</option><option value="Bloqueado">Bloqueado</option>';
+                } else if (colName === 'Tipo de persona') {
+                    optionsHTML += '<option value="Natural">Natural</option><option value="Jurídica">Jurídica</option>';
+                } else if (colName === 'Sexo') {
+                    optionsHTML += '<option value="M">Masculino (M)</option><option value="F">Femenino (F)</option>';
+                }
+                
+                inputControl.innerHTML = optionsHTML;
+            } else {
+                inputControl = document.createElement('input');
+                inputControl.type = 'text';
+                inputControl.placeholder = `Buscar...`;
+            }
+            
+            inputControl.className = 'filter-input';
+            inputControl.dataset.column = colIndex;
+            
+            inputControl.addEventListener('input', applyAllFilters);
+            filterTag.appendChild(inputControl);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn-remove-filter';
+            removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            removeBtn.addEventListener('click', () => {
+                filterTag.remove();
+                applyAllFilters();
+            });
+            filterTag.appendChild(removeBtn);
+
+            activeFiltersContainer.appendChild(filterTag);
+        });
+    });
+
+    // Filtro con regla StartsWith (Estricto)
+    function applyAllFilters() {
+        const activeInputs = activeFiltersContainer.querySelectorAll('.filter-input');
+        let visibleCount = 0;
+
+        tableRows.forEach(row => {
+            let rowMatchesAll = true;
+
+            activeInputs.forEach(input => {
+                const colIndex = input.dataset.column;
+                const searchTerm = input.value.toLowerCase().trim();
+                
+                if (searchTerm !== "") {
+                    const cellText = row.querySelectorAll('td')[colIndex].textContent.toLowerCase().trim();
+                    if (!cellText.startsWith(searchTerm)) {
+                        rowMatchesAll = false;
+                    }
+                }
+            });
+
+            if (rowMatchesAll) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        noResultsRow.style.display = (visibleCount === 0 && tableRows.length > 0) ? '' : 'none';
+    }
+});
+</script>
+{% endblock %}

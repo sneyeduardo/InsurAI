@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InzurAi+ | {% block title %}Dashboard{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <button id="toggle-btn" class="floating-toggle" title="Minimizar menú">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="sidebar-header">
+            <img src="{% static 'imagenes/inzur1.png' %}" alt="InzurAi+" class="logo-img" id="sidebar-logo">
+            <img src="{% static 'imagenes/zynaoxe1.png' %}" alt="Zynapxe" class="logo-mini" id="sidebar-logo-mini">
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="nav-item active">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Administración</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="{% url 'perfiles' %}" class="submenu-item"><i class="fa-solid fa-user-tie"></i> Perfiles</a>
+                    <a href="{% url 'usuarios' %}" class="submenu-item"><i class="fa-solid fa-users"></i> Usuarios</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-lock"></i> Accesos</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-fingerprint"></i> Auditoría</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Cartera</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-database"></i> Maestros</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-file-invoice-dollar"></i> Cotizaciones</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-file-signature"></i> Suscripciones</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-car-burst"></i> Siniestros</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-money-bill-transfer"></i> Cobranzas</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-percent"></i> Comisiones</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>CRM</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="#" class="submenu-item"><i class="fa-regular fa-calendar-days"></i> Calendario</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-bell"></i> Notificaciones</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-clock"></i> Recordatorios</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-flag"></i> Eventos</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-bullhorn"></i> Campañas</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-arrow-trend-up"></i> Impacto</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Estadísticas</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-chart-pie"></i> Cotizaciones</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-circle-check"></i> Suscripciones</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-sack-dollar"></i> Cobranzas</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-heart-pulse"></i> Siniestros</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-calculator"></i> Comisiones</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Reportes</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-folder-open"></i> Carteras</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-file-excel"></i> Siniestros</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-file-invoice"></i> Cobranzas</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button class="nav-item group-btn">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Soporte y Docs</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </button>
+                <div class="submenu">
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-ticket"></i> Crear Tickets</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-book"></i> Guías y FAQ</a>
+                    <a href="#" class="submenu-item"><i class="fa-solid fa-sitemap"></i> Arquitectura</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info" id="user-profile-btn">
+                <div class="user-avatar">
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">{{ request.session.usuario_nombre|default:"Usuario" }}</span>
+                    <span class="user-role">{{ request.session.usuario_rol|default:"Sin Rol" }}</span>
+                </div>
+            </div>
+            
+            <a href="{% url 'logout' %}" class="logout-btn" title="Cerrar Sesión">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+
+            <div class="profile-dropdown" id="profile-dropdown">
+                <a href="#"><i class="fa-solid fa-id-card"></i> Mi Perfil</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Configuración</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-body">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <div id="zybanna-chat" class="zybanna-chat-container">
+        <div class="chat-header">
+            <div class="header-info">
+                <img src="{% static 'imagenes/IA.png' %}" alt="Zybanna">
+                <div>
+                    <strong>Zybanna AI</strong>
+                    <small>En línea</small>
+                </div>
+            </div>
+            <button onclick="toggleZybanna()"><i class="fa-solid fa-minus"></i></button>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <div class="message bot">¡Hola! Soy Zybanna. ¿Cómo puedo ayudarte con InzurAi+ hoy?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input-text" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendToZybanna()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div class="zybanna-launcher" id="zybanna-launcher" onclick="toggleZybanna()">
+        <img src="{% static 'imagenes/IA.png' %}" alt="Chat">
+        <span class="launcher-text">¿Necesitas ayuda?</span>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggle-btn');
+            const profileBtn = document.getElementById('user-profile-btn');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const groupBtns = document.querySelectorAll('.group-btn');
+
+            // Toggle Sidebar
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                const icon = toggleBtn.querySelector('i');
+                if(sidebar.classList.contains('collapsed')) {
+                    icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+                    document.querySelectorAll('.nav-group').forEach(group => group.classList.remove('open'));
+                } else {
+                    icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+                }
+            });
+
+            // Profile Dropdown
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                }
+            });
+
+            // Accordion Logic
+            groupBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    if (sidebar.classList.contains('collapsed')) {
+                        sidebar.classList.remove('collapsed');
+                    }
+                    const parent = this.parentElement;
+                    document.querySelectorAll('.nav-group').forEach(group => {
+                        if(group !== parent) group.classList.remove('open');
+                    });
+                    parent.classList.toggle('open');
+                });
+            });
+        });
+
+        // --- LÓGICA DEL CHATBOT ZYBANNA ---
+        function toggleZybanna() {
+            const chat = document.getElementById('zybanna-chat');
+            chat.classList.toggle('active');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendToZybanna();
+            }
+        }
+
+        async function sendToZybanna() {
+            const input = document.getElementById('chat-input-text');
+            const container = document.getElementById('chat-messages');
+            const mensaje = input.value.trim();
+
+            if (!mensaje) return;
+
+            // Añadir mensaje del usuario
+            container.innerHTML += `<div class="message user">${mensaje}</div>`;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Mostrar indicador "Escribiendo..."
+            const typingId = 'typing-' + Date.now();
+            container.innerHTML += `<div class="message bot" id="${typingId}">...</div>`;
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                // Llamada a tu API de Django
+                const response = await fetch("{% url 'api_zybanna' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ mensaje: mensaje })
+                });
+                
+                const data = await response.json();
+                const typingMsg = document.getElementById(typingId);
+                
+                if (data.respuesta) {
+                    typingMsg.textContent = data.respuesta;
+                } else {
+                    typingMsg.textContent = "Lo siento, hubo un error al procesar tu mensaje.";
+                }
+            } catch (e) {
+                console.error("Error:", e);
+                document.getElementById(typingId).textContent = "Error de conexión.";
+            }
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
